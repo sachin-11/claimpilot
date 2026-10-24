@@ -6,8 +6,15 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 
 WORKDIR /app
 
+# Module 6 (claim intake): Tesseract OCR (English + Hindi data) and the shared libraries OpenCV
+# needs. Installed before the code is copied so this layer stays cached.
+RUN apt-get update     && apt-get install -y --no-install-recommends         tesseract-ocr tesseract-ocr-eng tesseract-ocr-hin libglib2.0-0 libgl1     && rm -rf /var/lib/apt/lists/*
+
 COPY . .
 RUN pip install -e ".[dev]"
+
+# spaCy model used by Presidio for person-name detection (PII masking before LLM calls).
+RUN python -m spacy download en_core_web_sm
 
 # Optional local reranker (RERANKER=local): CPU-only torch + sentence-transformers.
 # Build with: INSTALL_LOCAL_RERANKER=true docker compose build backend

@@ -8,7 +8,7 @@ from fastapi import FastAPI, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.ext.asyncio import async_sessionmaker
 
-from app.api import health, policies, rag
+from app.api import claims, health, policies, rag
 from app.core.config import Settings, get_settings
 from app.core.db import create_engine
 from app.core.errors import register_exception_handlers
@@ -81,6 +81,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     app.include_router(health.router)
     app.include_router(policies.router)
     app.include_router(rag.router)
+    app.include_router(claims.router)
     return app
 
 

@@ -4,6 +4,8 @@ import sys
 from contextvars import ContextVar
 from datetime import UTC, datetime
 
+from app.core.redaction import PIIRedactingFilter
+
 # Set by the request middleware; every log line emitted while handling a request carries it.
 request_id_ctx: ContextVar[str | None] = ContextVar("request_id", default=None)
 
@@ -23,12 +25,15 @@ class JsonFormatter(logging.Formatter):
         payload.update({k: v for k, v in record.__dict__.items() if k not in _RESERVED})
         if record.exc_info:
             payload["exc_info"] = self.formatException(record.exc_info)
+        elif record.exc_text:  # already formatted (and redacted) by PIIRedactingFilter
+            payload["exc_info"] = record.exc_text
         return json.dumps(payload, default=str)
 
 
 def setup_logging(level: str = "INFO") -> None:
     handler = logging.StreamHandler(sys.stdout)
     handler.setFormatter(JsonFormatter())
+    handler.addFilter(PIIRedactingFilter())  # no raw phone / e-mail / Aadhaar in any log line
     root = logging.getLogger()
     root.handlers = [handler]
     root.setLevel(level.upper())

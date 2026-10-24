@@ -45,6 +45,7 @@ services:
       - ./data:/data
       - ./data_gen:/data_gen:ro
       - ./eval:/eval
+      - ./storage:/storage
     depends_on:
       postgres:
         condition: service_healthy

@@ -13,3 +13,6 @@ data/debug/
 # RAG eval: keep report.md / summary.json, drop the big raw per-question dumps
 eval/rag/results/*/per_question.jsonl
 eval/rag/results/*/raw/
+# uploaded claim documents (Module 6)
+storage/
+eval/intake/results/*/per_claim.jsonl

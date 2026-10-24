@@ -1,0 +1,6690 @@
+[
+  {
+    "claim_id": "CLM-001",
+    "scenario": "covered",
+    "subtype": "base",
+    "has_scanned_copy": false,
+    "expected_missing_documents": [],
+    "expected_consistency_issues": [],
+    "fields": {
+      "policy_number": "POL-PREM/2021/8009051",
+      "patient_name": "Suhani Bala",
+      "hospital_name": "Prakash Nursing & Maternity Home",
+      "admission_date": "2025-11-12",
+      "discharge_date": "2025-11-14",
+      "diagnosis_text": "Normal Vaginal Delivery",
+      "icd10_code": "O80",
+      "bill_subtotal": 77317,
+      "taxes": 600,
+      "bill_total": 77917,
+      "claimed_amount": 77917,
+      "line_item_count": 16,
+      "length_of_stay_days": 2
+    },
+    "line_items": [
+      {
+        "description": "Room Rent - Private Room",
+        "category": "room_rent",
+        "qty": 2,
+        "rate": 6000,
+        "amount": 12000,
+        "is_duplicate": false
+      },
+      {
+        "description": "Surgeon Fee - Normal Vaginal Delivery",
+        "category": "professional_fees",
+        "qty": 1,
+        "rate": 6234,
+        "amount": 6234,
+        "is_duplicate": false
+      },
+      {
+        "description": "Anaesthetist Fee",
+        "category": "professional_fees",
+        "qty": 1,
+        "rate": 4115,
+        "amount": 4115,
+        "is_duplicate": false
+      },
+      {
+        "description": "Assistant Surgeon Fee",
+        "category": "professional_fees",
+        "qty": 1,
+        "rate": 4659,
+        "amount": 4659,
+        "is_duplicate": false
+      },
+      {
+        "description": "Operation Theatre Charges",
+        "category": "ot_charges",
+        "qty": 1,
+        "rate": 9698,
+        "amount": 9698,
+        "is_duplicate": false
+      },
+      {
+        "description": "Injection Tramadol 50 mg",
+        "category": "medicines",
+        "qty": 9,
+        "rate": 554,
+        "amount": 4986,
+        "is_duplicate": false
+      },
+      {
+        "description": "Tablet Ondansetron 4 mg",
+        "category": "medicines",
+        "qty": 2,
+        "rate": 2365,
+        "amount": 4730,
+        "is_duplicate": false
+      },
+      {
+        "description": "Oral Rehydration & Supplements",
+        "category": "medicines",
+        "qty": 7,
+        "rate": 688,
+        "amount": 4816,
+        "is_duplicate": false
+      },
+      {
+        "description": "Disposables & Consumables",
+        "category": "consumables",
+        "qty": 1,
+        "rate": 6714,
+        "amount": 6714,
+        "is_duplicate": false
+      },
+      {
+        "description": "IV Cannula, Syringes & Infusion Sets",
+        "category": "consumables",
+        "qty": 1,
+        "rate": 8151,
+        "amount": 8151,
+        "is_duplicate": false
+      },
+      {
+        "description": "Obstetric USG",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 2044,
+        "amount": 2044,
+        "is_duplicate": false
+      },
+      {
+        "description": "Complete Blood Count",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 1645,
+        "amount": 1645,
+        "is_duplicate": false
+      },
+      {
+        "description": "Blood Grouping",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 2507,
+        "amount": 2507,
+        "is_duplicate": false
+      },
+      {
+        "description": "Radiology / Imaging",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 1543,
+        "amount": 1543,
+        "is_duplicate": false
+      },
+      {
+        "description": "Nursing & Service Charges",
+        "category": "other",
+        "qty": 1,
+        "rate": 2236,
+        "amount": 2236,
+        "is_duplicate": false
+      },
+      {
+        "description": "Registration & Admission Charges",
+        "category": "other",
+        "qty": 1,
+        "rate": 1239,
+        "amount": 1239,
+        "is_duplicate": false
+      }
+    ],
+    "documents": {
+      "discharge_summary_present": true,
+      "summary_admission_date": "2025-11-12",
+      "summary_discharge_date": "2025-11-14",
+      "bill_total_blank": false
+    },
+    "pii": {
+      "name": "Suhani Bala",
+      "phone": "07649716752",
+      "email": "suhani15@example.com",
+      "address": "48, Bhasin Path, Junagadh 828219",
+      "uhid": "UH6627725"
+    }
+  },
+  {
+    "claim_id": "CLM-002",
+    "scenario": "covered",
+    "subtype": "base",
+    "has_scanned_copy": false,
+    "expected_missing_documents": [],
+    "expected_consistency_issues": [],
+    "fields": {
+      "policy_number": "POL-PREM/2024/3449925",
+      "patient_name": "Vanya Thakur",
+      "hospital_name": "Sanjivani Heart & General Hospital",
+      "admission_date": "2026-08-13",
+      "discharge_date": "2026-08-19",
+      "diagnosis_text": "Primary Osteoarthritis of Knee",
+      "icd10_code": "M17.11",
+      "bill_subtotal": 337262,
+      "taxes": 0,
+      "bill_total": 337262,
+      "claimed_amount": 337262,
+      "line_item_count": 18,
+      "length_of_stay_days": 6
+    },
+    "line_items": [
+      {
+        "description": "Room Rent - Semi-Private Room",
+        "category": "room_rent",
+        "qty": 6,
+        "rate": 3000,
+        "amount": 18000,
+        "is_duplicate": false
+      },
+      {
+        "description": "Surgeon Fee - Total Knee Replacement (Unilateral)",
+        "category": "professional_fees",
+        "qty": 1,
+        "rate": 21691,
+        "amount": 21691,
+        "is_duplicate": false
+      },
+      {
+        "description": "Anaesthetist Fee",
+        "category": "professional_fees",
+        "qty": 1,
+        "rate": 32974,
+        "amount": 32974,
+        "is_duplicate": false
+      },
+      {
+        "description": "Assistant Surgeon Fee",
+        "category": "professional_fees",
+        "qty": 1,
+        "rate": 21166,
+        "amount": 21166,
+        "is_duplicate": false
+      },
+      {
+        "description": "Operation Theatre Charges",
+        "category": "ot_charges",
+        "qty": 1,
+        "rate": 45049,
+        "amount": 45049,
+        "is_duplicate": false
+      },
+      {
+        "description": "Tablet Paracetamol 650 mg",
+        "category": "medicines",
+        "qty": 2,
+        "rate": 12458,
+        "amount": 24916,
+        "is_duplicate": false
+      },
+      {
+        "description": "IV Fluids (NS / RL) 500 ml",
+        "category": "medicines",
+        "qty": 6,
+        "rate": 2117,
+        "amount": 12702,
+        "is_duplicate": false
+      },
+      {
+        "description": "Oral Rehydration & Supplements",
+        "category": "medicines",
+        "qty": 4,
+        "rate": 3182,
+        "amount": 12728,
+        "is_duplicate": false
+      },
+      {
+        "description": "Tablet Ondansetron 4 mg",
+        "category": "medicines",
+        "qty": 9,
+        "rate": 2796,
+        "amount": 25164,
+        "is_duplicate": false
+      },
+      {
+        "description": "Knee Prosthesis Implant",
+        "category": "consumables",
+        "qty": 1,
+        "rate": 39095,
+        "amount": 39095,
+        "is_duplicate": false
+      },
+      {
+        "description": "Dressing Material",
+        "category": "consumables",
+        "qty": 1,
+        "rate": 15019,
+        "amount": 15019,
+        "is_duplicate": false
+      },
+      {
+        "description": "IV Cannula, Syringes & Infusion Sets",
+        "category": "consumables",
+        "qty": 1,
+        "rate": 11044,
+        "amount": 11044,
+        "is_duplicate": false
+      },
+      {
+        "description": "X-Ray Knee AP/Lateral",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 10852,
+        "amount": 10852,
+        "is_duplicate": false
+      },
+      {
+        "description": "MRI Knee",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 10945,
+        "amount": 10945,
+        "is_duplicate": false
+      },
+      {
+        "description": "Complete Blood Count",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 9882,
+        "amount": 9882,
+        "is_duplicate": false
+      },
+      {
+        "description": "Pre-anaesthetic Check-up",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 10168,
+        "amount": 10168,
+        "is_duplicate": false
+      },
+      {
+        "description": "Nursing & Service Charges",
+        "category": "other",
+        "qty": 1,
+        "rate": 5788,
+        "amount": 5788,
+        "is_duplicate": false
+      },
+      {
+        "description": "Registration & Admission Charges",
+        "category": "other",
+        "qty": 1,
+        "rate": 10079,
+        "amount": 10079,
+        "is_duplicate": false
+      }
+    ],
+    "documents": {
+      "discharge_summary_present": true,
+      "summary_admission_date": "2026-08-13",
+      "summary_discharge_date": "2026-08-19",
+      "bill_total_blank": false
+    },
+    "pii": {
+      "name": "Vanya Thakur",
+      "phone": "9849531029",
+      "email": "vanya86@example.com",
+      "address": "39/641, Sachdeva Ganj, Durg-767704",
+      "uhid": "UH4094339"
+    }
+  },
+  {
+    "claim_id": "CLM-003",
+    "scenario": "covered",
+    "subtype": "base",
+    "has_scanned_copy": false,
+    "expected_missing_documents": [],
+    "expected_consistency_issues": [],
+    "fields": {
+      "policy_number": "POL-STD/2022/7518680",
+      "patient_name": "Aarnav Kothari",
+      "hospital_name": "Aastha Super Speciality Hospital",
+      "admission_date": "2025-09-15",
+      "discharge_date": "2025-09-22",
+      "diagnosis_text": "Primary Osteoarthritis of Knee",
+      "icd10_code": "M17.11",
+      "bill_subtotal": 391436,
+      "taxes": 0,
+      "bill_total": 391436,
+      "claimed_amount": 391436,
+      "line_item_count": 18,
+      "length_of_stay_days": 7
+    },
+    "line_items": [
+      {
+        "description": "Room Rent - General Ward",
+        "category": "room_rent",
+        "qty": 7,
+        "rate": 1700,
+        "amount": 11900,
+        "is_duplicate": false
+      },
+      {
+        "description": "Surgeon Fee - Total Knee Replacement (Unilateral)",
+        "category": "professional_fees",
+        "qty": 1,
+        "rate": 21973,
+        "amount": 21973,
+        "is_duplicate": false
+      },
+      {
+        "description": "Anaesthetist Fee",
+        "category": "professional_fees",
+        "qty": 1,
+        "rate": 29859,
+        "amount": 29859,
+        "is_duplicate": false
+      },
+      {
+        "description": "Assistant Surgeon Fee",
+        "category": "professional_fees",
+        "qty": 1,
+        "rate": 41213,
+        "amount": 41213,
+        "is_duplicate": false
+      },
+      {
+        "description": "Operation Theatre Charges",
+        "category": "ot_charges",
+        "qty": 1,
+        "rate": 60766,
+        "amount": 60766,
+        "is_duplicate": false
+      },
+      {
+        "description": "Oral Rehydration & Supplements",
+        "category": "medicines",
+        "qty": 6,
+        "rate": 2963,
+        "amount": 17778,
+        "is_duplicate": false
+      },
+      {
+        "description": "Tablet Paracetamol 650 mg",
+        "category": "medicines",
+        "qty": 3,
+        "rate": 6950,
+        "amount": 20850,
+        "is_duplicate": false
+      },
+      {
+        "description": "Injection Ceftriaxone 1 g",
+        "category": "medicines",
+        "qty": 9,
+        "rate": 2430,
+        "amount": 21870,
+        "is_duplicate": false
+      },
+      {
+        "description": "Tablet Ondansetron 4 mg",
+        "category": "medicines",
+        "qty": 1,
+        "rate": 17204,
+        "amount": 17204,
+        "is_duplicate": false
+      },
+      {
+        "description": "Knee Prosthesis Implant",
+        "category": "consumables",
+        "qty": 1,
+        "rate": 53214,
+        "amount": 53214,
+        "is_duplicate": false
+      },
+      {
+        "description": "Disposables & Consumables",
+        "category": "consumables",
+        "qty": 1,
+        "rate": 13231,
+        "amount": 13231,
+        "is_duplicate": false
+      },
+      {
+        "description": "IV Cannula, Syringes & Infusion Sets",
+        "category": "consumables",
+        "qty": 1,
+        "rate": 22244,
+        "amount": 22244,
+        "is_duplicate": false
+      },
+      {
+        "description": "X-Ray Knee AP/Lateral",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 10668,
+        "amount": 10668,
+        "is_duplicate": false
+      },
+      {
+        "description": "MRI Knee",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 8597,
+        "amount": 8597,
+        "is_duplicate": false
+      },
+      {
+        "description": "Complete Blood Count",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 9213,
+        "amount": 9213,
+        "is_duplicate": false
+      },
+      {
+        "description": "Pre-anaesthetic Check-up",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 13644,
+        "amount": 13644,
+        "is_duplicate": false
+      },
+      {
+        "description": "Nursing & Service Charges",
+        "category": "other",
+        "qty": 1,
+        "rate": 7469,
+        "amount": 7469,
+        "is_duplicate": false
+      },
+      {
+        "description": "Registration & Admission Charges",
+        "category": "other",
+        "qty": 1,
+        "rate": 9743,
+        "amount": 9743,
+        "is_duplicate": false
+      }
+    ],
+    "documents": {
+      "discharge_summary_present": true,
+      "summary_admission_date": "2025-09-15",
+      "summary_discharge_date": "2025-09-22",
+      "bill_total_blank": false
+    },
+    "pii": {
+      "name": "Aarnav Kothari",
+      "phone": "02185208466",
+      "email": "aarnav83@example.com",
+      "address": "H.No. 239, Boase Path, Coimbatore-947840",
+      "uhid": "UH4311364"
+    }
+  },
+  {
+    "claim_id": "CLM-004",
+    "scenario": "incomplete",
+    "subtype": "missing_discharge_summary",
+    "has_scanned_copy": true,
+    "expected_missing_documents": [
+      "discharge_summary"
+    ],
+    "expected_consistency_issues": [
+      "missing_document:discharge_summary"
+    ],
+    "fields": {
+      "policy_number": "POL-PREM/2025/6045547",
+      "patient_name": "Zayyan Subramaniam",
+      "hospital_name": "Aastha Super Speciality Hospital",
+      "admission_date": "2025-08-21",
+      "discharge_date": "2025-08-26",
+      "diagnosis_text": "Dengue Fever with Thrombocytopenia",
+      "icd10_code": "A90",
+      "bill_subtotal": 103319,
+      "taxes": 0,
+      "bill_total": 103319,
+      "claimed_amount": 103319,
+      "line_item_count": 15,
+      "length_of_stay_days": 5
+    },
+    "line_items": [
+      {
+        "description": "Room Rent - Semi-Private Room",
+        "category": "room_rent",
+        "qty": 5,
+        "rate": 3000,
+        "amount": 15000,
+        "is_duplicate": false
+      },
+      {
+        "description": "Consultant Physician Charges",
+        "category": "professional_fees",
+        "qty": 1,
+        "rate": 10228,
+        "amount": 10228,
+        "is_duplicate": false
+      },
+      {
+        "description": "Resident Medical Officer Charges",
+        "category": "professional_fees",
+        "qty": 1,
+        "rate": 8148,
+        "amount": 8148,
+        "is_duplicate": false
+      },
+      {
+        "description": "Oral Rehydration & Supplements",
+        "category": "medicines",
+        "qty": 1,
+        "rate": 9920,
+        "amount": 9920,
+        "is_duplicate": false
+      },
+      {
+        "description": "Injection Ceftriaxone 1 g",
+        "category": "medicines",
+        "qty": 5,
+        "rate": 1929,
+        "amount": 9645,
+        "is_duplicate": false
+      },
+      {
+        "description": "IV Fluids (NS / RL) 500 ml",
+        "category": "medicines",
+        "qty": 1,
+        "rate": 10040,
+        "amount": 10040,
+        "is_duplicate": false
+      },
+      {
+        "description": "Tablet Ondansetron 4 mg",
+        "category": "medicines",
+        "qty": 3,
+        "rate": 2045,
+        "amount": 6135,
+        "is_duplicate": false
+      },
+      {
+        "description": "IV Cannula, Syringes & Infusion Sets",
+        "category": "consumables",
+        "qty": 1,
+        "rate": 6074,
+        "amount": 6074,
+        "is_duplicate": false
+      },
+      {
+        "description": "Disposables & Consumables",
+        "category": "consumables",
+        "qty": 1,
+        "rate": 3596,
+        "amount": 3596,
+        "is_duplicate": false
+      },
+      {
+        "description": "NS1 Antigen",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 5649,
+        "amount": 5649,
+        "is_duplicate": false
+      },
+      {
+        "description": "Dengue IgM/IgG Serology",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 4201,
+        "amount": 4201,
+        "is_duplicate": false
+      },
+      {
+        "description": "Platelet Count Serial",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 3921,
+        "amount": 3921,
+        "is_duplicate": false
+      },
+      {
+        "description": "Complete Blood Count",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 5772,
+        "amount": 5772,
+        "is_duplicate": false
+      },
+      {
+        "description": "Nursing & Service Charges",
+        "category": "other",
+        "qty": 1,
+        "rate": 2486,
+        "amount": 2486,
+        "is_duplicate": false
+      },
+      {
+        "description": "Registration & Admission Charges",
+        "category": "other",
+        "qty": 1,
+        "rate": 2504,
+        "amount": 2504,
+        "is_duplicate": false
+      }
+    ],
+    "documents": {
+      "discharge_summary_present": false,
+      "summary_admission_date": null,
+      "summary_discharge_date": null,
+      "bill_total_blank": false
+    },
+    "pii": {
+      "name": "Zayyan Subramaniam",
+      "phone": "01295951689",
+      "email": "zayyan62@example.com",
+      "address": "987, Sha Chowk, Chinsurah-450657",
+      "uhid": "UH9539923"
+    }
+  },
+  {
+    "claim_id": "CLM-005",
+    "scenario": "rejected",
+    "subtype": "specific_waiting:hernia",
+    "has_scanned_copy": false,
+    "expected_missing_documents": [],
+    "expected_consistency_issues": [],
+    "fields": {
+      "policy_number": "POL-STD/2024/8057940",
+      "patient_name": "Gauri Sathe",
+      "hospital_name": "Medicare Plus Hospital",
+      "admission_date": "2026-07-21",
+      "discharge_date": "2026-07-24",
+      "diagnosis_text": "Inguinal Hernia",
+      "icd10_code": "K40.90",
+      "bill_subtotal": 71412,
+      "taxes": 0,
+      "bill_total": 71412,
+      "claimed_amount": 71412,
+      "line_item_count": 18,
+      "length_of_stay_days": 3
+    },
+    "line_items": [
+      {
+        "description": "Room Rent - Semi-Private Room",
+        "category": "room_rent",
+        "qty": 3,
+        "rate": 4000,
+        "amount": 12000,
+        "is_duplicate": false
+      },
+      {
+        "description": "Surgeon Fee - Laparoscopic Inguinal Hernia Repair (Mesh)",
+        "category": "professional_fees",
+        "qty": 1,
+        "rate": 4095,
+        "amount": 4095,
+        "is_duplicate": false
+      },
+      {
+        "description": "Anaesthetist Fee",
+        "category": "professional_fees",
+        "qty": 1,
+        "rate": 5280,
+        "amount": 5280,
+        "is_duplicate": false
+      },
+      {
+        "description": "Assistant Surgeon Fee",
+        "category": "professional_fees",
+        "qty": 1,
+        "rate": 4010,
+        "amount": 4010,
+        "is_duplicate": false
+      },
+      {
+        "description": "Operation Theatre Charges",
+        "category": "ot_charges",
+        "qty": 1,
+        "rate": 8992,
+        "amount": 8992,
+        "is_duplicate": false
+      },
+      {
+        "description": "Injection Ceftriaxone 1 g",
+        "category": "medicines",
+        "qty": 8,
+        "rate": 387,
+        "amount": 3096,
+        "is_duplicate": false
+      },
+      {
+        "description": "Injection Tramadol 50 mg",
+        "category": "medicines",
+        "qty": 8,
+        "rate": 339,
+        "amount": 2712,
+        "is_duplicate": false
+      },
+      {
+        "description": "Oral Rehydration & Supplements",
+        "category": "medicines",
+        "qty": 3,
+        "rate": 1089,
+        "amount": 3267,
+        "is_duplicate": false
+      },
+      {
+        "description": "Tablet Paracetamol 650 mg",
+        "category": "medicines",
+        "qty": 2,
+        "rate": 2120,
+        "amount": 4240,
+        "is_duplicate": false
+      },
+      {
+        "description": "Surgical Mesh",
+        "category": "consumables",
+        "qty": 1,
+        "rate": 8563,
+        "amount": 8563,
+        "is_duplicate": false
+      },
+      {
+        "description": "Dressing Material",
+        "category": "consumables",
+        "qty": 1,
+        "rate": 2564,
+        "amount": 2564,
+        "is_duplicate": false
+      },
+      {
+        "description": "IV Cannula, Syringes & Infusion Sets",
+        "category": "consumables",
+        "qty": 1,
+        "rate": 3144,
+        "amount": 3144,
+        "is_duplicate": false
+      },
+      {
+        "description": "USG Abdomen/Inguinal Region",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 2009,
+        "amount": 2009,
+        "is_duplicate": false
+      },
+      {
+        "description": "Complete Blood Count",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 2089,
+        "amount": 2089,
+        "is_duplicate": false
+      },
+      {
+        "description": "Pre-anaesthetic Check-up",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 1527,
+        "amount": 1527,
+        "is_duplicate": false
+      },
+      {
+        "description": "Radiology / Imaging",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 1367,
+        "amount": 1367,
+        "is_duplicate": false
+      },
+      {
+        "description": "Nursing & Service Charges",
+        "category": "other",
+        "qty": 1,
+        "rate": 1309,
+        "amount": 1309,
+        "is_duplicate": false
+      },
+      {
+        "description": "Registration & Admission Charges",
+        "category": "other",
+        "qty": 1,
+        "rate": 1148,
+        "amount": 1148,
+        "is_duplicate": false
+      }
+    ],
+    "documents": {
+      "discharge_summary_present": true,
+      "summary_admission_date": "2026-07-21",
+      "summary_discharge_date": "2026-07-24",
+      "bill_total_blank": false
+    },
+    "pii": {
+      "name": "Gauri Sathe",
+      "phone": "+916277345458",
+      "email": "gauri11@example.com",
+      "address": "63/44, Shah Circle, Durg 954235",
+      "uhid": "UH6387716"
+    }
+  },
+  {
+    "claim_id": "CLM-006",
+    "scenario": "rejected",
+    "subtype": "specific_waiting:cataract",
+    "has_scanned_copy": false,
+    "expected_missing_documents": [],
+    "expected_consistency_issues": [],
+    "fields": {
+      "policy_number": "POL-PREM/2025/7877887",
+      "patient_name": "Warhi Lad",
+      "hospital_name": "Arya Vaidya Hospital",
+      "admission_date": "2026-05-28",
+      "discharge_date": "2026-05-29",
+      "diagnosis_text": "Senile Cataract",
+      "icd10_code": "H25.9",
+      "bill_subtotal": 40868,
+      "taxes": 0,
+      "bill_total": 40868,
+      "claimed_amount": 40868,
+      "line_item_count": 16,
+      "length_of_stay_days": 1
+    },
+    "line_items": [
+      {
+        "description": "Room Rent - Private Room",
+        "category": "room_rent",
+        "qty": 1,
+        "rate": 4500,
+        "amount": 4500,
+        "is_duplicate": false
+      },
+      {
+        "description": "Surgeon Fee - Phacoemulsification with IOL Implant",
+        "category": "professional_fees",
+        "qty": 1,
+        "rate": 5532,
+        "amount": 5532,
+        "is_duplicate": false
+      },
+      {
+        "description": "Anaesthetist Fee",
+        "category": "professional_fees",
+        "qty": 1,
+        "rate": 3910,
+        "amount": 3910,
+        "is_duplicate": false
+      },
+      {
+        "description": "Operation Theatre Charges",
+        "category": "ot_charges",
+        "qty": 1,
+        "rate": 5679,
+        "amount": 5679,
+        "is_duplicate": false
+      },
+      {
+        "description": "IV Fluids (NS / RL) 500 ml",
+        "category": "medicines",
+        "qty": 7,
+        "rate": 116,
+        "amount": 812,
+        "is_duplicate": false
+      },
+      {
+        "description": "Tablet Ondansetron 4 mg",
+        "category": "medicines",
+        "qty": 7,
+        "rate": 179,
+        "amount": 1253,
+        "is_duplicate": false
+      },
+      {
+        "description": "Injection Tramadol 50 mg",
+        "category": "medicines",
+        "qty": 6,
+        "rate": 186,
+        "amount": 1116,
+        "is_duplicate": false
+      },
+      {
+        "description": "Injection Ceftriaxone 1 g",
+        "category": "medicines",
+        "qty": 9,
+        "rate": 133,
+        "amount": 1197,
+        "is_duplicate": false
+      },
+      {
+        "description": "Intraocular Lens (IOL)",
+        "category": "consumables",
+        "qty": 1,
+        "rate": 7068,
+        "amount": 7068,
+        "is_duplicate": false
+      },
+      {
+        "description": "Disposables & Consumables",
+        "category": "consumables",
+        "qty": 1,
+        "rate": 3077,
+        "amount": 3077,
+        "is_duplicate": false
+      },
+      {
+        "description": "Dressing Material",
+        "category": "consumables",
+        "qty": 1,
+        "rate": 1635,
+        "amount": 1635,
+        "is_duplicate": false
+      },
+      {
+        "description": "Biometry (A-Scan)",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 1181,
+        "amount": 1181,
+        "is_duplicate": false
+      },
+      {
+        "description": "Pre-operative Blood Work",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 1525,
+        "amount": 1525,
+        "is_duplicate": false
+      },
+      {
+        "description": "Radiology / Imaging",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 1214,
+        "amount": 1214,
+        "is_duplicate": false
+      },
+      {
+        "description": "Nursing & Service Charges",
+        "category": "other",
+        "qty": 1,
+        "rate": 747,
+        "amount": 747,
+        "is_duplicate": false
+      },
+      {
+        "description": "Registration & Admission Charges",
+        "category": "other",
+        "qty": 1,
+        "rate": 422,
+        "amount": 422,
+        "is_duplicate": false
+      }
+    ],
+    "documents": {
+      "discharge_summary_present": true,
+      "summary_admission_date": "2026-05-28",
+      "summary_discharge_date": "2026-05-29",
+      "bill_total_blank": false
+    },
+    "pii": {
+      "name": "Warhi Lad",
+      "phone": "+913021922381",
+      "email": "warhi31@example.com",
+      "address": "H.No. 703, Bail Circle, Imphal-415923",
+      "uhid": "UH9418526"
+    }
+  },
+  {
+    "claim_id": "CLM-007",
+    "scenario": "risk",
+    "subtype": "high_bill",
+    "has_scanned_copy": false,
+    "expected_missing_documents": [],
+    "expected_consistency_issues": [],
+    "fields": {
+      "policy_number": "POL-STD/2023/9102493",
+      "patient_name": "Vasatika Modi",
+      "hospital_name": "Aastha Super Speciality Hospital",
+      "admission_date": "2025-06-02",
+      "discharge_date": "2025-06-08",
+      "diagnosis_text": "Fracture Shaft of Tibia (road traffic accident)",
+      "icd10_code": "S82.201A",
+      "bill_subtotal": 492608,
+      "taxes": 0,
+      "bill_total": 492608,
+      "claimed_amount": 492608,
+      "line_item_count": 17,
+      "length_of_stay_days": 6
+    },
+    "line_items": [
+      {
+        "description": "Room Rent - General Ward",
+        "category": "room_rent",
+        "qty": 6,
+        "rate": 2200,
+        "amount": 13200,
+        "is_duplicate": false
+      },
+      {
+        "description": "Surgeon Fee - Open Reduction and Internal Fixation (ORIF)",
+        "category": "professional_fees",
+        "qty": 1,
+        "rate": 36424,
+        "amount": 36424,
+        "is_duplicate": false
+      },
+      {
+        "description": "Anaesthetist Fee",
+        "category": "professional_fees",
+        "qty": 1,
+        "rate": 48903,
+        "amount": 48903,
+        "is_duplicate": false
+      },
+      {
+        "description": "Assistant Surgeon Fee",
+        "category": "professional_fees",
+        "qty": 1,
+        "rate": 26457,
+        "amount": 26457,
+        "is_duplicate": false
+      },
+      {
+        "description": "Operation Theatre Charges",
+        "category": "ot_charges",
+        "qty": 1,
+        "rate": 67706,
+        "amount": 67706,
+        "is_duplicate": false
+      },
+      {
+        "description": "Oral Rehydration & Supplements",
+        "category": "medicines",
+        "qty": 4,
+        "rate": 10562,
+        "amount": 42248,
+        "is_duplicate": false
+      },
+      {
+        "description": "Injection Ceftriaxone 1 g",
+        "category": "medicines",
+        "qty": 7,
+        "rate": 5607,
+        "amount": 39249,
+        "is_duplicate": false
+      },
+      {
+        "description": "Tablet Ondansetron 4 mg",
+        "category": "medicines",
+        "qty": 1,
+        "rate": 25192,
+        "amount": 25192,
+        "is_duplicate": false
+      },
+      {
+        "description": "Orthopaedic Plate and Screws",
+        "category": "consumables",
+        "qty": 1,
+        "rate": 68659,
+        "amount": 68659,
+        "is_duplicate": false
+      },
+      {
+        "description": "IV Cannula, Syringes & Infusion Sets",
+        "category": "consumables",
+        "qty": 1,
+        "rate": 15706,
+        "amount": 15706,
+        "is_duplicate": false
+      },
+      {
+        "description": "Disposables & Consumables",
+        "category": "consumables",
+        "qty": 1,
+        "rate": 30067,
+        "amount": 30067,
+        "is_duplicate": false
+      },
+      {
+        "description": "X-Ray Tibia/Fibula AP/Lateral",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 14011,
+        "amount": 14011,
+        "is_duplicate": false
+      },
+      {
+        "description": "Complete Blood Count",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 11256,
+        "amount": 11256,
+        "is_duplicate": false
+      },
+      {
+        "description": "Pre-anaesthetic Check-up",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 9029,
+        "amount": 9029,
+        "is_duplicate": false
+      },
+      {
+        "description": "Radiology / Imaging",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 20017,
+        "amount": 20017,
+        "is_duplicate": false
+      },
+      {
+        "description": "Nursing & Service Charges",
+        "category": "other",
+        "qty": 1,
+        "rate": 8947,
+        "amount": 8947,
+        "is_duplicate": false
+      },
+      {
+        "description": "Registration & Admission Charges",
+        "category": "other",
+        "qty": 1,
+        "rate": 15537,
+        "amount": 15537,
+        "is_duplicate": false
+      }
+    ],
+    "documents": {
+      "discharge_summary_present": true,
+      "summary_admission_date": "2025-06-02",
+      "summary_discharge_date": "2025-06-08",
+      "bill_total_blank": false
+    },
+    "pii": {
+      "name": "Vasatika Modi",
+      "phone": "5244732320",
+      "email": "vasatika29@example.com",
+      "address": "65/12, Bhatti Ganj, Durgapur 674511",
+      "uhid": "UH7747554"
+    }
+  },
+  {
+    "claim_id": "CLM-008",
+    "scenario": "covered",
+    "subtype": "base",
+    "has_scanned_copy": false,
+    "expected_missing_documents": [],
+    "expected_consistency_issues": [],
+    "fields": {
+      "policy_number": "POL-STD/2025/4096979",
+      "patient_name": "Girik Kibe",
+      "hospital_name": "Aastha Super Speciality Hospital",
+      "admission_date": "2026-02-16",
+      "discharge_date": "2026-02-22",
+      "diagnosis_text": "Enteric Fever (Typhoid)",
+      "icd10_code": "A01.0",
+      "bill_subtotal": 55045,
+      "taxes": 0,
+      "bill_total": 55045,
+      "claimed_amount": 55045,
+      "line_item_count": 14,
+      "length_of_stay_days": 6
+    },
+    "line_items": [
+      {
+        "description": "Room Rent - Semi-Private Room",
+        "category": "room_rent",
+        "qty": 6,
+        "rate": 3000,
+        "amount": 18000,
+        "is_duplicate": false
+      },
+      {
+        "description": "Consultant Physician Charges",
+        "category": "professional_fees",
+        "qty": 1,
+        "rate": 4068,
+        "amount": 4068,
+        "is_duplicate": false
+      },
+      {
+        "description": "Resident Medical Officer Charges",
+        "category": "professional_fees",
+        "qty": 1,
+        "rate": 3342,
+        "amount": 3342,
+        "is_duplicate": false
+      },
+      {
+        "description": "Tablet Ondansetron 4 mg",
+        "category": "medicines",
+        "qty": 10,
+        "rate": 395,
+        "amount": 3950,
+        "is_duplicate": false
+      },
+      {
+        "description": "Injection Pantoprazole 40 mg",
+        "category": "medicines",
+        "qty": 1,
+        "rate": 3251,
+        "amount": 3251,
+        "is_duplicate": false
+      },
+      {
+        "description": "Tablet Paracetamol 650 mg",
+        "category": "medicines",
+        "qty": 4,
+        "rate": 1701,
+        "amount": 6804,
+        "is_duplicate": false
+      },
+      {
+        "description": "Dressing Material",
+        "category": "consumables",
+        "qty": 1,
+        "rate": 1631,
+        "amount": 1631,
+        "is_duplicate": false
+      },
+      {
+        "description": "IV Cannula, Syringes & Infusion Sets",
+        "category": "consumables",
+        "qty": 1,
+        "rate": 2521,
+        "amount": 2521,
+        "is_duplicate": false
+      },
+      {
+        "description": "Widal Test",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 1622,
+        "amount": 1622,
+        "is_duplicate": false
+      },
+      {
+        "description": "Blood Culture",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 2738,
+        "amount": 2738,
+        "is_duplicate": false
+      },
+      {
+        "description": "Complete Blood Count",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 3078,
+        "amount": 3078,
+        "is_duplicate": false
+      },
+      {
+        "description": "Liver Function Test",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 2136,
+        "amount": 2136,
+        "is_duplicate": false
+      },
+      {
+        "description": "Nursing & Service Charges",
+        "category": "other",
+        "qty": 1,
+        "rate": 1009,
+        "amount": 1009,
+        "is_duplicate": false
+      },
+      {
+        "description": "Registration & Admission Charges",
+        "category": "other",
+        "qty": 1,
+        "rate": 895,
+        "amount": 895,
+        "is_duplicate": false
+      }
+    ],
+    "documents": {
+      "discharge_summary_present": true,
+      "summary_admission_date": "2026-02-16",
+      "summary_discharge_date": "2026-02-22",
+      "bill_total_blank": false
+    },
+    "pii": {
+      "name": "Girik Kibe",
+      "phone": "2315505792",
+      "email": "girik11@example.com",
+      "address": "900, Kanda Chowk, Bhiwani 235769",
+      "uhid": "UH8266403"
+    }
+  },
+  {
+    "claim_id": "CLM-009",
+    "scenario": "covered",
+    "subtype": "base",
+    "has_scanned_copy": false,
+    "expected_missing_documents": [],
+    "expected_consistency_issues": [],
+    "fields": {
+      "policy_number": "POL-STD/2023/7764132",
+      "patient_name": "Barkha Sur",
+      "hospital_name": "Arya Vaidya Hospital",
+      "admission_date": "2025-12-27",
+      "discharge_date": "2025-12-29",
+      "diagnosis_text": "Inguinal Hernia",
+      "icd10_code": "K40.90",
+      "bill_subtotal": 101119,
+      "taxes": 0,
+      "bill_total": 101119,
+      "claimed_amount": 101119,
+      "line_item_count": 17,
+      "length_of_stay_days": 2
+    },
+    "line_items": [
+      {
+        "description": "Room Rent - Private Room",
+        "category": "room_rent",
+        "qty": 2,
+        "rate": 4900,
+        "amount": 9800,
+        "is_duplicate": false
+      },
+      {
+        "description": "Surgeon Fee - Laparoscopic Inguinal Hernia Repair (Mesh)",
+        "category": "professional_fees",
+        "qty": 1,
+        "rate": 4686,
+        "amount": 4686,
+        "is_duplicate": false
+      },
+      {
+        "description": "Anaesthetist Fee",
+        "category": "professional_fees",
+        "qty": 1,
+        "rate": 8528,
+        "amount": 8528,
+        "is_duplicate": false
+      },
+      {
+        "description": "Assistant Surgeon Fee",
+        "category": "professional_fees",
+        "qty": 1,
+        "rate": 7134,
+        "amount": 7134,
+        "is_duplicate": false
+      },
+      {
+        "description": "Operation Theatre Charges",
+        "category": "ot_charges",
+        "qty": 1,
+        "rate": 13144,
+        "amount": 13144,
+        "is_duplicate": false
+      },
+      {
+        "description": "Injection Pantoprazole 40 mg",
+        "category": "medicines",
+        "qty": 4,
+        "rate": 1284,
+        "amount": 5136,
+        "is_duplicate": false
+      },
+      {
+        "description": "Injection Tramadol 50 mg",
+        "category": "medicines",
+        "qty": 9,
+        "rate": 736,
+        "amount": 6624,
+        "is_duplicate": false
+      },
+      {
+        "description": "Tablet Paracetamol 650 mg",
+        "category": "medicines",
+        "qty": 5,
+        "rate": 1644,
+        "amount": 8220,
+        "is_duplicate": false
+      },
+      {
+        "description": "Surgical Mesh",
+        "category": "consumables",
+        "qty": 1,
+        "rate": 12042,
+        "amount": 12042,
+        "is_duplicate": false
+      },
+      {
+        "description": "IV Cannula, Syringes & Infusion Sets",
+        "category": "consumables",
+        "qty": 1,
+        "rate": 3588,
+        "amount": 3588,
+        "is_duplicate": false
+      },
+      {
+        "description": "Dressing Material",
+        "category": "consumables",
+        "qty": 1,
+        "rate": 4440,
+        "amount": 4440,
+        "is_duplicate": false
+      },
+      {
+        "description": "USG Abdomen/Inguinal Region",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 2960,
+        "amount": 2960,
+        "is_duplicate": false
+      },
+      {
+        "description": "Complete Blood Count",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 3020,
+        "amount": 3020,
+        "is_duplicate": false
+      },
+      {
+        "description": "Pre-anaesthetic Check-up",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 3760,
+        "amount": 3760,
+        "is_duplicate": false
+      },
+      {
+        "description": "Radiology / Imaging",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 3602,
+        "amount": 3602,
+        "is_duplicate": false
+      },
+      {
+        "description": "Nursing & Service Charges",
+        "category": "other",
+        "qty": 1,
+        "rate": 1966,
+        "amount": 1966,
+        "is_duplicate": false
+      },
+      {
+        "description": "Registration & Admission Charges",
+        "category": "other",
+        "qty": 1,
+        "rate": 2469,
+        "amount": 2469,
+        "is_duplicate": false
+      }
+    ],
+    "documents": {
+      "discharge_summary_present": true,
+      "summary_admission_date": "2025-12-27",
+      "summary_discharge_date": "2025-12-29",
+      "bill_total_blank": false
+    },
+    "pii": {
+      "name": "Barkha Sur",
+      "phone": "02709528851",
+      "email": "barkha48@example.com",
+      "address": "H.No. 40, Sankaran Circle, Srinagar 861552",
+      "uhid": "UH4704554"
+    }
+  },
+  {
+    "claim_id": "CLM-010",
+    "scenario": "risk",
+    "subtype": "date_mismatch",
+    "has_scanned_copy": true,
+    "expected_missing_documents": [],
+    "expected_consistency_issues": [
+      "date_mismatch"
+    ],
+    "fields": {
+      "policy_number": "POL-STD/2025/4276244",
+      "patient_name": "Samarth Bala",
+      "hospital_name": "Medicare Plus Hospital",
+      "admission_date": "2026-09-16",
+      "discharge_date": "2026-09-20",
+      "diagnosis_text": "Community Acquired Pneumonia",
+      "icd10_code": "J18.9",
+      "bill_subtotal": 83111,
+      "taxes": 0,
+      "bill_total": 83111,
+      "claimed_amount": 83111,
+      "line_item_count": 15,
+      "length_of_stay_days": 4
+    },
+    "line_items": [
+      {
+        "description": "Room Rent - General Ward",
+        "category": "room_rent",
+        "qty": 4,
+        "rate": 2100,
+        "amount": 8400,
+        "is_duplicate": false
+      },
+      {
+        "description": "Consultant Physician Charges",
+        "category": "professional_fees",
+        "qty": 1,
+        "rate": 7609,
+        "amount": 7609,
+        "is_duplicate": false
+      },
+      {
+        "description": "Resident Medical Officer Charges",
+        "category": "professional_fees",
+        "qty": 1,
+        "rate": 5737,
+        "amount": 5737,
+        "is_duplicate": false
+      },
+      {
+        "description": "Oral Rehydration & Supplements",
+        "category": "medicines",
+        "qty": 7,
+        "rate": 1374,
+        "amount": 9618,
+        "is_duplicate": false
+      },
+      {
+        "description": "IV Fluids (NS / RL) 500 ml",
+        "category": "medicines",
+        "qty": 3,
+        "rate": 2571,
+        "amount": 7713,
+        "is_duplicate": false
+      },
+      {
+        "description": "Injection Pantoprazole 40 mg",
+        "category": "medicines",
+        "qty": 2,
+        "rate": 4142,
+        "amount": 8284,
+        "is_duplicate": false
+      },
+      {
+        "description": "Tablet Paracetamol 650 mg",
+        "category": "medicines",
+        "qty": 2,
+        "rate": 3572,
+        "amount": 7144,
+        "is_duplicate": false
+      },
+      {
+        "description": "IV Cannula, Syringes & Infusion Sets",
+        "category": "consumables",
+        "qty": 1,
+        "rate": 3543,
+        "amount": 3543,
+        "is_duplicate": false
+      },
+      {
+        "description": "Dressing Material",
+        "category": "consumables",
+        "qty": 1,
+        "rate": 3861,
+        "amount": 3861,
+        "is_duplicate": false
+      },
+      {
+        "description": "Chest X-Ray",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 4949,
+        "amount": 4949,
+        "is_duplicate": false
+      },
+      {
+        "description": "Sputum Culture",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 3095,
+        "amount": 3095,
+        "is_duplicate": false
+      },
+      {
+        "description": "Complete Blood Count",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 4396,
+        "amount": 4396,
+        "is_duplicate": false
+      },
+      {
+        "description": "Arterial Blood Gas",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 5032,
+        "amount": 5032,
+        "is_duplicate": false
+      },
+      {
+        "description": "Nursing & Service Charges",
+        "category": "other",
+        "qty": 1,
+        "rate": 2146,
+        "amount": 2146,
+        "is_duplicate": false
+      },
+      {
+        "description": "Registration & Admission Charges",
+        "category": "other",
+        "qty": 1,
+        "rate": 1584,
+        "amount": 1584,
+        "is_duplicate": false
+      }
+    ],
+    "documents": {
+      "discharge_summary_present": true,
+      "summary_admission_date": "2026-09-19",
+      "summary_discharge_date": "2026-09-23",
+      "bill_total_blank": false
+    },
+    "pii": {
+      "name": "Samarth Bala",
+      "phone": "01794639771",
+      "email": "samarth87@example.com",
+      "address": "67/937, Chakrabarti Marg, Gandhinagar-674068",
+      "uhid": "UH4597258"
+    }
+  },
+  {
+    "claim_id": "CLM-011",
+    "scenario": "partial",
+    "subtype": "room_rent",
+    "has_scanned_copy": true,
+    "expected_missing_documents": [],
+    "expected_consistency_issues": [],
+    "fields": {
+      "policy_number": "POL-STD/2023/8459741",
+      "patient_name": "Widisha Bedi",
+      "hospital_name": "Arya Vaidya Hospital",
+      "admission_date": "2025-08-11",
+      "discharge_date": "2025-08-14",
+      "diagnosis_text": "Cholelithiasis (Gallstones) with Cholecystitis",
+      "icd10_code": "K80.20",
+      "bill_subtotal": 94198,
+      "taxes": 1155,
+      "bill_total": 95353,
+      "claimed_amount": 95353,
+      "line_item_count": 17,
+      "length_of_stay_days": 3
+    },
+    "line_items": [
+      {
+        "description": "Room Rent - Deluxe Room",
+        "category": "room_rent",
+        "qty": 3,
+        "rate": 7700,
+        "amount": 23100,
+        "is_duplicate": false
+      },
+      {
+        "description": "Surgeon Fee - Laparoscopic Cholecystectomy",
+        "category": "professional_fees",
+        "qty": 1,
+        "rate": 5113,
+        "amount": 5113,
+        "is_duplicate": false
+      },
+      {
+        "description": "Anaesthetist Fee",
+        "category": "professional_fees",
+        "qty": 1,
+        "rate": 7027,
+        "amount": 7027,
+        "is_duplicate": false
+      },
+      {
+        "description": "Assistant Surgeon Fee",
+        "category": "professional_fees",
+        "qty": 1,
+        "rate": 6529,
+        "amount": 6529,
+        "is_duplicate": false
+      },
+      {
+        "description": "Operation Theatre Charges",
+        "category": "ot_charges",
+        "qty": 1,
+        "rate": 11318,
+        "amount": 11318,
+        "is_duplicate": false
+      },
+      {
+        "description": "IV Fluids (NS / RL) 500 ml",
+        "category": "medicines",
+        "qty": 1,
+        "rate": 4349,
+        "amount": 4349,
+        "is_duplicate": false
+      },
+      {
+        "description": "Injection Pantoprazole 40 mg",
+        "category": "medicines",
+        "qty": 5,
+        "rate": 438,
+        "amount": 2190,
+        "is_duplicate": false
+      },
+      {
+        "description": "Oral Rehydration & Supplements",
+        "category": "medicines",
+        "qty": 6,
+        "rate": 620,
+        "amount": 3720,
+        "is_duplicate": false
+      },
+      {
+        "description": "Injection Ceftriaxone 1 g",
+        "category": "medicines",
+        "qty": 10,
+        "rate": 347,
+        "amount": 3470,
+        "is_duplicate": false
+      },
+      {
+        "description": "Disposables & Consumables",
+        "category": "consumables",
+        "qty": 1,
+        "rate": 6503,
+        "amount": 6503,
+        "is_duplicate": false
+      },
+      {
+        "description": "IV Cannula, Syringes & Infusion Sets",
+        "category": "consumables",
+        "qty": 1,
+        "rate": 8020,
+        "amount": 8020,
+        "is_duplicate": false
+      },
+      {
+        "description": "USG Abdomen",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 2273,
+        "amount": 2273,
+        "is_duplicate": false
+      },
+      {
+        "description": "Liver Function Test",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 2116,
+        "amount": 2116,
+        "is_duplicate": false
+      },
+      {
+        "description": "Complete Blood Count",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 2344,
+        "amount": 2344,
+        "is_duplicate": false
+      },
+      {
+        "description": "Pre-anaesthetic Check-up",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 2572,
+        "amount": 2572,
+        "is_duplicate": false
+      },
+      {
+        "description": "Nursing & Service Charges",
+        "category": "other",
+        "qty": 1,
+        "rate": 1838,
+        "amount": 1838,
+        "is_duplicate": false
+      },
+      {
+        "description": "Registration & Admission Charges",
+        "category": "other",
+        "qty": 1,
+        "rate": 1716,
+        "amount": 1716,
+        "is_duplicate": false
+      }
+    ],
+    "documents": {
+      "discharge_summary_present": true,
+      "summary_admission_date": "2025-08-11",
+      "summary_discharge_date": "2025-08-14",
+      "bill_total_blank": false
+    },
+    "pii": {
+      "name": "Widisha Bedi",
+      "phone": "3233615171",
+      "email": "widisha23@example.com",
+      "address": "88/798, Dhingra Marg, Nagaon-548776",
+      "uhid": "UH8192830"
+    }
+  },
+  {
+    "claim_id": "CLM-012",
+    "scenario": "rejected",
+    "subtype": "exclusion:obesity_treatment",
+    "has_scanned_copy": false,
+    "expected_missing_documents": [],
+    "expected_consistency_issues": [],
+    "fields": {
+      "policy_number": "POL-PREM/2023/3812714",
+      "patient_name": "Gabriel Ratti",
+      "hospital_name": "Vedanta Health Institute",
+      "admission_date": "2026-01-01",
+      "discharge_date": "2026-01-04",
+      "diagnosis_text": "Morbid Obesity",
+      "icd10_code": "E66.01",
+      "bill_subtotal": 316424,
+      "taxes": 0,
+      "bill_total": 316424,
+      "claimed_amount": 316424,
+      "line_item_count": 17,
+      "length_of_stay_days": 3
+    },
+    "line_items": [
+      {
+        "description": "Room Rent - Private Room",
+        "category": "room_rent",
+        "qty": 3,
+        "rate": 4500,
+        "amount": 13500,
+        "is_duplicate": false
+      },
+      {
+        "description": "Surgeon Fee - Laparoscopic Sleeve Gastrectomy",
+        "category": "professional_fees",
+        "qty": 1,
+        "rate": 31248,
+        "amount": 31248,
+        "is_duplicate": false
+      },
+      {
+        "description": "Anaesthetist Fee",
+        "category": "professional_fees",
+        "qty": 1,
+        "rate": 26753,
+        "amount": 26753,
+        "is_duplicate": false
+      },
+      {
+        "description": "Assistant Surgeon Fee",
+        "category": "professional_fees",
+        "qty": 1,
+        "rate": 18973,
+        "amount": 18973,
+        "is_duplicate": false
+      },
+      {
+        "description": "Operation Theatre Charges",
+        "category": "ot_charges",
+        "qty": 1,
+        "rate": 47812,
+        "amount": 47812,
+        "is_duplicate": false
+      },
+      {
+        "description": "IV Fluids (NS / RL) 500 ml",
+        "category": "medicines",
+        "qty": 1,
+        "rate": 16453,
+        "amount": 16453,
+        "is_duplicate": false
+      },
+      {
+        "description": "Injection Ceftriaxone 1 g",
+        "category": "medicines",
+        "qty": 9,
+        "rate": 2151,
+        "amount": 19359,
+        "is_duplicate": false
+      },
+      {
+        "description": "Oral Rehydration & Supplements",
+        "category": "medicines",
+        "qty": 5,
+        "rate": 2584,
+        "amount": 12920,
+        "is_duplicate": false
+      },
+      {
+        "description": "Tablet Ondansetron 4 mg",
+        "category": "medicines",
+        "qty": 2,
+        "rate": 4861,
+        "amount": 9722,
+        "is_duplicate": false
+      },
+      {
+        "description": "Disposables & Consumables",
+        "category": "consumables",
+        "qty": 1,
+        "rate": 34686,
+        "amount": 34686,
+        "is_duplicate": false
+      },
+      {
+        "description": "IV Cannula, Syringes & Infusion Sets",
+        "category": "consumables",
+        "qty": 1,
+        "rate": 33367,
+        "amount": 33367,
+        "is_duplicate": false
+      },
+      {
+        "description": "Upper GI Endoscopy",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 11756,
+        "amount": 11756,
+        "is_duplicate": false
+      },
+      {
+        "description": "Complete Blood Count",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 11018,
+        "amount": 11018,
+        "is_duplicate": false
+      },
+      {
+        "description": "Pre-anaesthetic Check-up",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 6813,
+        "amount": 6813,
+        "is_duplicate": false
+      },
+      {
+        "description": "Radiology / Imaging",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 6452,
+        "amount": 6452,
+        "is_duplicate": false
+      },
+      {
+        "description": "Nursing & Service Charges",
+        "category": "other",
+        "qty": 1,
+        "rate": 10218,
+        "amount": 10218,
+        "is_duplicate": false
+      },
+      {
+        "description": "Registration & Admission Charges",
+        "category": "other",
+        "qty": 1,
+        "rate": 5374,
+        "amount": 5374,
+        "is_duplicate": false
+      }
+    ],
+    "documents": {
+      "discharge_summary_present": true,
+      "summary_admission_date": "2026-01-01",
+      "summary_discharge_date": "2026-01-04",
+      "bill_total_blank": false
+    },
+    "pii": {
+      "name": "Gabriel Ratti",
+      "phone": "+914177509059",
+      "email": "gabriel52@example.com",
+      "address": "74, Sur Path, Eluru 009699",
+      "uhid": "UH9409603"
+    }
+  },
+  {
+    "claim_id": "CLM-013",
+    "scenario": "rejected",
+    "subtype": "initial_waiting",
+    "has_scanned_copy": false,
+    "expected_missing_documents": [],
+    "expected_consistency_issues": [],
+    "fields": {
+      "policy_number": "POL-PREM/2026/5506200",
+      "patient_name": "Eesha Mutti",
+      "hospital_name": "Arya Vaidya Hospital",
+      "admission_date": "2026-02-06",
+      "discharge_date": "2026-02-07",
+      "diagnosis_text": "Senile Cataract",
+      "icd10_code": "H25.9",
+      "bill_subtotal": 51851,
+      "taxes": 0,
+      "bill_total": 51851,
+      "claimed_amount": 51851,
+      "line_item_count": 16,
+      "length_of_stay_days": 1
+    },
+    "line_items": [
+      {
+        "description": "Room Rent - Semi-Private Room",
+        "category": "room_rent",
+        "qty": 1,
+        "rate": 3000,
+        "amount": 3000,
+        "is_duplicate": false
+      },
+      {
+        "description": "Surgeon Fee - Phacoemulsification with IOL Implant",
+        "category": "professional_fees",
+        "qty": 1,
+        "rate": 6694,
+        "amount": 6694,
+        "is_duplicate": false
+      },
+      {
+        "description": "Anaesthetist Fee",
+        "category": "professional_fees",
+        "qty": 1,
+        "rate": 4361,
+        "amount": 4361,
+        "is_duplicate": false
+      },
+      {
+        "description": "Operation Theatre Charges",
+        "category": "ot_charges",
+        "qty": 1,
+        "rate": 7545,
+        "amount": 7545,
+        "is_duplicate": false
+      },
+      {
+        "description": "Tablet Ondansetron 4 mg",
+        "category": "medicines",
+        "qty": 5,
+        "rate": 207,
+        "amount": 1035,
+        "is_duplicate": false
+      },
+      {
+        "description": "Injection Ceftriaxone 1 g",
+        "category": "medicines",
+        "qty": 4,
+        "rate": 370,
+        "amount": 1480,
+        "is_duplicate": false
+      },
+      {
+        "description": "IV Fluids (NS / RL) 500 ml",
+        "category": "medicines",
+        "qty": 8,
+        "rate": 137,
+        "amount": 1096,
+        "is_duplicate": false
+      },
+      {
+        "description": "Tablet Paracetamol 650 mg",
+        "category": "medicines",
+        "qty": 7,
+        "rate": 215,
+        "amount": 1505,
+        "is_duplicate": false
+      },
+      {
+        "description": "Intraocular Lens (IOL)",
+        "category": "consumables",
+        "qty": 1,
+        "rate": 11154,
+        "amount": 11154,
+        "is_duplicate": false
+      },
+      {
+        "description": "Dressing Material",
+        "category": "consumables",
+        "qty": 1,
+        "rate": 3823,
+        "amount": 3823,
+        "is_duplicate": false
+      },
+      {
+        "description": "IV Cannula, Syringes & Infusion Sets",
+        "category": "consumables",
+        "qty": 1,
+        "rate": 3612,
+        "amount": 3612,
+        "is_duplicate": false
+      },
+      {
+        "description": "Biometry (A-Scan)",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 2058,
+        "amount": 2058,
+        "is_duplicate": false
+      },
+      {
+        "description": "Pre-operative Blood Work",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 1201,
+        "amount": 1201,
+        "is_duplicate": false
+      },
+      {
+        "description": "Radiology / Imaging",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 1488,
+        "amount": 1488,
+        "is_duplicate": false
+      },
+      {
+        "description": "Nursing & Service Charges",
+        "category": "other",
+        "qty": 1,
+        "rate": 1196,
+        "amount": 1196,
+        "is_duplicate": false
+      },
+      {
+        "description": "Registration & Admission Charges",
+        "category": "other",
+        "qty": 1,
+        "rate": 603,
+        "amount": 603,
+        "is_duplicate": false
+      }
+    ],
+    "documents": {
+      "discharge_summary_present": true,
+      "summary_admission_date": "2026-02-06",
+      "summary_discharge_date": "2026-02-07",
+      "bill_total_blank": false
+    },
+    "pii": {
+      "name": "Eesha Mutti",
+      "phone": "+914585861356",
+      "email": "eesha11@example.com",
+      "address": "503, Soni Circle, Malda 959348",
+      "uhid": "UH9009480"
+    }
+  },
+  {
+    "claim_id": "CLM-014",
+    "scenario": "partial",
+    "subtype": "room_rent",
+    "has_scanned_copy": false,
+    "expected_missing_documents": [],
+    "expected_consistency_issues": [],
+    "fields": {
+      "policy_number": "POL-AS/2024/7084652",
+      "patient_name": "Sanaya Raju",
+      "hospital_name": "Vedanta Health Institute",
+      "admission_date": "2026-04-24",
+      "discharge_date": "2026-04-26",
+      "diagnosis_text": "Acute Appendicitis",
+      "icd10_code": "K35.80",
+      "bill_subtotal": 70575,
+      "taxes": 840,
+      "bill_total": 71415,
+      "claimed_amount": 71415,
+      "line_item_count": 16,
+      "length_of_stay_days": 2
+    },
+    "line_items": [
+      {
+        "description": "Room Rent - Deluxe Room",
+        "category": "room_rent",
+        "qty": 2,
+        "rate": 8400,
+        "amount": 16800,
+        "is_duplicate": false
+      },
+      {
+        "description": "Surgeon Fee - Laparoscopic Appendectomy",
+        "category": "professional_fees",
+        "qty": 1,
+        "rate": 3490,
+        "amount": 3490,
+        "is_duplicate": false
+      },
+      {
+        "description": "Anaesthetist Fee",
+        "category": "professional_fees",
+        "qty": 1,
+        "rate": 4695,
+        "amount": 4695,
+        "is_duplicate": false
+      },
+      {
+        "description": "Assistant Surgeon Fee",
+        "category": "professional_fees",
+        "qty": 1,
+        "rate": 4066,
+        "amount": 4066,
+        "is_duplicate": false
+      },
+      {
+        "description": "Operation Theatre Charges",
+        "category": "ot_charges",
+        "qty": 1,
+        "rate": 6979,
+        "amount": 6979,
+        "is_duplicate": false
+      },
+      {
+        "description": "Oral Rehydration & Supplements",
+        "category": "medicines",
+        "qty": 7,
+        "rate": 488,
+        "amount": 3416,
+        "is_duplicate": false
+      },
+      {
+        "description": "Tablet Paracetamol 650 mg",
+        "category": "medicines",
+        "qty": 10,
+        "rate": 375,
+        "amount": 3750,
+        "is_duplicate": false
+      },
+      {
+        "description": "Tablet Ondansetron 4 mg",
+        "category": "medicines",
+        "qty": 7,
+        "rate": 570,
+        "amount": 3990,
+        "is_duplicate": false
+      },
+      {
+        "description": "IV Cannula, Syringes & Infusion Sets",
+        "category": "consumables",
+        "qty": 1,
+        "rate": 9082,
+        "amount": 9082,
+        "is_duplicate": false
+      },
+      {
+        "description": "Disposables & Consumables",
+        "category": "consumables",
+        "qty": 1,
+        "rate": 4757,
+        "amount": 4757,
+        "is_duplicate": false
+      },
+      {
+        "description": "USG Abdomen",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 2067,
+        "amount": 2067,
+        "is_duplicate": false
+      },
+      {
+        "description": "Complete Blood Count",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 1800,
+        "amount": 1800,
+        "is_duplicate": false
+      },
+      {
+        "description": "Pre-anaesthetic Check-up",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 1330,
+        "amount": 1330,
+        "is_duplicate": false
+      },
+      {
+        "description": "Radiology / Imaging",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 1340,
+        "amount": 1340,
+        "is_duplicate": false
+      },
+      {
+        "description": "Nursing & Service Charges",
+        "category": "other",
+        "qty": 1,
+        "rate": 1373,
+        "amount": 1373,
+        "is_duplicate": false
+      },
+      {
+        "description": "Registration & Admission Charges",
+        "category": "other",
+        "qty": 1,
+        "rate": 1640,
+        "amount": 1640,
+        "is_duplicate": false
+      }
+    ],
+    "documents": {
+      "discharge_summary_present": true,
+      "summary_admission_date": "2026-04-24",
+      "summary_discharge_date": "2026-04-26",
+      "bill_total_blank": false
+    },
+    "pii": {
+      "name": "Sanaya Raju",
+      "phone": "6806857593",
+      "email": "sanaya92@example.com",
+      "address": "19/95, Kalla Zila, Rajkot-683059",
+      "uhid": "UH9767891"
+    }
+  },
+  {
+    "claim_id": "CLM-015",
+    "scenario": "covered",
+    "subtype": "base",
+    "has_scanned_copy": false,
+    "expected_missing_documents": [],
+    "expected_consistency_issues": [],
+    "fields": {
+      "policy_number": "POL-PREM/2023/8644745",
+      "patient_name": "Jagrati Rastogi",
+      "hospital_name": "Medicare Plus Hospital",
+      "admission_date": "2026-07-23",
+      "discharge_date": "2026-07-25",
+      "diagnosis_text": "Inguinal Hernia",
+      "icd10_code": "K40.90",
+      "bill_subtotal": 63527,
+      "taxes": 600,
+      "bill_total": 64127,
+      "claimed_amount": 64127,
+      "line_item_count": 17,
+      "length_of_stay_days": 2
+    },
+    "line_items": [
+      {
+        "description": "Room Rent - Private Room",
+        "category": "room_rent",
+        "qty": 2,
+        "rate": 6000,
+        "amount": 12000,
+        "is_duplicate": false
+      },
+      {
+        "description": "Surgeon Fee - Laparoscopic Inguinal Hernia Repair (Mesh)",
+        "category": "professional_fees",
+        "qty": 1,
+        "rate": 4560,
+        "amount": 4560,
+        "is_duplicate": false
+      },
+      {
+        "description": "Anaesthetist Fee",
+        "category": "professional_fees",
+        "qty": 1,
+        "rate": 2853,
+        "amount": 2853,
+        "is_duplicate": false
+      },
+      {
+        "description": "Assistant Surgeon Fee",
+        "category": "professional_fees",
+        "qty": 1,
+        "rate": 4556,
+        "amount": 4556,
+        "is_duplicate": false
+      },
+      {
+        "description": "Operation Theatre Charges",
+        "category": "ot_charges",
+        "qty": 1,
+        "rate": 7360,
+        "amount": 7360,
+        "is_duplicate": false
+      },
+      {
+        "description": "Tablet Ondansetron 4 mg",
+        "category": "medicines",
+        "qty": 10,
+        "rate": 276,
+        "amount": 2760,
+        "is_duplicate": false
+      },
+      {
+        "description": "Oral Rehydration & Supplements",
+        "category": "medicines",
+        "qty": 9,
+        "rate": 563,
+        "amount": 5067,
+        "is_duplicate": false
+      },
+      {
+        "description": "Tablet Paracetamol 650 mg",
+        "category": "medicines",
+        "qty": 10,
+        "rate": 263,
+        "amount": 2630,
+        "is_duplicate": false
+      },
+      {
+        "description": "Surgical Mesh",
+        "category": "consumables",
+        "qty": 1,
+        "rate": 7402,
+        "amount": 7402,
+        "is_duplicate": false
+      },
+      {
+        "description": "Dressing Material",
+        "category": "consumables",
+        "qty": 1,
+        "rate": 2943,
+        "amount": 2943,
+        "is_duplicate": false
+      },
+      {
+        "description": "Disposables & Consumables",
+        "category": "consumables",
+        "qty": 1,
+        "rate": 1992,
+        "amount": 1992,
+        "is_duplicate": false
+      },
+      {
+        "description": "USG Abdomen/Inguinal Region",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 1667,
+        "amount": 1667,
+        "is_duplicate": false
+      },
+      {
+        "description": "Complete Blood Count",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 1981,
+        "amount": 1981,
+        "is_duplicate": false
+      },
+      {
+        "description": "Pre-anaesthetic Check-up",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 1988,
+        "amount": 1988,
+        "is_duplicate": false
+      },
+      {
+        "description": "Radiology / Imaging",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 1190,
+        "amount": 1190,
+        "is_duplicate": false
+      },
+      {
+        "description": "Nursing & Service Charges",
+        "category": "other",
+        "qty": 1,
+        "rate": 1600,
+        "amount": 1600,
+        "is_duplicate": false
+      },
+      {
+        "description": "Registration & Admission Charges",
+        "category": "other",
+        "qty": 1,
+        "rate": 978,
+        "amount": 978,
+        "is_duplicate": false
+      }
+    ],
+    "documents": {
+      "discharge_summary_present": true,
+      "summary_admission_date": "2026-07-23",
+      "summary_discharge_date": "2026-07-25",
+      "bill_total_blank": false
+    },
+    "pii": {
+      "name": "Jagrati Rastogi",
+      "phone": "+913781780665",
+      "email": "jagrati76@example.com",
+      "address": "54, Bhavsar Road, Jalandhar-224246",
+      "uhid": "UH1218708"
+    }
+  },
+  {
+    "claim_id": "CLM-016",
+    "scenario": "risk",
+    "subtype": "discharge_before_admission",
+    "has_scanned_copy": false,
+    "expected_missing_documents": [],
+    "expected_consistency_issues": [
+      "discharge_before_admission"
+    ],
+    "fields": {
+      "policy_number": "POL-STD/2024/4370119",
+      "patient_name": "Gunbir Roy",
+      "hospital_name": "Kaveri Institute of Medical Sciences",
+      "admission_date": "2025-11-04",
+      "discharge_date": "2025-11-02",
+      "diagnosis_text": "Dengue Fever with Thrombocytopenia",
+      "icd10_code": "A90",
+      "bill_subtotal": 122797,
+      "taxes": 0,
+      "bill_total": 122797,
+      "claimed_amount": 122797,
+      "line_item_count": 14,
+      "length_of_stay_days": -2
+    },
+    "line_items": [
+      {
+        "description": "Room Rent - Private Room",
+        "category": "room_rent",
+        "qty": 4,
+        "rate": 5000,
+        "amount": 20000,
+        "is_duplicate": false
+      },
+      {
+        "description": "Consultant Physician Charges",
+        "category": "professional_fees",
+        "qty": 1,
+        "rate": 7342,
+        "amount": 7342,
+        "is_duplicate": false
+      },
+      {
+        "description": "Resident Medical Officer Charges",
+        "category": "professional_fees",
+        "qty": 1,
+        "rate": 9919,
+        "amount": 9919,
+        "is_duplicate": false
+      },
+      {
+        "description": "Tablet Ondansetron 4 mg",
+        "category": "medicines",
+        "qty": 10,
+        "rate": 1321,
+        "amount": 13210,
+        "is_duplicate": false
+      },
+      {
+        "description": "Injection Ceftriaxone 1 g",
+        "category": "medicines",
+        "qty": 8,
+        "rate": 1684,
+        "amount": 13472,
+        "is_duplicate": false
+      },
+      {
+        "description": "Tablet Paracetamol 650 mg",
+        "category": "medicines",
+        "qty": 6,
+        "rate": 2587,
+        "amount": 15522,
+        "is_duplicate": false
+      },
+      {
+        "description": "Disposables & Consumables",
+        "category": "consumables",
+        "qty": 1,
+        "rate": 6446,
+        "amount": 6446,
+        "is_duplicate": false
+      },
+      {
+        "description": "Dressing Material",
+        "category": "consumables",
+        "qty": 1,
+        "rate": 6217,
+        "amount": 6217,
+        "is_duplicate": false
+      },
+      {
+        "description": "NS1 Antigen",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 4381,
+        "amount": 4381,
+        "is_duplicate": false
+      },
+      {
+        "description": "Dengue IgM/IgG Serology",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 5699,
+        "amount": 5699,
+        "is_duplicate": false
+      },
+      {
+        "description": "Platelet Count Serial",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 8136,
+        "amount": 8136,
+        "is_duplicate": false
+      },
+      {
+        "description": "Complete Blood Count",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 6432,
+        "amount": 6432,
+        "is_duplicate": false
+      },
+      {
+        "description": "Nursing & Service Charges",
+        "category": "other",
+        "qty": 1,
+        "rate": 3816,
+        "amount": 3816,
+        "is_duplicate": false
+      },
+      {
+        "description": "Registration & Admission Charges",
+        "category": "other",
+        "qty": 1,
+        "rate": 2205,
+        "amount": 2205,
+        "is_duplicate": false
+      }
+    ],
+    "documents": {
+      "discharge_summary_present": true,
+      "summary_admission_date": "2025-11-04",
+      "summary_discharge_date": "2025-11-02",
+      "bill_total_blank": false
+    },
+    "pii": {
+      "name": "Gunbir Roy",
+      "phone": "03181558302",
+      "email": "gunbir33@example.com",
+      "address": "H.No. 37, Sarkar, Guntur-603682",
+      "uhid": "UH9010023"
+    }
+  },
+  {
+    "claim_id": "CLM-017",
+    "scenario": "risk",
+    "subtype": "high_bill",
+    "has_scanned_copy": false,
+    "expected_missing_documents": [],
+    "expected_consistency_issues": [],
+    "fields": {
+      "policy_number": "POL-STD/2025/7612147",
+      "patient_name": "Amaira Kuruvilla",
+      "hospital_name": "Lotus Care Multispeciality Hospital",
+      "admission_date": "2026-07-16",
+      "discharge_date": "2026-07-21",
+      "diagnosis_text": "Fracture Shaft of Tibia (road traffic accident)",
+      "icd10_code": "S82.201A",
+      "bill_subtotal": 524620,
+      "taxes": 0,
+      "bill_total": 524620,
+      "claimed_amount": 524620,
+      "line_item_count": 17,
+      "length_of_stay_days": 5
+    },
+    "line_items": [
+      {
+        "description": "Room Rent - Private Room",
+        "category": "room_rent",
+        "qty": 5,
+        "rate": 4800,
+        "amount": 24000,
+        "is_duplicate": false
+      },
+      {
+        "description": "Surgeon Fee - Open Reduction and Internal Fixation (ORIF)",
+        "category": "professional_fees",
+        "qty": 1,
+        "rate": 46791,
+        "amount": 46791,
+        "is_duplicate": false
+      },
+      {
+        "description": "Anaesthetist Fee",
+        "category": "professional_fees",
+        "qty": 1,
+        "rate": 45848,
+        "amount": 45848,
+        "is_duplicate": false
+      },
+      {
+        "description": "Assistant Surgeon Fee",
+        "category": "professional_fees",
+        "qty": 1,
+        "rate": 38103,
+        "amount": 38103,
+        "is_duplicate": false
+      },
+      {
+        "description": "Operation Theatre Charges",
+        "category": "ot_charges",
+        "qty": 1,
+        "rate": 60475,
+        "amount": 60475,
+        "is_duplicate": false
+      },
+      {
+        "description": "Tablet Ondansetron 4 mg",
+        "category": "medicines",
+        "qty": 1,
+        "rate": 43139,
+        "amount": 43139,
+        "is_duplicate": false
+      },
+      {
+        "description": "Injection Tramadol 50 mg",
+        "category": "medicines",
+        "qty": 1,
+        "rate": 36612,
+        "amount": 36612,
+        "is_duplicate": false
+      },
+      {
+        "description": "Injection Pantoprazole 40 mg",
+        "category": "medicines",
+        "qty": 5,
+        "rate": 7299,
+        "amount": 36495,
+        "is_duplicate": false
+      },
+      {
+        "description": "Orthopaedic Plate and Screws",
+        "category": "consumables",
+        "qty": 1,
+        "rate": 62357,
+        "amount": 62357,
+        "is_duplicate": false
+      },
+      {
+        "description": "Dressing Material",
+        "category": "consumables",
+        "qty": 1,
+        "rate": 23733,
+        "amount": 23733,
+        "is_duplicate": false
+      },
+      {
+        "description": "IV Cannula, Syringes & Infusion Sets",
+        "category": "consumables",
+        "qty": 1,
+        "rate": 17838,
+        "amount": 17838,
+        "is_duplicate": false
+      },
+      {
+        "description": "X-Ray Tibia/Fibula AP/Lateral",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 18278,
+        "amount": 18278,
+        "is_duplicate": false
+      },
+      {
+        "description": "Complete Blood Count",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 17579,
+        "amount": 17579,
+        "is_duplicate": false
+      },
+      {
+        "description": "Pre-anaesthetic Check-up",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 14918,
+        "amount": 14918,
+        "is_duplicate": false
+      },
+      {
+        "description": "Radiology / Imaging",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 16217,
+        "amount": 16217,
+        "is_duplicate": false
+      },
+      {
+        "description": "Nursing & Service Charges",
+        "category": "other",
+        "qty": 1,
+        "rate": 10580,
+        "amount": 10580,
+        "is_duplicate": false
+      },
+      {
+        "description": "Registration & Admission Charges",
+        "category": "other",
+        "qty": 1,
+        "rate": 11657,
+        "amount": 11657,
+        "is_duplicate": false
+      }
+    ],
+    "documents": {
+      "discharge_summary_present": true,
+      "summary_admission_date": "2026-07-16",
+      "summary_discharge_date": "2026-07-21",
+      "bill_total_blank": false
+    },
+    "pii": {
+      "name": "Amaira Kuruvilla",
+      "phone": "+917051734335",
+      "email": "amaira58@example.com",
+      "address": "43, Hayer Nagar, Bhusawal-651471",
+      "uhid": "UH1323543"
+    }
+  },
+  {
+    "claim_id": "CLM-018",
+    "scenario": "rejected",
+    "subtype": "pre_existing",
+    "has_scanned_copy": false,
+    "expected_missing_documents": [],
+    "expected_consistency_issues": [],
+    "fields": {
+      "policy_number": "POL-AS/2022/3453796",
+      "patient_name": "Patrick Jani",
+      "hospital_name": "Lotus Care Multispeciality Hospital",
+      "admission_date": "2025-10-22",
+      "discharge_date": "2025-10-26",
+      "diagnosis_text": "Diabetic Ketoacidosis",
+      "icd10_code": "E11.10",
+      "bill_subtotal": 140038,
+      "taxes": 0,
+      "bill_total": 140038,
+      "claimed_amount": 140038,
+      "line_item_count": 15,
+      "length_of_stay_days": 4
+    },
+    "line_items": [
+      {
+        "description": "Room Rent - Semi-Private Room",
+        "category": "room_rent",
+        "qty": 4,
+        "rate": 2800,
+        "amount": 11200,
+        "is_duplicate": false
+      },
+      {
+        "description": "Consultant Physician Charges",
+        "category": "professional_fees",
+        "qty": 1,
+        "rate": 13135,
+        "amount": 13135,
+        "is_duplicate": false
+      },
+      {
+        "description": "Resident Medical Officer Charges",
+        "category": "professional_fees",
+        "qty": 1,
+        "rate": 9438,
+        "amount": 9438,
+        "is_duplicate": false
+      },
+      {
+        "description": "IV Fluids (NS / RL) 500 ml",
+        "category": "medicines",
+        "qty": 8,
+        "rate": 1885,
+        "amount": 15080,
+        "is_duplicate": false
+      },
+      {
+        "description": "Tablet Ondansetron 4 mg",
+        "category": "medicines",
+        "qty": 8,
+        "rate": 1624,
+        "amount": 12992,
+        "is_duplicate": false
+      },
+      {
+        "description": "Injection Ceftriaxone 1 g",
+        "category": "medicines",
+        "qty": 6,
+        "rate": 1360,
+        "amount": 8160,
+        "is_duplicate": false
+      },
+      {
+        "description": "Injection Tramadol 50 mg",
+        "category": "medicines",
+        "qty": 2,
+        "rate": 8040,
+        "amount": 16080,
+        "is_duplicate": false
+      },
+      {
+        "description": "IV Cannula, Syringes & Infusion Sets",
+        "category": "consumables",
+        "qty": 1,
+        "rate": 6499,
+        "amount": 6499,
+        "is_duplicate": false
+      },
+      {
+        "description": "Dressing Material",
+        "category": "consumables",
+        "qty": 1,
+        "rate": 7183,
+        "amount": 7183,
+        "is_duplicate": false
+      },
+      {
+        "description": "Blood Ketones",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 8070,
+        "amount": 8070,
+        "is_duplicate": false
+      },
+      {
+        "description": "HbA1c",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 11024,
+        "amount": 11024,
+        "is_duplicate": false
+      },
+      {
+        "description": "Arterial Blood Gas",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 6708,
+        "amount": 6708,
+        "is_duplicate": false
+      },
+      {
+        "description": "Serum Electrolytes",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 7992,
+        "amount": 7992,
+        "is_duplicate": false
+      },
+      {
+        "description": "Nursing & Service Charges",
+        "category": "other",
+        "qty": 1,
+        "rate": 3509,
+        "amount": 3509,
+        "is_duplicate": false
+      },
+      {
+        "description": "Registration & Admission Charges",
+        "category": "other",
+        "qty": 1,
+        "rate": 2968,
+        "amount": 2968,
+        "is_duplicate": false
+      }
+    ],
+    "documents": {
+      "discharge_summary_present": true,
+      "summary_admission_date": "2025-10-22",
+      "summary_discharge_date": "2025-10-26",
+      "bill_total_blank": false
+    },
+    "pii": {
+      "name": "Patrick Jani",
+      "phone": "3640770675",
+      "email": "patrick49@example.com",
+      "address": "05, Johal Street, Maheshtala-692927",
+      "uhid": "UH9399906"
+    }
+  },
+  {
+    "claim_id": "CLM-019",
+    "scenario": "covered",
+    "subtype": "base",
+    "has_scanned_copy": false,
+    "expected_missing_documents": [],
+    "expected_consistency_issues": [],
+    "fields": {
+      "policy_number": "POL-PREM/2024/4801868",
+      "patient_name": "Qasim Parikh",
+      "hospital_name": "Navjeevan Medical Centre",
+      "admission_date": "2025-09-09",
+      "discharge_date": "2025-09-12",
+      "diagnosis_text": "Cholelithiasis (Gallstones) with Cholecystitis",
+      "icd10_code": "K80.20",
+      "bill_subtotal": 114005,
+      "taxes": 900,
+      "bill_total": 114905,
+      "claimed_amount": 114905,
+      "line_item_count": 16,
+      "length_of_stay_days": 3
+    },
+    "line_items": [
+      {
+        "description": "Room Rent - Private Room",
+        "category": "room_rent",
+        "qty": 3,
+        "rate": 6000,
+        "amount": 18000,
+        "is_duplicate": false
+      },
+      {
+        "description": "Surgeon Fee - Laparoscopic Cholecystectomy",
+        "category": "professional_fees",
+        "qty": 1,
+        "rate": 7990,
+        "amount": 7990,
+        "is_duplicate": false
+      },
+      {
+        "description": "Anaesthetist Fee",
+        "category": "professional_fees",
+        "qty": 1,
+        "rate": 6159,
+        "amount": 6159,
+        "is_duplicate": false
+      },
+      {
+        "description": "Assistant Surgeon Fee",
+        "category": "professional_fees",
+        "qty": 1,
+        "rate": 9711,
+        "amount": 9711,
+        "is_duplicate": false
+      },
+      {
+        "description": "Operation Theatre Charges",
+        "category": "ot_charges",
+        "qty": 1,
+        "rate": 14664,
+        "amount": 14664,
+        "is_duplicate": false
+      },
+      {
+        "description": "Injection Ceftriaxone 1 g",
+        "category": "medicines",
+        "qty": 2,
+        "rate": 2698,
+        "amount": 5396,
+        "is_duplicate": false
+      },
+      {
+        "description": "Injection Tramadol 50 mg",
+        "category": "medicines",
+        "qty": 7,
+        "rate": 791,
+        "amount": 5537,
+        "is_duplicate": false
+      },
+      {
+        "description": "Tablet Paracetamol 650 mg",
+        "category": "medicines",
+        "qty": 3,
+        "rate": 3558,
+        "amount": 10674,
+        "is_duplicate": false
+      },
+      {
+        "description": "Disposables & Consumables",
+        "category": "consumables",
+        "qty": 1,
+        "rate": 11671,
+        "amount": 11671,
+        "is_duplicate": false
+      },
+      {
+        "description": "Dressing Material",
+        "category": "consumables",
+        "qty": 1,
+        "rate": 10016,
+        "amount": 10016,
+        "is_duplicate": false
+      },
+      {
+        "description": "USG Abdomen",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 2145,
+        "amount": 2145,
+        "is_duplicate": false
+      },
+      {
+        "description": "Liver Function Test",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 2654,
+        "amount": 2654,
+        "is_duplicate": false
+      },
+      {
+        "description": "Complete Blood Count",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 2406,
+        "amount": 2406,
+        "is_duplicate": false
+      },
+      {
+        "description": "Pre-anaesthetic Check-up",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 2255,
+        "amount": 2255,
+        "is_duplicate": false
+      },
+      {
+        "description": "Nursing & Service Charges",
+        "category": "other",
+        "qty": 1,
+        "rate": 2500,
+        "amount": 2500,
+        "is_duplicate": false
+      },
+      {
+        "description": "Registration & Admission Charges",
+        "category": "other",
+        "qty": 1,
+        "rate": 2227,
+        "amount": 2227,
+        "is_duplicate": false
+      }
+    ],
+    "documents": {
+      "discharge_summary_present": true,
+      "summary_admission_date": "2025-09-09",
+      "summary_discharge_date": "2025-09-12",
+      "bill_total_blank": false
+    },
+    "pii": {
+      "name": "Qasim Parikh",
+      "phone": "5654273024",
+      "email": "qasim65@example.com",
+      "address": "45, Pradhan Nagar, Pallavaram-377767",
+      "uhid": "UH4545590"
+    }
+  },
+  {
+    "claim_id": "CLM-020",
+    "scenario": "partial",
+    "subtype": "copay",
+    "has_scanned_copy": false,
+    "expected_missing_documents": [],
+    "expected_consistency_issues": [],
+    "fields": {
+      "policy_number": "POL-AS/2025/4776757",
+      "patient_name": "Ekanta Choudhary",
+      "hospital_name": "Shree Dhanvantari Hospital",
+      "admission_date": "2025-07-10",
+      "discharge_date": "2025-07-14",
+      "diagnosis_text": "Dengue Fever with Thrombocytopenia",
+      "icd10_code": "A90",
+      "bill_subtotal": 97275,
+      "taxes": 0,
+      "bill_total": 97275,
+      "claimed_amount": 97275,
+      "line_item_count": 15,
+      "length_of_stay_days": 4
+    },
+    "line_items": [
+      {
+        "description": "Room Rent - Semi-Private Room",
+        "category": "room_rent",
+        "qty": 4,
+        "rate": 3300,
+        "amount": 13200,
+        "is_duplicate": false
+      },
+      {
+        "description": "Consultant Physician Charges",
+        "category": "professional_fees",
+        "qty": 1,
+        "rate": 8061,
+        "amount": 8061,
+        "is_duplicate": false
+      },
+      {
+        "description": "Resident Medical Officer Charges",
+        "category": "professional_fees",
+        "qty": 1,
+        "rate": 9154,
+        "amount": 9154,
+        "is_duplicate": false
+      },
+      {
+        "description": "Injection Pantoprazole 40 mg",
+        "category": "medicines",
+        "qty": 2,
+        "rate": 4067,
+        "amount": 8134,
+        "is_duplicate": false
+      },
+      {
+        "description": "Injection Ceftriaxone 1 g",
+        "category": "medicines",
+        "qty": 7,
+        "rate": 1281,
+        "amount": 8967,
+        "is_duplicate": false
+      },
+      {
+        "description": "Oral Rehydration & Supplements",
+        "category": "medicines",
+        "qty": 3,
+        "rate": 2325,
+        "amount": 6975,
+        "is_duplicate": false
+      },
+      {
+        "description": "Injection Tramadol 50 mg",
+        "category": "medicines",
+        "qty": 5,
+        "rate": 1246,
+        "amount": 6230,
+        "is_duplicate": false
+      },
+      {
+        "description": "Disposables & Consumables",
+        "category": "consumables",
+        "qty": 1,
+        "rate": 3960,
+        "amount": 3960,
+        "is_duplicate": false
+      },
+      {
+        "description": "Dressing Material",
+        "category": "consumables",
+        "qty": 1,
+        "rate": 4231,
+        "amount": 4231,
+        "is_duplicate": false
+      },
+      {
+        "description": "NS1 Antigen",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 4145,
+        "amount": 4145,
+        "is_duplicate": false
+      },
+      {
+        "description": "Dengue IgM/IgG Serology",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 6012,
+        "amount": 6012,
+        "is_duplicate": false
+      },
+      {
+        "description": "Platelet Count Serial",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 7996,
+        "amount": 7996,
+        "is_duplicate": false
+      },
+      {
+        "description": "Complete Blood Count",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 5856,
+        "amount": 5856,
+        "is_duplicate": false
+      },
+      {
+        "description": "Nursing & Service Charges",
+        "category": "other",
+        "qty": 1,
+        "rate": 1912,
+        "amount": 1912,
+        "is_duplicate": false
+      },
+      {
+        "description": "Registration & Admission Charges",
+        "category": "other",
+        "qty": 1,
+        "rate": 2442,
+        "amount": 2442,
+        "is_duplicate": false
+      }
+    ],
+    "documents": {
+      "discharge_summary_present": true,
+      "summary_admission_date": "2025-07-10",
+      "summary_discharge_date": "2025-07-14",
+      "bill_total_blank": false
+    },
+    "pii": {
+      "name": "Ekanta Choudhary",
+      "phone": "3277192703",
+      "email": "ekanta48@example.com",
+      "address": "72/13, Bhatti, Bikaner 153006",
+      "uhid": "UH8645609"
+    }
+  },
+  {
+    "claim_id": "CLM-021",
+    "scenario": "partial",
+    "subtype": "sub_limit",
+    "has_scanned_copy": false,
+    "expected_missing_documents": [],
+    "expected_consistency_issues": [],
+    "fields": {
+      "policy_number": "POL-PREM/2023/6395130",
+      "patient_name": "Andrew Chanda",
+      "hospital_name": "Medicare Plus Hospital",
+      "admission_date": "2025-08-14",
+      "discharge_date": "2025-08-15",
+      "diagnosis_text": "Senile Cataract",
+      "icd10_code": "H25.9",
+      "bill_subtotal": 67535,
+      "taxes": 0,
+      "bill_total": 67535,
+      "claimed_amount": 67535,
+      "line_item_count": 15,
+      "length_of_stay_days": 1
+    },
+    "line_items": [
+      {
+        "description": "Room Rent - Private Room",
+        "category": "room_rent",
+        "qty": 1,
+        "rate": 4500,
+        "amount": 4500,
+        "is_duplicate": false
+      },
+      {
+        "description": "Surgeon Fee - Phacoemulsification with IOL Implant",
+        "category": "professional_fees",
+        "qty": 1,
+        "rate": 12040,
+        "amount": 12040,
+        "is_duplicate": false
+      },
+      {
+        "description": "Anaesthetist Fee",
+        "category": "professional_fees",
+        "qty": 1,
+        "rate": 5756,
+        "amount": 5756,
+        "is_duplicate": false
+      },
+      {
+        "description": "Operation Theatre Charges",
+        "category": "ot_charges",
+        "qty": 1,
+        "rate": 8222,
+        "amount": 8222,
+        "is_duplicate": false
+      },
+      {
+        "description": "Oral Rehydration & Supplements",
+        "category": "medicines",
+        "qty": 5,
+        "rate": 361,
+        "amount": 1805,
+        "is_duplicate": false
+      },
+      {
+        "description": "Tablet Paracetamol 650 mg",
+        "category": "medicines",
+        "qty": 6,
+        "rate": 387,
+        "amount": 2322,
+        "is_duplicate": false
+      },
+      {
+        "description": "Tablet Ondansetron 4 mg",
+        "category": "medicines",
+        "qty": 8,
+        "rate": 299,
+        "amount": 2392,
+        "is_duplicate": false
+      },
+      {
+        "description": "Intraocular Lens (IOL)",
+        "category": "consumables",
+        "qty": 1,
+        "rate": 12976,
+        "amount": 12976,
+        "is_duplicate": false
+      },
+      {
+        "description": "Dressing Material",
+        "category": "consumables",
+        "qty": 1,
+        "rate": 3635,
+        "amount": 3635,
+        "is_duplicate": false
+      },
+      {
+        "description": "Disposables & Consumables",
+        "category": "consumables",
+        "qty": 1,
+        "rate": 5015,
+        "amount": 5015,
+        "is_duplicate": false
+      },
+      {
+        "description": "Biometry (A-Scan)",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 1448,
+        "amount": 1448,
+        "is_duplicate": false
+      },
+      {
+        "description": "Pre-operative Blood Work",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 2932,
+        "amount": 2932,
+        "is_duplicate": false
+      },
+      {
+        "description": "Radiology / Imaging",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 2328,
+        "amount": 2328,
+        "is_duplicate": false
+      },
+      {
+        "description": "Nursing & Service Charges",
+        "category": "other",
+        "qty": 1,
+        "rate": 1446,
+        "amount": 1446,
+        "is_duplicate": false
+      },
+      {
+        "description": "Registration & Admission Charges",
+        "category": "other",
+        "qty": 1,
+        "rate": 718,
+        "amount": 718,
+        "is_duplicate": false
+      }
+    ],
+    "documents": {
+      "discharge_summary_present": true,
+      "summary_admission_date": "2025-08-14",
+      "summary_discharge_date": "2025-08-15",
+      "bill_total_blank": false
+    },
+    "pii": {
+      "name": "Andrew Chanda",
+      "phone": "1302716369",
+      "email": "andrew41@example.com",
+      "address": "H.No. 591, Singh Marg, Udupi 823765",
+      "uhid": "UH4855438"
+    }
+  },
+  {
+    "claim_id": "CLM-022",
+    "scenario": "risk",
+    "subtype": "early_admission",
+    "has_scanned_copy": false,
+    "expected_missing_documents": [],
+    "expected_consistency_issues": [],
+    "fields": {
+      "policy_number": "POL-AS/2025/2216036",
+      "patient_name": "Ayaan Anand",
+      "hospital_name": "Sanjivani Heart & General Hospital",
+      "admission_date": "2025-11-11",
+      "discharge_date": "2025-11-15",
+      "diagnosis_text": "Fracture Shaft of Tibia (road traffic accident)",
+      "icd10_code": "S82.201A",
+      "bill_subtotal": 162081,
+      "taxes": 0,
+      "bill_total": 162081,
+      "claimed_amount": 162081,
+      "line_item_count": 18,
+      "length_of_stay_days": 4
+    },
+    "line_items": [
+      {
+        "description": "Room Rent - General Ward",
+        "category": "room_rent",
+        "qty": 4,
+        "rate": 1600,
+        "amount": 6400,
+        "is_duplicate": false
+      },
+      {
+        "description": "Surgeon Fee - Open Reduction and Internal Fixation (ORIF)",
+        "category": "professional_fees",
+        "qty": 1,
+        "rate": 16512,
+        "amount": 16512,
+        "is_duplicate": false
+      },
+      {
+        "description": "Anaesthetist Fee",
+        "category": "professional_fees",
+        "qty": 1,
+        "rate": 11499,
+        "amount": 11499,
+        "is_duplicate": false
+      },
+      {
+        "description": "Assistant Surgeon Fee",
+        "category": "professional_fees",
+        "qty": 1,
+        "rate": 13471,
+        "amount": 13471,
+        "is_duplicate": false
+      },
+      {
+        "description": "Operation Theatre Charges",
+        "category": "ot_charges",
+        "qty": 1,
+        "rate": 24780,
+        "amount": 24780,
+        "is_duplicate": false
+      },
+      {
+        "description": "Injection Ceftriaxone 1 g",
+        "category": "medicines",
+        "qty": 1,
+        "rate": 7518,
+        "amount": 7518,
+        "is_duplicate": false
+      },
+      {
+        "description": "Tablet Paracetamol 650 mg",
+        "category": "medicines",
+        "qty": 3,
+        "rate": 3165,
+        "amount": 9495,
+        "is_duplicate": false
+      },
+      {
+        "description": "Oral Rehydration & Supplements",
+        "category": "medicines",
+        "qty": 4,
+        "rate": 1747,
+        "amount": 6988,
+        "is_duplicate": false
+      },
+      {
+        "description": "Injection Pantoprazole 40 mg",
+        "category": "medicines",
+        "qty": 2,
+        "rate": 4657,
+        "amount": 9314,
+        "is_duplicate": false
+      },
+      {
+        "description": "Orthopaedic Plate and Screws",
+        "category": "consumables",
+        "qty": 1,
+        "rate": 18151,
+        "amount": 18151,
+        "is_duplicate": false
+      },
+      {
+        "description": "Disposables & Consumables",
+        "category": "consumables",
+        "qty": 1,
+        "rate": 3826,
+        "amount": 3826,
+        "is_duplicate": false
+      },
+      {
+        "description": "Dressing Material",
+        "category": "consumables",
+        "qty": 1,
+        "rate": 8274,
+        "amount": 8274,
+        "is_duplicate": false
+      },
+      {
+        "description": "X-Ray Tibia/Fibula AP/Lateral",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 3769,
+        "amount": 3769,
+        "is_duplicate": false
+      },
+      {
+        "description": "Complete Blood Count",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 4743,
+        "amount": 4743,
+        "is_duplicate": false
+      },
+      {
+        "description": "Pre-anaesthetic Check-up",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 6529,
+        "amount": 6529,
+        "is_duplicate": false
+      },
+      {
+        "description": "Radiology / Imaging",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 4523,
+        "amount": 4523,
+        "is_duplicate": false
+      },
+      {
+        "description": "Nursing & Service Charges",
+        "category": "other",
+        "qty": 1,
+        "rate": 2683,
+        "amount": 2683,
+        "is_duplicate": false
+      },
+      {
+        "description": "Registration & Admission Charges",
+        "category": "other",
+        "qty": 1,
+        "rate": 3606,
+        "amount": 3606,
+        "is_duplicate": false
+      }
+    ],
+    "documents": {
+      "discharge_summary_present": true,
+      "summary_admission_date": "2025-11-11",
+      "summary_discharge_date": "2025-11-15",
+      "bill_total_blank": false
+    },
+    "pii": {
+      "name": "Ayaan Anand",
+      "phone": "00559266106",
+      "email": "ayaan18@example.com",
+      "address": "H.No. 001, Baria Path, Ramagundam 602469",
+      "uhid": "UH8324582"
+    }
+  },
+  {
+    "claim_id": "CLM-023",
+    "scenario": "incomplete",
+    "subtype": "blank_field",
+    "has_scanned_copy": true,
+    "expected_missing_documents": [],
+    "expected_consistency_issues": [
+      "missing_field:admission_date"
+    ],
+    "fields": {
+      "policy_number": "POL-PREM/2024/1699302",
+      "patient_name": "Prisha Devi",
+      "hospital_name": "Vedanta Health Institute",
+      "admission_date": "2026-09-14",
+      "discharge_date": "2026-09-21",
+      "diagnosis_text": "Community Acquired Pneumonia",
+      "icd10_code": "J18.9",
+      "bill_subtotal": 102441,
+      "taxes": 2625,
+      "bill_total": 105066,
+      "claimed_amount": 105066,
+      "line_item_count": 14,
+      "length_of_stay_days": 7
+    },
+    "line_items": [
+      {
+        "description": "Room Rent - Deluxe Room",
+        "category": "room_rent",
+        "qty": 7,
+        "rate": 7500,
+        "amount": 52500,
+        "is_duplicate": false
+      },
+      {
+        "description": "Consultant Physician Charges",
+        "category": "professional_fees",
+        "qty": 1,
+        "rate": 4398,
+        "amount": 4398,
+        "is_duplicate": false
+      },
+      {
+        "description": "Resident Medical Officer Charges",
+        "category": "professional_fees",
+        "qty": 1,
+        "rate": 3703,
+        "amount": 3703,
+        "is_duplicate": false
+      },
+      {
+        "description": "Injection Tramadol 50 mg",
+        "category": "medicines",
+        "qty": 4,
+        "rate": 1644,
+        "amount": 6576,
+        "is_duplicate": false
+      },
+      {
+        "description": "IV Fluids (NS / RL) 500 ml",
+        "category": "medicines",
+        "qty": 2,
+        "rate": 3306,
+        "amount": 6612,
+        "is_duplicate": false
+      },
+      {
+        "description": "Injection Ceftriaxone 1 g",
+        "category": "medicines",
+        "qty": 5,
+        "rate": 1262,
+        "amount": 6310,
+        "is_duplicate": false
+      },
+      {
+        "description": "Dressing Material",
+        "category": "consumables",
+        "qty": 1,
+        "rate": 2463,
+        "amount": 2463,
+        "is_duplicate": false
+      },
+      {
+        "description": "Disposables & Consumables",
+        "category": "consumables",
+        "qty": 1,
+        "rate": 2399,
+        "amount": 2399,
+        "is_duplicate": false
+      },
+      {
+        "description": "Chest X-Ray",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 4729,
+        "amount": 4729,
+        "is_duplicate": false
+      },
+      {
+        "description": "Sputum Culture",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 2834,
+        "amount": 2834,
+        "is_duplicate": false
+      },
+      {
+        "description": "Complete Blood Count",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 2669,
+        "amount": 2669,
+        "is_duplicate": false
+      },
+      {
+        "description": "Arterial Blood Gas",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 4542,
+        "amount": 4542,
+        "is_duplicate": false
+      },
+      {
+        "description": "Nursing & Service Charges",
+        "category": "other",
+        "qty": 1,
+        "rate": 1324,
+        "amount": 1324,
+        "is_duplicate": false
+      },
+      {
+        "description": "Registration & Admission Charges",
+        "category": "other",
+        "qty": 1,
+        "rate": 1382,
+        "amount": 1382,
+        "is_duplicate": false
+      }
+    ],
+    "documents": {
+      "discharge_summary_present": true,
+      "summary_admission_date": null,
+      "summary_discharge_date": "2026-09-21",
+      "bill_total_blank": false
+    },
+    "pii": {
+      "name": "Prisha Devi",
+      "phone": "+912155533371",
+      "email": "prisha21@example.com",
+      "address": "838, Soman, Vasai-Virar 081627",
+      "uhid": "UH6369761"
+    }
+  },
+  {
+    "claim_id": "CLM-024",
+    "scenario": "rejected",
+    "subtype": "exclusion:dental_unless_accident",
+    "has_scanned_copy": true,
+    "expected_missing_documents": [],
+    "expected_consistency_issues": [],
+    "fields": {
+      "policy_number": "POL-PREM/2025/1488034",
+      "patient_name": "Diya Basu",
+      "hospital_name": "Ganga Jamuna Multispeciality Hospital",
+      "admission_date": "2025-12-11",
+      "discharge_date": "2025-12-12",
+      "diagnosis_text": "Partial Edentulism (loss of teeth)",
+      "icd10_code": "K08.109",
+      "bill_subtotal": 85472,
+      "taxes": 300,
+      "bill_total": 85772,
+      "claimed_amount": 85772,
+      "line_item_count": 16,
+      "length_of_stay_days": 1
+    },
+    "line_items": [
+      {
+        "description": "Room Rent - Private Room",
+        "category": "room_rent",
+        "qty": 1,
+        "rate": 6000,
+        "amount": 6000,
+        "is_duplicate": false
+      },
+      {
+        "description": "Surgeon Fee - Dental Implant Placement",
+        "category": "professional_fees",
+        "qty": 1,
+        "rate": 11299,
+        "amount": 11299,
+        "is_duplicate": false
+      },
+      {
+        "description": "Anaesthetist Fee",
+        "category": "professional_fees",
+        "qty": 1,
+        "rate": 8367,
+        "amount": 8367,
+        "is_duplicate": false
+      },
+      {
+        "description": "Operation Theatre Charges",
+        "category": "ot_charges",
+        "qty": 1,
+        "rate": 11499,
+        "amount": 11499,
+        "is_duplicate": false
+      },
+      {
+        "description": "Oral Rehydration & Supplements",
+        "category": "medicines",
+        "qty": 9,
+        "rate": 343,
+        "amount": 3087,
+        "is_duplicate": false
+      },
+      {
+        "description": "Tablet Paracetamol 650 mg",
+        "category": "medicines",
+        "qty": 8,
+        "rate": 214,
+        "amount": 1712,
+        "is_duplicate": false
+      },
+      {
+        "description": "Injection Tramadol 50 mg",
+        "category": "medicines",
+        "qty": 10,
+        "rate": 260,
+        "amount": 2600,
+        "is_duplicate": false
+      },
+      {
+        "description": "IV Fluids (NS / RL) 500 ml",
+        "category": "medicines",
+        "qty": 3,
+        "rate": 1136,
+        "amount": 3408,
+        "is_duplicate": false
+      },
+      {
+        "description": "Titanium Dental Implant",
+        "category": "consumables",
+        "qty": 1,
+        "rate": 15388,
+        "amount": 15388,
+        "is_duplicate": false
+      },
+      {
+        "description": "Disposables & Consumables",
+        "category": "consumables",
+        "qty": 1,
+        "rate": 4446,
+        "amount": 4446,
+        "is_duplicate": false
+      },
+      {
+        "description": "IV Cannula, Syringes & Infusion Sets",
+        "category": "consumables",
+        "qty": 1,
+        "rate": 5812,
+        "amount": 5812,
+        "is_duplicate": false
+      },
+      {
+        "description": "OPG X-Ray",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 2345,
+        "amount": 2345,
+        "is_duplicate": false
+      },
+      {
+        "description": "CBCT Scan",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 3395,
+        "amount": 3395,
+        "is_duplicate": false
+      },
+      {
+        "description": "Radiology / Imaging",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 3006,
+        "amount": 3006,
+        "is_duplicate": false
+      },
+      {
+        "description": "Nursing & Service Charges",
+        "category": "other",
+        "qty": 1,
+        "rate": 1556,
+        "amount": 1556,
+        "is_duplicate": false
+      },
+      {
+        "description": "Registration & Admission Charges",
+        "category": "other",
+        "qty": 1,
+        "rate": 1552,
+        "amount": 1552,
+        "is_duplicate": false
+      }
+    ],
+    "documents": {
+      "discharge_summary_present": true,
+      "summary_admission_date": "2025-12-11",
+      "summary_discharge_date": "2025-12-12",
+      "bill_total_blank": false
+    },
+    "pii": {
+      "name": "Diya Basu",
+      "phone": "+912130455615",
+      "email": "diya99@example.com",
+      "address": "73, Wable Path, Meerut-529006",
+      "uhid": "UH8363959"
+    }
+  },
+  {
+    "claim_id": "CLM-025",
+    "scenario": "partial",
+    "subtype": "copay",
+    "has_scanned_copy": false,
+    "expected_missing_documents": [],
+    "expected_consistency_issues": [],
+    "fields": {
+      "policy_number": "POL-AS/2025/2315940",
+      "patient_name": "Deepa Saini",
+      "hospital_name": "Lotus Care Multispeciality Hospital",
+      "admission_date": "2026-01-23",
+      "discharge_date": "2026-01-30",
+      "diagnosis_text": "Community Acquired Pneumonia",
+      "icd10_code": "J18.9",
+      "bill_subtotal": 135610,
+      "taxes": 0,
+      "bill_total": 135610,
+      "claimed_amount": 135610,
+      "line_item_count": 14,
+      "length_of_stay_days": 7
+    },
+    "line_items": [
+      {
+        "description": "Room Rent - General Ward",
+        "category": "room_rent",
+        "qty": 7,
+        "rate": 2500,
+        "amount": 17500,
+        "is_duplicate": false
+      },
+      {
+        "description": "Consultant Physician Charges",
+        "category": "professional_fees",
+        "qty": 1,
+        "rate": 9750,
+        "amount": 9750,
+        "is_duplicate": false
+      },
+      {
+        "description": "Resident Medical Officer Charges",
+        "category": "professional_fees",
+        "qty": 1,
+        "rate": 11832,
+        "amount": 11832,
+        "is_duplicate": false
+      },
+      {
+        "description": "Injection Tramadol 50 mg",
+        "category": "medicines",
+        "qty": 5,
+        "rate": 2781,
+        "amount": 13905,
+        "is_duplicate": false
+      },
+      {
+        "description": "Injection Ceftriaxone 1 g",
+        "category": "medicines",
+        "qty": 8,
+        "rate": 1915,
+        "amount": 15320,
+        "is_duplicate": false
+      },
+      {
+        "description": "Tablet Paracetamol 650 mg",
+        "category": "medicines",
+        "qty": 2,
+        "rate": 10481,
+        "amount": 20962,
+        "is_duplicate": false
+      },
+      {
+        "description": "Dressing Material",
+        "category": "consumables",
+        "qty": 1,
+        "rate": 5013,
+        "amount": 5013,
+        "is_duplicate": false
+      },
+      {
+        "description": "Disposables & Consumables",
+        "category": "consumables",
+        "qty": 1,
+        "rate": 6627,
+        "amount": 6627,
+        "is_duplicate": false
+      },
+      {
+        "description": "Chest X-Ray",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 8416,
+        "amount": 8416,
+        "is_duplicate": false
+      },
+      {
+        "description": "Sputum Culture",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 4339,
+        "amount": 4339,
+        "is_duplicate": false
+      },
+      {
+        "description": "Complete Blood Count",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 7639,
+        "amount": 7639,
+        "is_duplicate": false
+      },
+      {
+        "description": "Arterial Blood Gas",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 8389,
+        "amount": 8389,
+        "is_duplicate": false
+      },
+      {
+        "description": "Nursing & Service Charges",
+        "category": "other",
+        "qty": 1,
+        "rate": 2701,
+        "amount": 2701,
+        "is_duplicate": false
+      },
+      {
+        "description": "Registration & Admission Charges",
+        "category": "other",
+        "qty": 1,
+        "rate": 3217,
+        "amount": 3217,
+        "is_duplicate": false
+      }
+    ],
+    "documents": {
+      "discharge_summary_present": true,
+      "summary_admission_date": "2026-01-23",
+      "summary_discharge_date": "2026-01-30",
+      "bill_total_blank": false
+    },
+    "pii": {
+      "name": "Deepa Saini",
+      "phone": "+915516095476",
+      "email": "deepa61@example.com",
+      "address": "62/002, Narula Chowk, Vadodara-895831",
+      "uhid": "UH3650269"
+    }
+  },
+  {
+    "claim_id": "CLM-026",
+    "scenario": "partial",
+    "subtype": "copay",
+    "has_scanned_copy": false,
+    "expected_missing_documents": [],
+    "expected_consistency_issues": [],
+    "fields": {
+      "policy_number": "POL-AS/2024/3279090",
+      "patient_name": "Oni Som",
+      "hospital_name": "Medicare Plus Hospital",
+      "admission_date": "2026-04-08",
+      "discharge_date": "2026-04-14",
+      "diagnosis_text": "Fracture Shaft of Tibia (road traffic accident)",
+      "icd10_code": "S82.201A",
+      "bill_subtotal": 135992,
+      "taxes": 0,
+      "bill_total": 135992,
+      "claimed_amount": 135992,
+      "line_item_count": 17,
+      "length_of_stay_days": 6
+    },
+    "line_items": [
+      {
+        "description": "Room Rent - Semi-Private Room",
+        "category": "room_rent",
+        "qty": 6,
+        "rate": 2900,
+        "amount": 17400,
+        "is_duplicate": false
+      },
+      {
+        "description": "Surgeon Fee - Open Reduction and Internal Fixation (ORIF)",
+        "category": "professional_fees",
+        "qty": 1,
+        "rate": 10308,
+        "amount": 10308,
+        "is_duplicate": false
+      },
+      {
+        "description": "Anaesthetist Fee",
+        "category": "professional_fees",
+        "qty": 1,
+        "rate": 7548,
+        "amount": 7548,
+        "is_duplicate": false
+      },
+      {
+        "description": "Assistant Surgeon Fee",
+        "category": "professional_fees",
+        "qty": 1,
+        "rate": 10743,
+        "amount": 10743,
+        "is_duplicate": false
+      },
+      {
+        "description": "Operation Theatre Charges",
+        "category": "ot_charges",
+        "qty": 1,
+        "rate": 15875,
+        "amount": 15875,
+        "is_duplicate": false
+      },
+      {
+        "description": "Injection Pantoprazole 40 mg",
+        "category": "medicines",
+        "qty": 6,
+        "rate": 1186,
+        "amount": 7116,
+        "is_duplicate": false
+      },
+      {
+        "description": "Oral Rehydration & Supplements",
+        "category": "medicines",
+        "qty": 9,
+        "rate": 1032,
+        "amount": 9288,
+        "is_duplicate": false
+      },
+      {
+        "description": "Tablet Paracetamol 650 mg",
+        "category": "medicines",
+        "qty": 3,
+        "rate": 2661,
+        "amount": 7983,
+        "is_duplicate": false
+      },
+      {
+        "description": "Orthopaedic Plate and Screws",
+        "category": "consumables",
+        "qty": 1,
+        "rate": 17360,
+        "amount": 17360,
+        "is_duplicate": false
+      },
+      {
+        "description": "Dressing Material",
+        "category": "consumables",
+        "qty": 1,
+        "rate": 4564,
+        "amount": 4564,
+        "is_duplicate": false
+      },
+      {
+        "description": "Disposables & Consumables",
+        "category": "consumables",
+        "qty": 1,
+        "rate": 7009,
+        "amount": 7009,
+        "is_duplicate": false
+      },
+      {
+        "description": "X-Ray Tibia/Fibula AP/Lateral",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 4187,
+        "amount": 4187,
+        "is_duplicate": false
+      },
+      {
+        "description": "Complete Blood Count",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 2253,
+        "amount": 2253,
+        "is_duplicate": false
+      },
+      {
+        "description": "Pre-anaesthetic Check-up",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 4408,
+        "amount": 4408,
+        "is_duplicate": false
+      },
+      {
+        "description": "Radiology / Imaging",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 4504,
+        "amount": 4504,
+        "is_duplicate": false
+      },
+      {
+        "description": "Nursing & Service Charges",
+        "category": "other",
+        "qty": 1,
+        "rate": 2754,
+        "amount": 2754,
+        "is_duplicate": false
+      },
+      {
+        "description": "Registration & Admission Charges",
+        "category": "other",
+        "qty": 1,
+        "rate": 2692,
+        "amount": 2692,
+        "is_duplicate": false
+      }
+    ],
+    "documents": {
+      "discharge_summary_present": true,
+      "summary_admission_date": "2026-04-08",
+      "summary_discharge_date": "2026-04-14",
+      "bill_total_blank": false
+    },
+    "pii": {
+      "name": "Oni Som",
+      "phone": "02682384851",
+      "email": "oni58@example.com",
+      "address": "73/203, Oza Path, Farrukhabad-778701",
+      "uhid": "UH1748434"
+    }
+  },
+  {
+    "claim_id": "CLM-027",
+    "scenario": "incomplete",
+    "subtype": "unreadable_bill_total",
+    "has_scanned_copy": true,
+    "expected_missing_documents": [],
+    "expected_consistency_issues": [
+      "missing_field:bill_total"
+    ],
+    "fields": {
+      "policy_number": "POL-PREM/2025/9750004",
+      "patient_name": "Krish Sharma",
+      "hospital_name": "Prakash Nursing & Maternity Home",
+      "admission_date": "2026-03-09",
+      "discharge_date": "2026-03-12",
+      "diagnosis_text": "Acute Appendicitis",
+      "icd10_code": "K35.80",
+      "bill_subtotal": 83888,
+      "taxes": 1125,
+      "bill_total": null,
+      "claimed_amount": 85013,
+      "line_item_count": 16,
+      "length_of_stay_days": 3
+    },
+    "line_items": [
+      {
+        "description": "Room Rent - Deluxe Room",
+        "category": "room_rent",
+        "qty": 3,
+        "rate": 7500,
+        "amount": 22500,
+        "is_duplicate": false
+      },
+      {
+        "description": "Surgeon Fee - Laparoscopic Appendectomy",
+        "category": "professional_fees",
+        "qty": 1,
+        "rate": 5694,
+        "amount": 5694,
+        "is_duplicate": false
+      },
+      {
+        "description": "Anaesthetist Fee",
+        "category": "professional_fees",
+        "qty": 1,
+        "rate": 6005,
+        "amount": 6005,
+        "is_duplicate": false
+      },
+      {
+        "description": "Assistant Surgeon Fee",
+        "category": "professional_fees",
+        "qty": 1,
+        "rate": 5136,
+        "amount": 5136,
+        "is_duplicate": false
+      },
+      {
+        "description": "Operation Theatre Charges",
+        "category": "ot_charges",
+        "qty": 1,
+        "rate": 7837,
+        "amount": 7837,
+        "is_duplicate": false
+      },
+      {
+        "description": "Tablet Paracetamol 650 mg",
+        "category": "medicines",
+        "qty": 1,
+        "rate": 4402,
+        "amount": 4402,
+        "is_duplicate": false
+      },
+      {
+        "description": "Injection Tramadol 50 mg",
+        "category": "medicines",
+        "qty": 1,
+        "rate": 5768,
+        "amount": 5768,
+        "is_duplicate": false
+      },
+      {
+        "description": "IV Fluids (NS / RL) 500 ml",
+        "category": "medicines",
+        "qty": 3,
+        "rate": 863,
+        "amount": 2589,
+        "is_duplicate": false
+      },
+      {
+        "description": "Disposables & Consumables",
+        "category": "consumables",
+        "qty": 1,
+        "rate": 4874,
+        "amount": 4874,
+        "is_duplicate": false
+      },
+      {
+        "description": "IV Cannula, Syringes & Infusion Sets",
+        "category": "consumables",
+        "qty": 1,
+        "rate": 9024,
+        "amount": 9024,
+        "is_duplicate": false
+      },
+      {
+        "description": "USG Abdomen",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 2276,
+        "amount": 2276,
+        "is_duplicate": false
+      },
+      {
+        "description": "Complete Blood Count",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 1400,
+        "amount": 1400,
+        "is_duplicate": false
+      },
+      {
+        "description": "Pre-anaesthetic Check-up",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 1615,
+        "amount": 1615,
+        "is_duplicate": false
+      },
+      {
+        "description": "Radiology / Imaging",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 1702,
+        "amount": 1702,
+        "is_duplicate": false
+      },
+      {
+        "description": "Nursing & Service Charges",
+        "category": "other",
+        "qty": 1,
+        "rate": 998,
+        "amount": 998,
+        "is_duplicate": false
+      },
+      {
+        "description": "Registration & Admission Charges",
+        "category": "other",
+        "qty": 1,
+        "rate": 2068,
+        "amount": 2068,
+        "is_duplicate": false
+      }
+    ],
+    "documents": {
+      "discharge_summary_present": true,
+      "summary_admission_date": "2026-03-09",
+      "summary_discharge_date": "2026-03-12",
+      "bill_total_blank": true
+    },
+    "pii": {
+      "name": "Krish Sharma",
+      "phone": "+915027040551",
+      "email": "krish26@example.com",
+      "address": "H.No. 077, Doshi Nagar, Ahmedabad 611716",
+      "uhid": "UH9986053"
+    }
+  },
+  {
+    "claim_id": "CLM-028",
+    "scenario": "risk",
+    "subtype": "duplicate_items",
+    "has_scanned_copy": false,
+    "expected_missing_documents": [],
+    "expected_consistency_issues": [
+      "duplicate_line_items"
+    ],
+    "fields": {
+      "policy_number": "POL-STD/2025/4856696",
+      "patient_name": "Kiaan Chacko",
+      "hospital_name": "Kaveri Institute of Medical Sciences",
+      "admission_date": "2025-12-20",
+      "discharge_date": "2025-12-23",
+      "diagnosis_text": "Acute Appendicitis",
+      "icd10_code": "K35.80",
+      "bill_subtotal": 127391,
+      "taxes": 0,
+      "bill_total": 127391,
+      "claimed_amount": 127391,
+      "line_item_count": 19,
+      "length_of_stay_days": 3
+    },
+    "line_items": [
+      {
+        "description": "Room Rent - Semi-Private Room",
+        "category": "room_rent",
+        "qty": 3,
+        "rate": 3200,
+        "amount": 9600,
+        "is_duplicate": false
+      },
+      {
+        "description": "Surgeon Fee - Laparoscopic Appendectomy",
+        "category": "professional_fees",
+        "qty": 1,
+        "rate": 11067,
+        "amount": 11067,
+        "is_duplicate": false
+      },
+      {
+        "description": "Anaesthetist Fee",
+        "category": "professional_fees",
+        "qty": 1,
+        "rate": 8485,
+        "amount": 8485,
+        "is_duplicate": false
+      },
+      {
+        "description": "Assistant Surgeon Fee",
+        "category": "professional_fees",
+        "qty": 1,
+        "rate": 9043,
+        "amount": 9043,
+        "is_duplicate": false
+      },
+      {
+        "description": "Operation Theatre Charges",
+        "category": "ot_charges",
+        "qty": 1,
+        "rate": 16622,
+        "amount": 16622,
+        "is_duplicate": false
+      },
+      {
+        "description": "Oral Rehydration & Supplements",
+        "category": "medicines",
+        "qty": 5,
+        "rate": 1116,
+        "amount": 5580,
+        "is_duplicate": false
+      },
+      {
+        "description": "IV Fluids (NS / RL) 500 ml",
+        "category": "medicines",
+        "qty": 5,
+        "rate": 1027,
+        "amount": 5135,
+        "is_duplicate": false
+      },
+      {
+        "description": "Injection Pantoprazole 40 mg",
+        "category": "medicines",
+        "qty": 9,
+        "rate": 664,
+        "amount": 5976,
+        "is_duplicate": false
+      },
+      {
+        "description": "Injection Ceftriaxone 1 g",
+        "category": "medicines",
+        "qty": 2,
+        "rate": 2146,
+        "amount": 4292,
+        "is_duplicate": false
+      },
+      {
+        "description": "Injection Ceftriaxone 1 g",
+        "category": "medicines",
+        "qty": 2,
+        "rate": 2146,
+        "amount": 4292,
+        "is_duplicate": true
+      },
+      {
+        "description": "IV Cannula, Syringes & Infusion Sets",
+        "category": "consumables",
+        "qty": 1,
+        "rate": 12592,
+        "amount": 12592,
+        "is_duplicate": false
+      },
+      {
+        "description": "Dressing Material",
+        "category": "consumables",
+        "qty": 1,
+        "rate": 13806,
+        "amount": 13806,
+        "is_duplicate": false
+      },
+      {
+        "description": "USG Abdomen",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 2690,
+        "amount": 2690,
+        "is_duplicate": false
+      },
+      {
+        "description": "USG Abdomen",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 2690,
+        "amount": 2690,
+        "is_duplicate": true
+      },
+      {
+        "description": "Complete Blood Count",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 3884,
+        "amount": 3884,
+        "is_duplicate": false
+      },
+      {
+        "description": "Pre-anaesthetic Check-up",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 2274,
+        "amount": 2274,
+        "is_duplicate": false
+      },
+      {
+        "description": "Radiology / Imaging",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 4150,
+        "amount": 4150,
+        "is_duplicate": false
+      },
+      {
+        "description": "Nursing & Service Charges",
+        "category": "other",
+        "qty": 1,
+        "rate": 2770,
+        "amount": 2770,
+        "is_duplicate": false
+      },
+      {
+        "description": "Registration & Admission Charges",
+        "category": "other",
+        "qty": 1,
+        "rate": 2443,
+        "amount": 2443,
+        "is_duplicate": false
+      }
+    ],
+    "documents": {
+      "discharge_summary_present": true,
+      "summary_admission_date": "2025-12-20",
+      "summary_discharge_date": "2025-12-23",
+      "bill_total_blank": false
+    },
+    "pii": {
+      "name": "Kiaan Chacko",
+      "phone": "09022947539",
+      "email": "kiaan27@example.com",
+      "address": "H.No. 635, Mall Road, Ichalkaranji-131615",
+      "uhid": "UH9731737"
+    }
+  },
+  {
+    "claim_id": "CLM-029",
+    "scenario": "covered",
+    "subtype": "base",
+    "has_scanned_copy": false,
+    "expected_missing_documents": [],
+    "expected_consistency_issues": [],
+    "fields": {
+      "policy_number": "POL-PREM/2023/4089246",
+      "patient_name": "Nathaniel Dara",
+      "hospital_name": "Aastha Super Speciality Hospital",
+      "admission_date": "2025-06-23",
+      "discharge_date": "2025-06-24",
+      "diagnosis_text": "Senile Cataract",
+      "icd10_code": "H25.9",
+      "bill_subtotal": 57619,
+      "taxes": 0,
+      "bill_total": 57619,
+      "claimed_amount": 57619,
+      "line_item_count": 15,
+      "length_of_stay_days": 1
+    },
+    "line_items": [
+      {
+        "description": "Room Rent - Private Room",
+        "category": "room_rent",
+        "qty": 1,
+        "rate": 4500,
+        "amount": 4500,
+        "is_duplicate": false
+      },
+      {
+        "description": "Surgeon Fee - Phacoemulsification with IOL Implant",
+        "category": "professional_fees",
+        "qty": 1,
+        "rate": 6722,
+        "amount": 6722,
+        "is_duplicate": false
+      },
+      {
+        "description": "Anaesthetist Fee",
+        "category": "professional_fees",
+        "qty": 1,
+        "rate": 7329,
+        "amount": 7329,
+        "is_duplicate": false
+      },
+      {
+        "description": "Operation Theatre Charges",
+        "category": "ot_charges",
+        "qty": 1,
+        "rate": 5806,
+        "amount": 5806,
+        "is_duplicate": false
+      },
+      {
+        "description": "Injection Tramadol 50 mg",
+        "category": "medicines",
+        "qty": 3,
+        "rate": 803,
+        "amount": 2409,
+        "is_duplicate": false
+      },
+      {
+        "description": "Oral Rehydration & Supplements",
+        "category": "medicines",
+        "qty": 10,
+        "rate": 183,
+        "amount": 1830,
+        "is_duplicate": false
+      },
+      {
+        "description": "Injection Pantoprazole 40 mg",
+        "category": "medicines",
+        "qty": 3,
+        "rate": 485,
+        "amount": 1455,
+        "is_duplicate": false
+      },
+      {
+        "description": "Intraocular Lens (IOL)",
+        "category": "consumables",
+        "qty": 1,
+        "rate": 11521,
+        "amount": 11521,
+        "is_duplicate": false
+      },
+      {
+        "description": "Disposables & Consumables",
+        "category": "consumables",
+        "qty": 1,
+        "rate": 4085,
+        "amount": 4085,
+        "is_duplicate": false
+      },
+      {
+        "description": "IV Cannula, Syringes & Infusion Sets",
+        "category": "consumables",
+        "qty": 1,
+        "rate": 3595,
+        "amount": 3595,
+        "is_duplicate": false
+      },
+      {
+        "description": "Biometry (A-Scan)",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 2047,
+        "amount": 2047,
+        "is_duplicate": false
+      },
+      {
+        "description": "Pre-operative Blood Work",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 2338,
+        "amount": 2338,
+        "is_duplicate": false
+      },
+      {
+        "description": "Radiology / Imaging",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 2031,
+        "amount": 2031,
+        "is_duplicate": false
+      },
+      {
+        "description": "Nursing & Service Charges",
+        "category": "other",
+        "qty": 1,
+        "rate": 1244,
+        "amount": 1244,
+        "is_duplicate": false
+      },
+      {
+        "description": "Registration & Admission Charges",
+        "category": "other",
+        "qty": 1,
+        "rate": 707,
+        "amount": 707,
+        "is_duplicate": false
+      }
+    ],
+    "documents": {
+      "discharge_summary_present": true,
+      "summary_admission_date": "2025-06-23",
+      "summary_discharge_date": "2025-06-24",
+      "bill_total_blank": false
+    },
+    "pii": {
+      "name": "Nathaniel Dara",
+      "phone": "2480945936",
+      "email": "nathaniel85@example.com",
+      "address": "31, Khalsa Nagar, Jodhpur 674649",
+      "uhid": "UH1420373"
+    }
+  },
+  {
+    "claim_id": "CLM-030",
+    "scenario": "covered",
+    "subtype": "base",
+    "has_scanned_copy": false,
+    "expected_missing_documents": [],
+    "expected_consistency_issues": [],
+    "fields": {
+      "policy_number": "POL-PREM/2024/9931187",
+      "patient_name": "Isaac Rajagopalan",
+      "hospital_name": "Sunrise Life Hospital",
+      "admission_date": "2026-07-11",
+      "discharge_date": "2026-07-14",
+      "diagnosis_text": "Inguinal Hernia",
+      "icd10_code": "K40.90",
+      "bill_subtotal": 72747,
+      "taxes": 0,
+      "bill_total": 72747,
+      "claimed_amount": 72747,
+      "line_item_count": 18,
+      "length_of_stay_days": 3
+    },
+    "line_items": [
+      {
+        "description": "Room Rent - Semi-Private Room",
+        "category": "room_rent",
+        "qty": 3,
+        "rate": 3000,
+        "amount": 9000,
+        "is_duplicate": false
+      },
+      {
+        "description": "Surgeon Fee - Laparoscopic Inguinal Hernia Repair (Mesh)",
+        "category": "professional_fees",
+        "qty": 1,
+        "rate": 4420,
+        "amount": 4420,
+        "is_duplicate": false
+      },
+      {
+        "description": "Anaesthetist Fee",
+        "category": "professional_fees",
+        "qty": 1,
+        "rate": 6789,
+        "amount": 6789,
+        "is_duplicate": false
+      },
+      {
+        "description": "Assistant Surgeon Fee",
+        "category": "professional_fees",
+        "qty": 1,
+        "rate": 5404,
+        "amount": 5404,
+        "is_duplicate": false
+      },
+      {
+        "description": "Operation Theatre Charges",
+        "category": "ot_charges",
+        "qty": 1,
+        "rate": 9104,
+        "amount": 9104,
+        "is_duplicate": false
+      },
+      {
+        "description": "Injection Ceftriaxone 1 g",
+        "category": "medicines",
+        "qty": 3,
+        "rate": 1165,
+        "amount": 3495,
+        "is_duplicate": false
+      },
+      {
+        "description": "IV Fluids (NS / RL) 500 ml",
+        "category": "medicines",
+        "qty": 6,
+        "rate": 674,
+        "amount": 4044,
+        "is_duplicate": false
+      },
+      {
+        "description": "Injection Pantoprazole 40 mg",
+        "category": "medicines",
+        "qty": 5,
+        "rate": 683,
+        "amount": 3415,
+        "is_duplicate": false
+      },
+      {
+        "description": "Tablet Paracetamol 650 mg",
+        "category": "medicines",
+        "qty": 2,
+        "rate": 1396,
+        "amount": 2792,
+        "is_duplicate": false
+      },
+      {
+        "description": "Surgical Mesh",
+        "category": "consumables",
+        "qty": 1,
+        "rate": 7875,
+        "amount": 7875,
+        "is_duplicate": false
+      },
+      {
+        "description": "Disposables & Consumables",
+        "category": "consumables",
+        "qty": 1,
+        "rate": 2588,
+        "amount": 2588,
+        "is_duplicate": false
+      },
+      {
+        "description": "Dressing Material",
+        "category": "consumables",
+        "qty": 1,
+        "rate": 2661,
+        "amount": 2661,
+        "is_duplicate": false
+      },
+      {
+        "description": "USG Abdomen/Inguinal Region",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 1667,
+        "amount": 1667,
+        "is_duplicate": false
+      },
+      {
+        "description": "Complete Blood Count",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 1932,
+        "amount": 1932,
+        "is_duplicate": false
+      },
+      {
+        "description": "Pre-anaesthetic Check-up",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 2620,
+        "amount": 2620,
+        "is_duplicate": false
+      },
+      {
+        "description": "Radiology / Imaging",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 2095,
+        "amount": 2095,
+        "is_duplicate": false
+      },
+      {
+        "description": "Nursing & Service Charges",
+        "category": "other",
+        "qty": 1,
+        "rate": 1346,
+        "amount": 1346,
+        "is_duplicate": false
+      },
+      {
+        "description": "Registration & Admission Charges",
+        "category": "other",
+        "qty": 1,
+        "rate": 1500,
+        "amount": 1500,
+        "is_duplicate": false
+      }
+    ],
+    "documents": {
+      "discharge_summary_present": true,
+      "summary_admission_date": "2026-07-11",
+      "summary_discharge_date": "2026-07-14",
+      "bill_total_blank": false
+    },
+    "pii": {
+      "name": "Isaac Rajagopalan",
+      "phone": "3053788806",
+      "email": "isaac13@example.com",
+      "address": "028, Bahl Marg, Dehri-565578",
+      "uhid": "UH5809166"
+    }
+  },
+  {
+    "claim_id": "CLM-031",
+    "scenario": "incomplete",
+    "subtype": "missing_policy_number",
+    "has_scanned_copy": false,
+    "expected_missing_documents": [],
+    "expected_consistency_issues": [
+      "missing_field:policy_number"
+    ],
+    "fields": {
+      "policy_number": null,
+      "patient_name": "Hredhaan Panchal",
+      "hospital_name": "Ganga Jamuna Multispeciality Hospital",
+      "admission_date": "2025-10-24",
+      "discharge_date": "2025-10-25",
+      "diagnosis_text": "Senile Cataract",
+      "icd10_code": "H25.9",
+      "bill_subtotal": 70218,
+      "taxes": 0,
+      "bill_total": 70218,
+      "claimed_amount": 70218,
+      "line_item_count": 15,
+      "length_of_stay_days": 1
+    },
+    "line_items": [
+      {
+        "description": "Room Rent - Private Room",
+        "category": "room_rent",
+        "qty": 1,
+        "rate": 4800,
+        "amount": 4800,
+        "is_duplicate": false
+      },
+      {
+        "description": "Surgeon Fee - Phacoemulsification with IOL Implant",
+        "category": "professional_fees",
+        "qty": 1,
+        "rate": 6073,
+        "amount": 6073,
+        "is_duplicate": false
+      },
+      {
+        "description": "Anaesthetist Fee",
+        "category": "professional_fees",
+        "qty": 1,
+        "rate": 9112,
+        "amount": 9112,
+        "is_duplicate": false
+      },
+      {
+        "description": "Operation Theatre Charges",
+        "category": "ot_charges",
+        "qty": 1,
+        "rate": 8756,
+        "amount": 8756,
+        "is_duplicate": false
+      },
+      {
+        "description": "IV Fluids (NS / RL) 500 ml",
+        "category": "medicines",
+        "qty": 3,
+        "rate": 1118,
+        "amount": 3354,
+        "is_duplicate": false
+      },
+      {
+        "description": "Injection Tramadol 50 mg",
+        "category": "medicines",
+        "qty": 3,
+        "rate": 758,
+        "amount": 2274,
+        "is_duplicate": false
+      },
+      {
+        "description": "Oral Rehydration & Supplements",
+        "category": "medicines",
+        "qty": 7,
+        "rate": 394,
+        "amount": 2758,
+        "is_duplicate": false
+      },
+      {
+        "description": "Intraocular Lens (IOL)",
+        "category": "consumables",
+        "qty": 1,
+        "rate": 14635,
+        "amount": 14635,
+        "is_duplicate": false
+      },
+      {
+        "description": "IV Cannula, Syringes & Infusion Sets",
+        "category": "consumables",
+        "qty": 1,
+        "rate": 4829,
+        "amount": 4829,
+        "is_duplicate": false
+      },
+      {
+        "description": "Dressing Material",
+        "category": "consumables",
+        "qty": 1,
+        "rate": 4927,
+        "amount": 4927,
+        "is_duplicate": false
+      },
+      {
+        "description": "Biometry (A-Scan)",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 2149,
+        "amount": 2149,
+        "is_duplicate": false
+      },
+      {
+        "description": "Pre-operative Blood Work",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 2383,
+        "amount": 2383,
+        "is_duplicate": false
+      },
+      {
+        "description": "Radiology / Imaging",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 2037,
+        "amount": 2037,
+        "is_duplicate": false
+      },
+      {
+        "description": "Nursing & Service Charges",
+        "category": "other",
+        "qty": 1,
+        "rate": 1381,
+        "amount": 1381,
+        "is_duplicate": false
+      },
+      {
+        "description": "Registration & Admission Charges",
+        "category": "other",
+        "qty": 1,
+        "rate": 750,
+        "amount": 750,
+        "is_duplicate": false
+      }
+    ],
+    "documents": {
+      "discharge_summary_present": true,
+      "summary_admission_date": "2025-10-24",
+      "summary_discharge_date": "2025-10-25",
+      "bill_total_blank": false
+    },
+    "pii": {
+      "name": "Hredhaan Panchal",
+      "phone": "06622409841",
+      "email": "hredhaan10@example.com",
+      "address": "64, Nayak Chowk, Sambalpur 987503",
+      "uhid": "UH3302695"
+    }
+  },
+  {
+    "claim_id": "CLM-032",
+    "scenario": "rejected",
+    "subtype": "exclusion:cosmetic_surgery",
+    "has_scanned_copy": false,
+    "expected_missing_documents": [],
+    "expected_consistency_issues": [],
+    "fields": {
+      "policy_number": "POL-AS/2024/1181333",
+      "patient_name": "Yashvi Arora",
+      "hospital_name": "Kaveri Institute of Medical Sciences",
+      "admission_date": "2025-11-26",
+      "discharge_date": "2025-11-28",
+      "diagnosis_text": "Nasal Deformity (aesthetic correction)",
+      "icd10_code": "Z41.1",
+      "bill_subtotal": 134057,
+      "taxes": 0,
+      "bill_total": 134057,
+      "claimed_amount": 134057,
+      "line_item_count": 15,
+      "length_of_stay_days": 2
+    },
+    "line_items": [
+      {
+        "description": "Room Rent - General Ward",
+        "category": "room_rent",
+        "qty": 2,
+        "rate": 1800,
+        "amount": 3600,
+        "is_duplicate": false
+      },
+      {
+        "description": "Surgeon Fee - Rhinoplasty (Cosmetic)",
+        "category": "professional_fees",
+        "qty": 1,
+        "rate": 12385,
+        "amount": 12385,
+        "is_duplicate": false
+      },
+      {
+        "description": "Anaesthetist Fee",
+        "category": "professional_fees",
+        "qty": 1,
+        "rate": 11496,
+        "amount": 11496,
+        "is_duplicate": false
+      },
+      {
+        "description": "Assistant Surgeon Fee",
+        "category": "professional_fees",
+        "qty": 1,
+        "rate": 12125,
+        "amount": 12125,
+        "is_duplicate": false
+      },
+      {
+        "description": "Operation Theatre Charges",
+        "category": "ot_charges",
+        "qty": 1,
+        "rate": 21579,
+        "amount": 21579,
+        "is_duplicate": false
+      },
+      {
+        "description": "IV Fluids (NS / RL) 500 ml",
+        "category": "medicines",
+        "qty": 8,
+        "rate": 1269,
+        "amount": 10152,
+        "is_duplicate": false
+      },
+      {
+        "description": "Oral Rehydration & Supplements",
+        "category": "medicines",
+        "qty": 1,
+        "rate": 10209,
+        "amount": 10209,
+        "is_duplicate": false
+      },
+      {
+        "description": "Injection Pantoprazole 40 mg",
+        "category": "medicines",
+        "qty": 3,
+        "rate": 2347,
+        "amount": 7041,
+        "is_duplicate": false
+      },
+      {
+        "description": "Dressing Material",
+        "category": "consumables",
+        "qty": 1,
+        "rate": 15133,
+        "amount": 15133,
+        "is_duplicate": false
+      },
+      {
+        "description": "IV Cannula, Syringes & Infusion Sets",
+        "category": "consumables",
+        "qty": 1,
+        "rate": 10810,
+        "amount": 10810,
+        "is_duplicate": false
+      },
+      {
+        "description": "Pre-anaesthetic Check-up",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 5060,
+        "amount": 5060,
+        "is_duplicate": false
+      },
+      {
+        "description": "Complete Blood Count",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 4212,
+        "amount": 4212,
+        "is_duplicate": false
+      },
+      {
+        "description": "Radiology / Imaging",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 4277,
+        "amount": 4277,
+        "is_duplicate": false
+      },
+      {
+        "description": "Nursing & Service Charges",
+        "category": "other",
+        "qty": 1,
+        "rate": 3725,
+        "amount": 3725,
+        "is_duplicate": false
+      },
+      {
+        "description": "Registration & Admission Charges",
+        "category": "other",
+        "qty": 1,
+        "rate": 2253,
+        "amount": 2253,
+        "is_duplicate": false
+      }
+    ],
+    "documents": {
+      "discharge_summary_present": true,
+      "summary_admission_date": "2025-11-26",
+      "summary_discharge_date": "2025-11-28",
+      "bill_total_blank": false
+    },
+    "pii": {
+      "name": "Yashvi Arora",
+      "phone": "1927431360",
+      "email": "yashvi60@example.com",
+      "address": "773, Kala Chowk, Muzaffarnagar 458957",
+      "uhid": "UH7702852"
+    }
+  },
+  {
+    "claim_id": "CLM-033",
+    "scenario": "covered",
+    "subtype": "base",
+    "has_scanned_copy": true,
+    "expected_missing_documents": [],
+    "expected_consistency_issues": [],
+    "fields": {
+      "policy_number": "POL-PREM/2024/5905879",
+      "patient_name": "Wriddhish Mallick",
+      "hospital_name": "Aastha Super Speciality Hospital",
+      "admission_date": "2026-01-05",
+      "discharge_date": "2026-01-09",
+      "diagnosis_text": "Cholelithiasis (Gallstones) with Cholecystitis",
+      "icd10_code": "K80.20",
+      "bill_subtotal": 115674,
+      "taxes": 1500,
+      "bill_total": 117174,
+      "claimed_amount": 117174,
+      "line_item_count": 16,
+      "length_of_stay_days": 4
+    },
+    "line_items": [
+      {
+        "description": "Room Rent - Deluxe Room",
+        "category": "room_rent",
+        "qty": 4,
+        "rate": 7500,
+        "amount": 30000,
+        "is_duplicate": false
+      },
+      {
+        "description": "Surgeon Fee - Laparoscopic Cholecystectomy",
+        "category": "professional_fees",
+        "qty": 1,
+        "rate": 6990,
+        "amount": 6990,
+        "is_duplicate": false
+      },
+      {
+        "description": "Anaesthetist Fee",
+        "category": "professional_fees",
+        "qty": 1,
+        "rate": 6175,
+        "amount": 6175,
+        "is_duplicate": false
+      },
+      {
+        "description": "Assistant Surgeon Fee",
+        "category": "professional_fees",
+        "qty": 1,
+        "rate": 7043,
+        "amount": 7043,
+        "is_duplicate": false
+      },
+      {
+        "description": "Operation Theatre Charges",
+        "category": "ot_charges",
+        "qty": 1,
+        "rate": 12773,
+        "amount": 12773,
+        "is_duplicate": false
+      },
+      {
+        "description": "Injection Ceftriaxone 1 g",
+        "category": "medicines",
+        "qty": 5,
+        "rate": 1343,
+        "amount": 6715,
+        "is_duplicate": false
+      },
+      {
+        "description": "Tablet Ondansetron 4 mg",
+        "category": "medicines",
+        "qty": 2,
+        "rate": 3488,
+        "amount": 6976,
+        "is_duplicate": false
+      },
+      {
+        "description": "Injection Pantoprazole 40 mg",
+        "category": "medicines",
+        "qty": 6,
+        "rate": 723,
+        "amount": 4338,
+        "is_duplicate": false
+      },
+      {
+        "description": "Disposables & Consumables",
+        "category": "consumables",
+        "qty": 1,
+        "rate": 11929,
+        "amount": 11929,
+        "is_duplicate": false
+      },
+      {
+        "description": "Dressing Material",
+        "category": "consumables",
+        "qty": 1,
+        "rate": 8150,
+        "amount": 8150,
+        "is_duplicate": false
+      },
+      {
+        "description": "USG Abdomen",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 2281,
+        "amount": 2281,
+        "is_duplicate": false
+      },
+      {
+        "description": "Liver Function Test",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 2226,
+        "amount": 2226,
+        "is_duplicate": false
+      },
+      {
+        "description": "Complete Blood Count",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 2630,
+        "amount": 2630,
+        "is_duplicate": false
+      },
+      {
+        "description": "Pre-anaesthetic Check-up",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 3190,
+        "amount": 3190,
+        "is_duplicate": false
+      },
+      {
+        "description": "Nursing & Service Charges",
+        "category": "other",
+        "qty": 1,
+        "rate": 2915,
+        "amount": 2915,
+        "is_duplicate": false
+      },
+      {
+        "description": "Registration & Admission Charges",
+        "category": "other",
+        "qty": 1,
+        "rate": 1343,
+        "amount": 1343,
+        "is_duplicate": false
+      }
+    ],
+    "documents": {
+      "discharge_summary_present": true,
+      "summary_admission_date": "2026-01-05",
+      "summary_discharge_date": "2026-01-09",
+      "bill_total_blank": false
+    },
+    "pii": {
+      "name": "Wriddhish Mallick",
+      "phone": "+916429901944",
+      "email": "wriddhish24@example.com",
+      "address": "H.No. 16, Char Nagar, Mehsana-343687",
+      "uhid": "UH4994075"
+    }
+  },
+  {
+    "claim_id": "CLM-034",
+    "scenario": "covered",
+    "subtype": "base",
+    "has_scanned_copy": true,
+    "expected_missing_documents": [],
+    "expected_consistency_issues": [],
+    "fields": {
+      "policy_number": "POL-PREM/2025/8133523",
+      "patient_name": "Vasana Mallick",
+      "hospital_name": "Shree Dhanvantari Hospital",
+      "admission_date": "2026-08-16",
+      "discharge_date": "2026-08-19",
+      "diagnosis_text": "Acute Appendicitis",
+      "icd10_code": "K35.80",
+      "bill_subtotal": 134190,
+      "taxes": 0,
+      "bill_total": 134190,
+      "claimed_amount": 134190,
+      "line_item_count": 16,
+      "length_of_stay_days": 3
+    },
+    "line_items": [
+      {
+        "description": "Room Rent - Private Room",
+        "category": "room_rent",
+        "qty": 3,
+        "rate": 4500,
+        "amount": 13500,
+        "is_duplicate": false
+      },
+      {
+        "description": "Surgeon Fee - Laparoscopic Appendectomy",
+        "category": "professional_fees",
+        "qty": 1,
+        "rate": 11220,
+        "amount": 11220,
+        "is_duplicate": false
+      },
+      {
+        "description": "Anaesthetist Fee",
+        "category": "professional_fees",
+        "qty": 1,
+        "rate": 9793,
+        "amount": 9793,
+        "is_duplicate": false
+      },
+      {
+        "description": "Assistant Surgeon Fee",
+        "category": "professional_fees",
+        "qty": 1,
+        "rate": 4942,
+        "amount": 4942,
+        "is_duplicate": false
+      },
+      {
+        "description": "Operation Theatre Charges",
+        "category": "ot_charges",
+        "qty": 1,
+        "rate": 19384,
+        "amount": 19384,
+        "is_duplicate": false
+      },
+      {
+        "description": "Oral Rehydration & Supplements",
+        "category": "medicines",
+        "qty": 5,
+        "rate": 1381,
+        "amount": 6905,
+        "is_duplicate": false
+      },
+      {
+        "description": "Injection Tramadol 50 mg",
+        "category": "medicines",
+        "qty": 7,
+        "rate": 1357,
+        "amount": 9499,
+        "is_duplicate": false
+      },
+      {
+        "description": "IV Fluids (NS / RL) 500 ml",
+        "category": "medicines",
+        "qty": 4,
+        "rate": 2492,
+        "amount": 9968,
+        "is_duplicate": false
+      },
+      {
+        "description": "Dressing Material",
+        "category": "consumables",
+        "qty": 1,
+        "rate": 12447,
+        "amount": 12447,
+        "is_duplicate": false
+      },
+      {
+        "description": "Disposables & Consumables",
+        "category": "consumables",
+        "qty": 1,
+        "rate": 15845,
+        "amount": 15845,
+        "is_duplicate": false
+      },
+      {
+        "description": "USG Abdomen",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 2758,
+        "amount": 2758,
+        "is_duplicate": false
+      },
+      {
+        "description": "Complete Blood Count",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 4525,
+        "amount": 4525,
+        "is_duplicate": false
+      },
+      {
+        "description": "Pre-anaesthetic Check-up",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 3322,
+        "amount": 3322,
+        "is_duplicate": false
+      },
+      {
+        "description": "Radiology / Imaging",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 4512,
+        "amount": 4512,
+        "is_duplicate": false
+      },
+      {
+        "description": "Nursing & Service Charges",
+        "category": "other",
+        "qty": 1,
+        "rate": 3164,
+        "amount": 3164,
+        "is_duplicate": false
+      },
+      {
+        "description": "Registration & Admission Charges",
+        "category": "other",
+        "qty": 1,
+        "rate": 2406,
+        "amount": 2406,
+        "is_duplicate": false
+      }
+    ],
+    "documents": {
+      "discharge_summary_present": true,
+      "summary_admission_date": "2026-08-16",
+      "summary_discharge_date": "2026-08-19",
+      "bill_total_blank": false
+    },
+    "pii": {
+      "name": "Vasana Mallick",
+      "phone": "4913117465",
+      "email": "vasana28@example.com",
+      "address": "10/23, Bandi Chowk, Mango 424222",
+      "uhid": "UH8373634"
+    }
+  },
+  {
+    "claim_id": "CLM-035",
+    "scenario": "covered",
+    "subtype": "base",
+    "has_scanned_copy": true,
+    "expected_missing_documents": [],
+    "expected_consistency_issues": [],
+    "fields": {
+      "policy_number": "POL-STD/2023/2045749",
+      "patient_name": "Chanchal Gala",
+      "hospital_name": "Vedanta Health Institute",
+      "admission_date": "2025-09-30",
+      "discharge_date": "2025-10-04",
+      "diagnosis_text": "Dengue Fever with Thrombocytopenia",
+      "icd10_code": "A90",
+      "bill_subtotal": 83298,
+      "taxes": 0,
+      "bill_total": 83298,
+      "claimed_amount": 83298,
+      "line_item_count": 14,
+      "length_of_stay_days": 4
+    },
+    "line_items": [
+      {
+        "description": "Room Rent - Private Room",
+        "category": "room_rent",
+        "qty": 4,
+        "rate": 4400,
+        "amount": 17600,
+        "is_duplicate": false
+      },
+      {
+        "description": "Consultant Physician Charges",
+        "category": "professional_fees",
+        "qty": 1,
+        "rate": 4637,
+        "amount": 4637,
+        "is_duplicate": false
+      },
+      {
+        "description": "Resident Medical Officer Charges",
+        "category": "professional_fees",
+        "qty": 1,
+        "rate": 9236,
+        "amount": 9236,
+        "is_duplicate": false
+      },
+      {
+        "description": "Oral Rehydration & Supplements",
+        "category": "medicines",
+        "qty": 2,
+        "rate": 4758,
+        "amount": 9516,
+        "is_duplicate": false
+      },
+      {
+        "description": "Injection Ceftriaxone 1 g",
+        "category": "medicines",
+        "qty": 4,
+        "rate": 1998,
+        "amount": 7992,
+        "is_duplicate": false
+      },
+      {
+        "description": "Injection Pantoprazole 40 mg",
+        "category": "medicines",
+        "qty": 6,
+        "rate": 1208,
+        "amount": 7248,
+        "is_duplicate": false
+      },
+      {
+        "description": "IV Cannula, Syringes & Infusion Sets",
+        "category": "consumables",
+        "qty": 1,
+        "rate": 4651,
+        "amount": 4651,
+        "is_duplicate": false
+      },
+      {
+        "description": "Dressing Material",
+        "category": "consumables",
+        "qty": 1,
+        "rate": 3257,
+        "amount": 3257,
+        "is_duplicate": false
+      },
+      {
+        "description": "NS1 Antigen",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 5384,
+        "amount": 5384,
+        "is_duplicate": false
+      },
+      {
+        "description": "Dengue IgM/IgG Serology",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 5397,
+        "amount": 5397,
+        "is_duplicate": false
+      },
+      {
+        "description": "Platelet Count Serial",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 2568,
+        "amount": 2568,
+        "is_duplicate": false
+      },
+      {
+        "description": "Complete Blood Count",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 2462,
+        "amount": 2462,
+        "is_duplicate": false
+      },
+      {
+        "description": "Nursing & Service Charges",
+        "category": "other",
+        "qty": 1,
+        "rate": 1768,
+        "amount": 1768,
+        "is_duplicate": false
+      },
+      {
+        "description": "Registration & Admission Charges",
+        "category": "other",
+        "qty": 1,
+        "rate": 1582,
+        "amount": 1582,
+        "is_duplicate": false
+      }
+    ],
+    "documents": {
+      "discharge_summary_present": true,
+      "summary_admission_date": "2025-09-30",
+      "summary_discharge_date": "2025-10-04",
+      "bill_total_blank": false
+    },
+    "pii": {
+      "name": "Chanchal Gala",
+      "phone": "6605579471",
+      "email": "chanchal97@example.com",
+      "address": "14/57, Sankar Nagar, Raebareli 532213",
+      "uhid": "UH4163613"
+    }
+  },
+  {
+    "claim_id": "CLM-036",
+    "scenario": "covered",
+    "subtype": "base",
+    "has_scanned_copy": false,
+    "expected_missing_documents": [],
+    "expected_consistency_issues": [],
+    "fields": {
+      "policy_number": "POL-STD/2022/4887071",
+      "patient_name": "Varenya Sridhar",
+      "hospital_name": "Prakash Nursing & Maternity Home",
+      "admission_date": "2026-08-02",
+      "discharge_date": "2026-08-05",
+      "diagnosis_text": "Inguinal Hernia",
+      "icd10_code": "K40.90",
+      "bill_subtotal": 79846,
+      "taxes": 0,
+      "bill_total": 79846,
+      "claimed_amount": 79846,
+      "line_item_count": 17,
+      "length_of_stay_days": 3
+    },
+    "line_items": [
+      {
+        "description": "Room Rent - General Ward",
+        "category": "room_rent",
+        "qty": 3,
+        "rate": 1900,
+        "amount": 5700,
+        "is_duplicate": false
+      },
+      {
+        "description": "Surgeon Fee - Laparoscopic Inguinal Hernia Repair (Mesh)",
+        "category": "professional_fees",
+        "qty": 1,
+        "rate": 6588,
+        "amount": 6588,
+        "is_duplicate": false
+      },
+      {
+        "description": "Anaesthetist Fee",
+        "category": "professional_fees",
+        "qty": 1,
+        "rate": 8364,
+        "amount": 8364,
+        "is_duplicate": false
+      },
+      {
+        "description": "Assistant Surgeon Fee",
+        "category": "professional_fees",
+        "qty": 1,
+        "rate": 3950,
+        "amount": 3950,
+        "is_duplicate": false
+      },
+      {
+        "description": "Operation Theatre Charges",
+        "category": "ot_charges",
+        "qty": 1,
+        "rate": 11968,
+        "amount": 11968,
+        "is_duplicate": false
+      },
+      {
+        "description": "Injection Tramadol 50 mg",
+        "category": "medicines",
+        "qty": 3,
+        "rate": 1679,
+        "amount": 5037,
+        "is_duplicate": false
+      },
+      {
+        "description": "IV Fluids (NS / RL) 500 ml",
+        "category": "medicines",
+        "qty": 5,
+        "rate": 787,
+        "amount": 3935,
+        "is_duplicate": false
+      },
+      {
+        "description": "Injection Ceftriaxone 1 g",
+        "category": "medicines",
+        "qty": 7,
+        "rate": 681,
+        "amount": 4767,
+        "is_duplicate": false
+      },
+      {
+        "description": "Surgical Mesh",
+        "category": "consumables",
+        "qty": 1,
+        "rate": 9403,
+        "amount": 9403,
+        "is_duplicate": false
+      },
+      {
+        "description": "IV Cannula, Syringes & Infusion Sets",
+        "category": "consumables",
+        "qty": 1,
+        "rate": 3237,
+        "amount": 3237,
+        "is_duplicate": false
+      },
+      {
+        "description": "Dressing Material",
+        "category": "consumables",
+        "qty": 1,
+        "rate": 3032,
+        "amount": 3032,
+        "is_duplicate": false
+      },
+      {
+        "description": "USG Abdomen/Inguinal Region",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 1699,
+        "amount": 1699,
+        "is_duplicate": false
+      },
+      {
+        "description": "Complete Blood Count",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 3275,
+        "amount": 3275,
+        "is_duplicate": false
+      },
+      {
+        "description": "Pre-anaesthetic Check-up",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 2723,
+        "amount": 2723,
+        "is_duplicate": false
+      },
+      {
+        "description": "Radiology / Imaging",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 2177,
+        "amount": 2177,
+        "is_duplicate": false
+      },
+      {
+        "description": "Nursing & Service Charges",
+        "category": "other",
+        "qty": 1,
+        "rate": 1814,
+        "amount": 1814,
+        "is_duplicate": false
+      },
+      {
+        "description": "Registration & Admission Charges",
+        "category": "other",
+        "qty": 1,
+        "rate": 2177,
+        "amount": 2177,
+        "is_duplicate": false
+      }
+    ],
+    "documents": {
+      "discharge_summary_present": true,
+      "summary_admission_date": "2026-08-02",
+      "summary_discharge_date": "2026-08-05",
+      "bill_total_blank": false
+    },
+    "pii": {
+      "name": "Varenya Sridhar",
+      "phone": "00592558479",
+      "email": "varenya38@example.com",
+      "address": "893, Datta Marg, Hyderabad 338349",
+      "uhid": "UH5962504"
+    }
+  },
+  {
+    "claim_id": "CLM-037",
+    "scenario": "partial",
+    "subtype": "room_rent",
+    "has_scanned_copy": false,
+    "expected_missing_documents": [],
+    "expected_consistency_issues": [],
+    "fields": {
+      "policy_number": "POL-STD/2023/7903194",
+      "patient_name": "Krisha Mitter",
+      "hospital_name": "Navjeevan Medical Centre",
+      "admission_date": "2025-11-07",
+      "discharge_date": "2025-11-10",
+      "diagnosis_text": "Acute Appendicitis",
+      "icd10_code": "K35.80",
+      "bill_subtotal": 126842,
+      "taxes": 1110,
+      "bill_total": 127952,
+      "claimed_amount": 127952,
+      "line_item_count": 17,
+      "length_of_stay_days": 3
+    },
+    "line_items": [
+      {
+        "description": "Room Rent - Deluxe Room",
+        "category": "room_rent",
+        "qty": 3,
+        "rate": 7400,
+        "amount": 22200,
+        "is_duplicate": false
+      },
+      {
+        "description": "Surgeon Fee - Laparoscopic Appendectomy",
+        "category": "professional_fees",
+        "qty": 1,
+        "rate": 8338,
+        "amount": 8338,
+        "is_duplicate": false
+      },
+      {
+        "description": "Anaesthetist Fee",
+        "category": "professional_fees",
+        "qty": 1,
+        "rate": 8040,
+        "amount": 8040,
+        "is_duplicate": false
+      },
+      {
+        "description": "Assistant Surgeon Fee",
+        "category": "professional_fees",
+        "qty": 1,
+        "rate": 10085,
+        "amount": 10085,
+        "is_duplicate": false
+      },
+      {
+        "description": "Operation Theatre Charges",
+        "category": "ot_charges",
+        "qty": 1,
+        "rate": 13771,
+        "amount": 13771,
+        "is_duplicate": false
+      },
+      {
+        "description": "Tablet Paracetamol 650 mg",
+        "category": "medicines",
+        "qty": 9,
+        "rate": 525,
+        "amount": 4725,
+        "is_duplicate": false
+      },
+      {
+        "description": "Tablet Ondansetron 4 mg",
+        "category": "medicines",
+        "qty": 2,
+        "rate": 2808,
+        "amount": 5616,
+        "is_duplicate": false
+      },
+      {
+        "description": "Injection Pantoprazole 40 mg",
+        "category": "medicines",
+        "qty": 2,
+        "rate": 1994,
+        "amount": 3988,
+        "is_duplicate": false
+      },
+      {
+        "description": "Injection Ceftriaxone 1 g",
+        "category": "medicines",
+        "qty": 8,
+        "rate": 1026,
+        "amount": 8208,
+        "is_duplicate": false
+      },
+      {
+        "description": "Disposables & Consumables",
+        "category": "consumables",
+        "qty": 1,
+        "rate": 10882,
+        "amount": 10882,
+        "is_duplicate": false
+      },
+      {
+        "description": "Dressing Material",
+        "category": "consumables",
+        "qty": 1,
+        "rate": 13654,
+        "amount": 13654,
+        "is_duplicate": false
+      },
+      {
+        "description": "USG Abdomen",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 3160,
+        "amount": 3160,
+        "is_duplicate": false
+      },
+      {
+        "description": "Complete Blood Count",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 3395,
+        "amount": 3395,
+        "is_duplicate": false
+      },
+      {
+        "description": "Pre-anaesthetic Check-up",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 3318,
+        "amount": 3318,
+        "is_duplicate": false
+      },
+      {
+        "description": "Radiology / Imaging",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 2221,
+        "amount": 2221,
+        "is_duplicate": false
+      },
+      {
+        "description": "Nursing & Service Charges",
+        "category": "other",
+        "qty": 1,
+        "rate": 2739,
+        "amount": 2739,
+        "is_duplicate": false
+      },
+      {
+        "description": "Registration & Admission Charges",
+        "category": "other",
+        "qty": 1,
+        "rate": 2502,
+        "amount": 2502,
+        "is_duplicate": false
+      }
+    ],
+    "documents": {
+      "discharge_summary_present": true,
+      "summary_admission_date": "2025-11-07",
+      "summary_discharge_date": "2025-11-10",
+      "bill_total_blank": false
+    },
+    "pii": {
+      "name": "Krisha Mitter",
+      "phone": "2318370247",
+      "email": "krisha77@example.com",
+      "address": "28/22, Rao Path, Madurai 153870",
+      "uhid": "UH8262311"
+    }
+  },
+  {
+    "claim_id": "CLM-038",
+    "scenario": "partial",
+    "subtype": "sub_limit",
+    "has_scanned_copy": true,
+    "expected_missing_documents": [],
+    "expected_consistency_issues": [],
+    "fields": {
+      "policy_number": "POL-STD/2022/3744010",
+      "patient_name": "Praneel Bali",
+      "hospital_name": "Shree Dhanvantari Hospital",
+      "admission_date": "2025-07-10",
+      "discharge_date": "2025-07-11",
+      "diagnosis_text": "Senile Cataract",
+      "icd10_code": "H25.9",
+      "bill_subtotal": 69508,
+      "taxes": 0,
+      "bill_total": 69508,
+      "claimed_amount": 69508,
+      "line_item_count": 16,
+      "length_of_stay_days": 1
+    },
+    "line_items": [
+      {
+        "description": "Room Rent - Semi-Private Room",
+        "category": "room_rent",
+        "qty": 1,
+        "rate": 3000,
+        "amount": 3000,
+        "is_duplicate": false
+      },
+      {
+        "description": "Surgeon Fee - Phacoemulsification with IOL Implant",
+        "category": "professional_fees",
+        "qty": 1,
+        "rate": 6536,
+        "amount": 6536,
+        "is_duplicate": false
+      },
+      {
+        "description": "Anaesthetist Fee",
+        "category": "professional_fees",
+        "qty": 1,
+        "rate": 7854,
+        "amount": 7854,
+        "is_duplicate": false
+      },
+      {
+        "description": "Operation Theatre Charges",
+        "category": "ot_charges",
+        "qty": 1,
+        "rate": 8689,
+        "amount": 8689,
+        "is_duplicate": false
+      },
+      {
+        "description": "Injection Pantoprazole 40 mg",
+        "category": "medicines",
+        "qty": 4,
+        "rate": 392,
+        "amount": 1568,
+        "is_duplicate": false
+      },
+      {
+        "description": "Tablet Paracetamol 650 mg",
+        "category": "medicines",
+        "qty": 7,
+        "rate": 253,
+        "amount": 1771,
+        "is_duplicate": false
+      },
+      {
+        "description": "Injection Tramadol 50 mg",
+        "category": "medicines",
+        "qty": 7,
+        "rate": 353,
+        "amount": 2471,
+        "is_duplicate": false
+      },
+      {
+        "description": "Tablet Ondansetron 4 mg",
+        "category": "medicines",
+        "qty": 1,
+        "rate": 2004,
+        "amount": 2004,
+        "is_duplicate": false
+      },
+      {
+        "description": "Intraocular Lens (IOL)",
+        "category": "consumables",
+        "qty": 1,
+        "rate": 14944,
+        "amount": 14944,
+        "is_duplicate": false
+      },
+      {
+        "description": "IV Cannula, Syringes & Infusion Sets",
+        "category": "consumables",
+        "qty": 1,
+        "rate": 4425,
+        "amount": 4425,
+        "is_duplicate": false
+      },
+      {
+        "description": "Disposables & Consumables",
+        "category": "consumables",
+        "qty": 1,
+        "rate": 5538,
+        "amount": 5538,
+        "is_duplicate": false
+      },
+      {
+        "description": "Biometry (A-Scan)",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 3255,
+        "amount": 3255,
+        "is_duplicate": false
+      },
+      {
+        "description": "Pre-operative Blood Work",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 2105,
+        "amount": 2105,
+        "is_duplicate": false
+      },
+      {
+        "description": "Radiology / Imaging",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 3092,
+        "amount": 3092,
+        "is_duplicate": false
+      },
+      {
+        "description": "Nursing & Service Charges",
+        "category": "other",
+        "qty": 1,
+        "rate": 1172,
+        "amount": 1172,
+        "is_duplicate": false
+      },
+      {
+        "description": "Registration & Admission Charges",
+        "category": "other",
+        "qty": 1,
+        "rate": 1084,
+        "amount": 1084,
+        "is_duplicate": false
+      }
+    ],
+    "documents": {
+      "discharge_summary_present": true,
+      "summary_admission_date": "2025-07-10",
+      "summary_discharge_date": "2025-07-11",
+      "bill_total_blank": false
+    },
+    "pii": {
+      "name": "Praneel Bali",
+      "phone": "+914918220836",
+      "email": "praneel42@example.com",
+      "address": "02, Dixit Marg, Kurnool 318051",
+      "uhid": "UH3954144"
+    }
+  },
+  {
+    "claim_id": "CLM-039",
+    "scenario": "covered",
+    "subtype": "base",
+    "has_scanned_copy": false,
+    "expected_missing_documents": [],
+    "expected_consistency_issues": [],
+    "fields": {
+      "policy_number": "POL-PREM/2024/8459481",
+      "patient_name": "Victor Kade",
+      "hospital_name": "Shree Dhanvantari Hospital",
+      "admission_date": "2025-10-30",
+      "discharge_date": "2025-11-03",
+      "diagnosis_text": "Dengue Fever with Thrombocytopenia",
+      "icd10_code": "A90",
+      "bill_subtotal": 95452,
+      "taxes": 1200,
+      "bill_total": 96652,
+      "claimed_amount": 96652,
+      "line_item_count": 15,
+      "length_of_stay_days": 4
+    },
+    "line_items": [
+      {
+        "description": "Room Rent - Private Room",
+        "category": "room_rent",
+        "qty": 4,
+        "rate": 6000,
+        "amount": 24000,
+        "is_duplicate": false
+      },
+      {
+        "description": "Consultant Physician Charges",
+        "category": "professional_fees",
+        "qty": 1,
+        "rate": 6799,
+        "amount": 6799,
+        "is_duplicate": false
+      },
+      {
+        "description": "Resident Medical Officer Charges",
+        "category": "professional_fees",
+        "qty": 1,
+        "rate": 7400,
+        "amount": 7400,
+        "is_duplicate": false
+      },
+      {
+        "description": "Tablet Ondansetron 4 mg",
+        "category": "medicines",
+        "qty": 9,
+        "rate": 601,
+        "amount": 5409,
+        "is_duplicate": false
+      },
+      {
+        "description": "Injection Pantoprazole 40 mg",
+        "category": "medicines",
+        "qty": 3,
+        "rate": 2675,
+        "amount": 8025,
+        "is_duplicate": false
+      },
+      {
+        "description": "Injection Tramadol 50 mg",
+        "category": "medicines",
+        "qty": 4,
+        "rate": 1699,
+        "amount": 6796,
+        "is_duplicate": false
+      },
+      {
+        "description": "IV Fluids (NS / RL) 500 ml",
+        "category": "medicines",
+        "qty": 3,
+        "rate": 1925,
+        "amount": 5775,
+        "is_duplicate": false
+      },
+      {
+        "description": "Dressing Material",
+        "category": "consumables",
+        "qty": 1,
+        "rate": 3849,
+        "amount": 3849,
+        "is_duplicate": false
+      },
+      {
+        "description": "IV Cannula, Syringes & Infusion Sets",
+        "category": "consumables",
+        "qty": 1,
+        "rate": 4231,
+        "amount": 4231,
+        "is_duplicate": false
+      },
+      {
+        "description": "NS1 Antigen",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 4286,
+        "amount": 4286,
+        "is_duplicate": false
+      },
+      {
+        "description": "Dengue IgM/IgG Serology",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 5765,
+        "amount": 5765,
+        "is_duplicate": false
+      },
+      {
+        "description": "Platelet Count Serial",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 3824,
+        "amount": 3824,
+        "is_duplicate": false
+      },
+      {
+        "description": "Complete Blood Count",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 5575,
+        "amount": 5575,
+        "is_duplicate": false
+      },
+      {
+        "description": "Nursing & Service Charges",
+        "category": "other",
+        "qty": 1,
+        "rate": 2040,
+        "amount": 2040,
+        "is_duplicate": false
+      },
+      {
+        "description": "Registration & Admission Charges",
+        "category": "other",
+        "qty": 1,
+        "rate": 1678,
+        "amount": 1678,
+        "is_duplicate": false
+      }
+    ],
+    "documents": {
+      "discharge_summary_present": true,
+      "summary_admission_date": "2025-10-30",
+      "summary_discharge_date": "2025-11-03",
+      "bill_total_blank": false
+    },
+    "pii": {
+      "name": "Victor Kade",
+      "phone": "05314961821",
+      "email": "victor44@example.com",
+      "address": "H.No. 502, Contractor Circle, Shivpuri-352298",
+      "uhid": "UH8230260"
+    }
+  },
+  {
+    "claim_id": "CLM-040",
+    "scenario": "covered",
+    "subtype": "base",
+    "has_scanned_copy": false,
+    "expected_missing_documents": [],
+    "expected_consistency_issues": [],
+    "fields": {
+      "policy_number": "POL-PREM/2024/4277471",
+      "patient_name": "Netra Halder",
+      "hospital_name": "Shree Dhanvantari Hospital",
+      "admission_date": "2025-12-28",
+      "discharge_date": "2025-12-30",
+      "diagnosis_text": "Cholelithiasis (Gallstones) with Cholecystitis",
+      "icd10_code": "K80.20",
+      "bill_subtotal": 115867,
+      "taxes": 600,
+      "bill_total": 116467,
+      "claimed_amount": 116467,
+      "line_item_count": 17,
+      "length_of_stay_days": 2
+    },
+    "line_items": [
+      {
+        "description": "Room Rent - Private Room",
+        "category": "room_rent",
+        "qty": 2,
+        "rate": 6000,
+        "amount": 12000,
+        "is_duplicate": false
+      },
+      {
+        "description": "Surgeon Fee - Laparoscopic Cholecystectomy",
+        "category": "professional_fees",
+        "qty": 1,
+        "rate": 6464,
+        "amount": 6464,
+        "is_duplicate": false
+      },
+      {
+        "description": "Anaesthetist Fee",
+        "category": "professional_fees",
+        "qty": 1,
+        "rate": 9983,
+        "amount": 9983,
+        "is_duplicate": false
+      },
+      {
+        "description": "Assistant Surgeon Fee",
+        "category": "professional_fees",
+        "qty": 1,
+        "rate": 11144,
+        "amount": 11144,
+        "is_duplicate": false
+      },
+      {
+        "description": "Operation Theatre Charges",
+        "category": "ot_charges",
+        "qty": 1,
+        "rate": 13290,
+        "amount": 13290,
+        "is_duplicate": false
+      },
+      {
+        "description": "Tablet Ondansetron 4 mg",
+        "category": "medicines",
+        "qty": 7,
+        "rate": 710,
+        "amount": 4970,
+        "is_duplicate": false
+      },
+      {
+        "description": "IV Fluids (NS / RL) 500 ml",
+        "category": "medicines",
+        "qty": 6,
+        "rate": 884,
+        "amount": 5304,
+        "is_duplicate": false
+      },
+      {
+        "description": "Tablet Paracetamol 650 mg",
+        "category": "medicines",
+        "qty": 8,
+        "rate": 756,
+        "amount": 6048,
+        "is_duplicate": false
+      },
+      {
+        "description": "Injection Tramadol 50 mg",
+        "category": "medicines",
+        "qty": 7,
+        "rate": 631,
+        "amount": 4417,
+        "is_duplicate": false
+      },
+      {
+        "description": "IV Cannula, Syringes & Infusion Sets",
+        "category": "consumables",
+        "qty": 1,
+        "rate": 13119,
+        "amount": 13119,
+        "is_duplicate": false
+      },
+      {
+        "description": "Dressing Material",
+        "category": "consumables",
+        "qty": 1,
+        "rate": 11410,
+        "amount": 11410,
+        "is_duplicate": false
+      },
+      {
+        "description": "USG Abdomen",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 3055,
+        "amount": 3055,
+        "is_duplicate": false
+      },
+      {
+        "description": "Liver Function Test",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 1833,
+        "amount": 1833,
+        "is_duplicate": false
+      },
+      {
+        "description": "Complete Blood Count",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 3749,
+        "amount": 3749,
+        "is_duplicate": false
+      },
+      {
+        "description": "Pre-anaesthetic Check-up",
+        "category": "diagnostics",
+        "qty": 1,
+        "rate": 3956,
+        "amount": 3956,
+        "is_duplicate": false
+      },
+      {
+        "description": "Nursing & Service Charges",
+        "category": "other",
+        "qty": 1,
+        "rate": 2071,
+        "amount": 2071,
+        "is_duplicate": false
+      },
+      {
+        "description": "Registration & Admission Charges",
+        "category": "other",
+        "qty": 1,
+        "rate": 3054,
+        "amount": 3054,
+        "is_duplicate": false
+      }
+    ],
+    "documents": {
+      "discharge_summary_present": true,
+      "summary_admission_date": "2025-12-28",
+      "summary_discharge_date": "2025-12-30",
+      "bill_total_blank": false
+    },
+    "pii": {
+      "name": "Netra Halder",
+      "phone": "07324953730",
+      "email": "netra43@example.com",
+      "address": "46/86, Narasimhan Chowk, Ludhiana-284501",
+      "uhid": "UH1102089"
+    }
+  }
+]
