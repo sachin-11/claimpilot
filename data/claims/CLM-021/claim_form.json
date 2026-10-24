@@ -1,0 +1,24 @@
+{
+  "claim_id": "CLM-021",
+  "claimant": {
+    "name": "Andrew Chanda",
+    "age": 67,
+    "gender": "Male",
+    "phone": "1302716369",
+    "email": "andrew41@example.com",
+    "address": "H.No. 591, Singh Marg, Udupi 823765",
+    "relationship_to_insured": "self"
+  },
+  "policy_id": "POL-PREM",
+  "policy_number": "POL-PREM/2023/6395130",
+  "policy_start_date": "2023-08-11",
+  "sum_insured": 1000000,
+  "hospital_name": "Medicare Plus Hospital",
+  "hospital_city": "Hyderabad",
+  "diagnosis": "Senile Cataract",
+  "admission_date": "2025-08-14",
+  "discharge_date": "2025-08-15",
+  "pre_existing_conditions": [],
+  "is_accident_case": false,
+  "claimed_amount": 67535
+}

@@ -1,0 +1,24 @@
+{
+  "claim_id": "CLM-031",
+  "claimant": {
+    "name": "Hredhaan Panchal",
+    "age": 56,
+    "gender": "Male",
+    "phone": "06622409841",
+    "email": "hredhaan10@example.com",
+    "address": "64, Nayak Chowk, Sambalpur 987503",
+    "relationship_to_insured": "self"
+  },
+  "policy_id": "POL-STD",
+  "policy_number": null,
+  "policy_start_date": "2023-04-08",
+  "sum_insured": 750000,
+  "hospital_name": "Ganga Jamuna Multispeciality Hospital",
+  "hospital_city": "Lucknow",
+  "diagnosis": "Senile Cataract",
+  "admission_date": "2025-10-24",
+  "discharge_date": "2025-10-25",
+  "pre_existing_conditions": [],
+  "is_accident_case": false,
+  "claimed_amount": 70218
+}

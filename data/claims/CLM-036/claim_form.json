@@ -1,0 +1,24 @@
+{
+  "claim_id": "CLM-036",
+  "claimant": {
+    "name": "Varenya Sridhar",
+    "age": 35,
+    "gender": "Female",
+    "phone": "00592558479",
+    "email": "varenya38@example.com",
+    "address": "893, Datta Marg, Hyderabad 338349",
+    "relationship_to_insured": "self"
+  },
+  "policy_id": "POL-STD",
+  "policy_number": "POL-STD/2022/4887071",
+  "policy_start_date": "2022-09-16",
+  "sum_insured": 300000,
+  "hospital_name": "Prakash Nursing & Maternity Home",
+  "hospital_city": "Indore",
+  "diagnosis": "Inguinal Hernia",
+  "admission_date": "2026-08-02",
+  "discharge_date": "2026-08-05",
+  "pre_existing_conditions": [],
+  "is_accident_case": false,
+  "claimed_amount": 79846
+}

@@ -1,0 +1,24 @@
+{
+  "claim_id": "CLM-038",
+  "claimant": {
+    "name": "Praneel Bali",
+    "age": 64,
+    "gender": "Male",
+    "phone": "+914918220836",
+    "email": "praneel42@example.com",
+    "address": "02, Dixit Marg, Kurnool 318051",
+    "relationship_to_insured": "self"
+  },
+  "policy_id": "POL-STD",
+  "policy_number": "POL-STD/2022/3744010",
+  "policy_start_date": "2022-02-01",
+  "sum_insured": 500000,
+  "hospital_name": "Shree Dhanvantari Hospital",
+  "hospital_city": "Mumbai",
+  "diagnosis": "Senile Cataract",
+  "admission_date": "2025-07-10",
+  "discharge_date": "2025-07-11",
+  "pre_existing_conditions": [],
+  "is_accident_case": false,
+  "claimed_amount": 69508
+}

@@ -1,0 +1,24 @@
+{
+  "claim_id": "CLM-014",
+  "claimant": {
+    "name": "Sanaya Raju",
+    "age": 27,
+    "gender": "Female",
+    "phone": "6806857593",
+    "email": "sanaya92@example.com",
+    "address": "19/95, Kalla Zila, Rajkot-683059",
+    "relationship_to_insured": "self"
+  },
+  "policy_id": "POL-AS",
+  "policy_number": "POL-AS/2024/7084652",
+  "policy_start_date": "2024-09-04",
+  "sum_insured": 500000,
+  "hospital_name": "Vedanta Health Institute",
+  "hospital_city": "Delhi",
+  "diagnosis": "Acute Appendicitis",
+  "admission_date": "2026-04-24",
+  "discharge_date": "2026-04-26",
+  "pre_existing_conditions": [],
+  "is_accident_case": false,
+  "claimed_amount": 71415
+}

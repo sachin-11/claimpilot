@@ -1,0 +1,24 @@
+{
+  "claim_id": "CLM-023",
+  "claimant": {
+    "name": "Prisha Devi",
+    "age": 46,
+    "gender": "Female",
+    "phone": "+912155533371",
+    "email": "prisha21@example.com",
+    "address": "838, Soman, Vasai-Virar 081627",
+    "relationship_to_insured": "self"
+  },
+  "policy_id": "POL-PREM",
+  "policy_number": "POL-PREM/2024/1699302",
+  "policy_start_date": "2024-09-13",
+  "sum_insured": 1500000,
+  "hospital_name": "Vedanta Health Institute",
+  "hospital_city": "Delhi",
+  "diagnosis": "Community Acquired Pneumonia",
+  "admission_date": "2026-09-14",
+  "discharge_date": "2026-09-21",
+  "pre_existing_conditions": [],
+  "is_accident_case": false,
+  "claimed_amount": 105066
+}

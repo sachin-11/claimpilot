@@ -1,0 +1,24 @@
+{
+  "claim_id": "CLM-029",
+  "claimant": {
+    "name": "Nathaniel Dara",
+    "age": 65,
+    "gender": "Male",
+    "phone": "2480945936",
+    "email": "nathaniel85@example.com",
+    "address": "31, Khalsa Nagar, Jodhpur 674649",
+    "relationship_to_insured": "self"
+  },
+  "policy_id": "POL-PREM",
+  "policy_number": "POL-PREM/2023/4089246",
+  "policy_start_date": "2023-04-13",
+  "sum_insured": 1000000,
+  "hospital_name": "Aastha Super Speciality Hospital",
+  "hospital_city": "Ahmedabad",
+  "diagnosis": "Senile Cataract",
+  "admission_date": "2025-06-23",
+  "discharge_date": "2025-06-24",
+  "pre_existing_conditions": [],
+  "is_accident_case": false,
+  "claimed_amount": 57619
+}

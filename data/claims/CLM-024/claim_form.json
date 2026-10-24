@@ -1,0 +1,24 @@
+{
+  "claim_id": "CLM-024",
+  "claimant": {
+    "name": "Diya Basu",
+    "age": 46,
+    "gender": "Female",
+    "phone": "+912130455615",
+    "email": "diya99@example.com",
+    "address": "73, Wable Path, Meerut-529006",
+    "relationship_to_insured": "self"
+  },
+  "policy_id": "POL-PREM",
+  "policy_number": "POL-PREM/2025/1488034",
+  "policy_start_date": "2025-05-06",
+  "sum_insured": 1500000,
+  "hospital_name": "Ganga Jamuna Multispeciality Hospital",
+  "hospital_city": "Lucknow",
+  "diagnosis": "Partial Edentulism (loss of teeth)",
+  "admission_date": "2025-12-11",
+  "discharge_date": "2025-12-12",
+  "pre_existing_conditions": [],
+  "is_accident_case": false,
+  "claimed_amount": 85772
+}

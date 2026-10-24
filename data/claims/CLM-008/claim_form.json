@@ -1,0 +1,24 @@
+{
+  "claim_id": "CLM-008",
+  "claimant": {
+    "name": "Girik Kibe",
+    "age": 46,
+    "gender": "Male",
+    "phone": "2315505792",
+    "email": "girik11@example.com",
+    "address": "900, Kanda Chowk, Bhiwani 235769",
+    "relationship_to_insured": "self"
+  },
+  "policy_id": "POL-STD",
+  "policy_number": "POL-STD/2025/4096979",
+  "policy_start_date": "2025-04-12",
+  "sum_insured": 500000,
+  "hospital_name": "Aastha Super Speciality Hospital",
+  "hospital_city": "Ahmedabad",
+  "diagnosis": "Enteric Fever (Typhoid)",
+  "admission_date": "2026-02-16",
+  "discharge_date": "2026-02-22",
+  "pre_existing_conditions": [],
+  "is_accident_case": false,
+  "claimed_amount": 55045
+}

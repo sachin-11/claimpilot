@@ -1,0 +1,24 @@
+{
+  "claim_id": "CLM-009",
+  "claimant": {
+    "name": "Barkha Sur",
+    "age": 70,
+    "gender": "Female",
+    "phone": "02709528851",
+    "email": "barkha48@example.com",
+    "address": "H.No. 40, Sankaran Circle, Srinagar 861552",
+    "relationship_to_insured": "self"
+  },
+  "policy_id": "POL-STD",
+  "policy_number": "POL-STD/2023/7764132",
+  "policy_start_date": "2023-09-26",
+  "sum_insured": 500000,
+  "hospital_name": "Arya Vaidya Hospital",
+  "hospital_city": "Jaipur",
+  "diagnosis": "Inguinal Hernia",
+  "admission_date": "2025-12-27",
+  "discharge_date": "2025-12-29",
+  "pre_existing_conditions": [],
+  "is_accident_case": false,
+  "claimed_amount": 101119
+}

@@ -1,0 +1,24 @@
+{
+  "claim_id": "CLM-035",
+  "claimant": {
+    "name": "Chanchal Gala",
+    "age": 56,
+    "gender": "Female",
+    "phone": "6605579471",
+    "email": "chanchal97@example.com",
+    "address": "14/57, Sankar Nagar, Raebareli 532213",
+    "relationship_to_insured": "self"
+  },
+  "policy_id": "POL-STD",
+  "policy_number": "POL-STD/2023/2045749",
+  "policy_start_date": "2023-10-23",
+  "sum_insured": 1000000,
+  "hospital_name": "Vedanta Health Institute",
+  "hospital_city": "Delhi",
+  "diagnosis": "Dengue Fever with Thrombocytopenia",
+  "admission_date": "2025-09-30",
+  "discharge_date": "2025-10-04",
+  "pre_existing_conditions": [],
+  "is_accident_case": false,
+  "claimed_amount": 83298
+}

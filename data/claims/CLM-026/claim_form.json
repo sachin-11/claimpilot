@@ -1,0 +1,24 @@
+{
+  "claim_id": "CLM-026",
+  "claimant": {
+    "name": "Oni Som",
+    "age": 56,
+    "gender": "Female",
+    "phone": "02682384851",
+    "email": "oni58@example.com",
+    "address": "73/203, Oza Path, Farrukhabad-778701",
+    "relationship_to_insured": "self"
+  },
+  "policy_id": "POL-AS",
+  "policy_number": "POL-AS/2024/3279090",
+  "policy_start_date": "2024-03-27",
+  "sum_insured": 300000,
+  "hospital_name": "Medicare Plus Hospital",
+  "hospital_city": "Hyderabad",
+  "diagnosis": "Fracture Shaft of Tibia (road traffic accident)",
+  "admission_date": "2026-04-08",
+  "discharge_date": "2026-04-14",
+  "pre_existing_conditions": [],
+  "is_accident_case": true,
+  "claimed_amount": 135992
+}

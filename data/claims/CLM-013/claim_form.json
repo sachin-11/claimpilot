@@ -1,0 +1,24 @@
+{
+  "claim_id": "CLM-013",
+  "claimant": {
+    "name": "Eesha Mutti",
+    "age": 70,
+    "gender": "Female",
+    "phone": "+914585861356",
+    "email": "eesha11@example.com",
+    "address": "503, Soni Circle, Malda 959348",
+    "relationship_to_insured": "self"
+  },
+  "policy_id": "POL-PREM",
+  "policy_number": "POL-PREM/2026/5506200",
+  "policy_start_date": "2026-01-27",
+  "sum_insured": 2500000,
+  "hospital_name": "Arya Vaidya Hospital",
+  "hospital_city": "Jaipur",
+  "diagnosis": "Senile Cataract",
+  "admission_date": "2026-02-06",
+  "discharge_date": "2026-02-07",
+  "pre_existing_conditions": [],
+  "is_accident_case": false,
+  "claimed_amount": 51851
+}

@@ -1,0 +1,24 @@
+{
+  "claim_id": "CLM-001",
+  "claimant": {
+    "name": "Suhani Bala",
+    "age": 24,
+    "gender": "Female",
+    "phone": "07649716752",
+    "email": "suhani15@example.com",
+    "address": "48, Bhasin Path, Junagadh 828219",
+    "relationship_to_insured": "self"
+  },
+  "policy_id": "POL-PREM",
+  "policy_number": "POL-PREM/2021/8009051",
+  "policy_start_date": "2021-11-26",
+  "sum_insured": 1500000,
+  "hospital_name": "Prakash Nursing & Maternity Home",
+  "hospital_city": "Indore",
+  "diagnosis": "Normal Vaginal Delivery",
+  "admission_date": "2025-11-12",
+  "discharge_date": "2025-11-14",
+  "pre_existing_conditions": [],
+  "is_accident_case": false,
+  "claimed_amount": 77917
+}

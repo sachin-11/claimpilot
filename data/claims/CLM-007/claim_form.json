@@ -1,0 +1,24 @@
+{
+  "claim_id": "CLM-007",
+  "claimant": {
+    "name": "Vasatika Modi",
+    "age": 64,
+    "gender": "Female",
+    "phone": "5244732320",
+    "email": "vasatika29@example.com",
+    "address": "65/12, Bhatti Ganj, Durgapur 674511",
+    "relationship_to_insured": "self"
+  },
+  "policy_id": "POL-STD",
+  "policy_number": "POL-STD/2023/9102493",
+  "policy_start_date": "2023-08-24",
+  "sum_insured": 750000,
+  "hospital_name": "Aastha Super Speciality Hospital",
+  "hospital_city": "Ahmedabad",
+  "diagnosis": "Fracture Shaft of Tibia (road traffic accident)",
+  "admission_date": "2025-06-02",
+  "discharge_date": "2025-06-08",
+  "pre_existing_conditions": [],
+  "is_accident_case": true,
+  "claimed_amount": 492608
+}

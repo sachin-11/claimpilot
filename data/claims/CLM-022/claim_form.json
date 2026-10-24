@@ -1,0 +1,24 @@
+{
+  "claim_id": "CLM-022",
+  "claimant": {
+    "name": "Ayaan Anand",
+    "age": 29,
+    "gender": "Male",
+    "phone": "00559266106",
+    "email": "ayaan18@example.com",
+    "address": "H.No. 001, Baria Path, Ramagundam 602469",
+    "relationship_to_insured": "self"
+  },
+  "policy_id": "POL-AS",
+  "policy_number": "POL-AS/2025/2216036",
+  "policy_start_date": "2025-11-06",
+  "sum_insured": 100000,
+  "hospital_name": "Sanjivani Heart & General Hospital",
+  "hospital_city": "Nagpur",
+  "diagnosis": "Fracture Shaft of Tibia (road traffic accident)",
+  "admission_date": "2025-11-11",
+  "discharge_date": "2025-11-15",
+  "pre_existing_conditions": [],
+  "is_accident_case": true,
+  "claimed_amount": 162081
+}

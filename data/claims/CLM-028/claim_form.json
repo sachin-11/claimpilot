@@ -1,0 +1,24 @@
+{
+  "claim_id": "CLM-028",
+  "claimant": {
+    "name": "Kiaan Chacko",
+    "age": 51,
+    "gender": "Male",
+    "phone": "09022947539",
+    "email": "kiaan27@example.com",
+    "address": "H.No. 635, Mall Road, Ichalkaranji-131615",
+    "relationship_to_insured": "self"
+  },
+  "policy_id": "POL-STD",
+  "policy_number": "POL-STD/2025/4856696",
+  "policy_start_date": "2025-07-03",
+  "sum_insured": 750000,
+  "hospital_name": "Kaveri Institute of Medical Sciences",
+  "hospital_city": "Chennai",
+  "diagnosis": "Acute Appendicitis",
+  "admission_date": "2025-12-20",
+  "discharge_date": "2025-12-23",
+  "pre_existing_conditions": [],
+  "is_accident_case": false,
+  "claimed_amount": 127391
+}

@@ -1,0 +1,24 @@
+{
+  "claim_id": "CLM-037",
+  "claimant": {
+    "name": "Krisha Mitter",
+    "age": 23,
+    "gender": "Female",
+    "phone": "2318370247",
+    "email": "krisha77@example.com",
+    "address": "28/22, Rao Path, Madurai 153870",
+    "relationship_to_insured": "self"
+  },
+  "policy_id": "POL-STD",
+  "policy_number": "POL-STD/2023/7903194",
+  "policy_start_date": "2023-11-01",
+  "sum_insured": 500000,
+  "hospital_name": "Navjeevan Medical Centre",
+  "hospital_city": "Bengaluru",
+  "diagnosis": "Acute Appendicitis",
+  "admission_date": "2025-11-07",
+  "discharge_date": "2025-11-10",
+  "pre_existing_conditions": [],
+  "is_accident_case": false,
+  "claimed_amount": 127952
+}

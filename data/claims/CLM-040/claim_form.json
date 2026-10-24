@@ -1,0 +1,24 @@
+{
+  "claim_id": "CLM-040",
+  "claimant": {
+    "name": "Netra Halder",
+    "age": 60,
+    "gender": "Female",
+    "phone": "07324953730",
+    "email": "netra43@example.com",
+    "address": "46/86, Narasimhan Chowk, Ludhiana-284501",
+    "relationship_to_insured": "self"
+  },
+  "policy_id": "POL-PREM",
+  "policy_number": "POL-PREM/2024/4277471",
+  "policy_start_date": "2024-04-25",
+  "sum_insured": 1500000,
+  "hospital_name": "Shree Dhanvantari Hospital",
+  "hospital_city": "Mumbai",
+  "diagnosis": "Cholelithiasis (Gallstones) with Cholecystitis",
+  "admission_date": "2025-12-28",
+  "discharge_date": "2025-12-30",
+  "pre_existing_conditions": [],
+  "is_accident_case": false,
+  "claimed_amount": 116467
+}

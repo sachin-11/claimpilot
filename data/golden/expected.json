@@ -1,0 +1,941 @@
+[
+  {
+    "claim_id": "CLM-001",
+    "scenario_type": "covered",
+    "subtype": "base",
+    "policy_id": "POL-PREM",
+    "diagnosis": "Normal Vaginal Delivery",
+    "icd10": "O80",
+    "expected_decision": "approve",
+    "claimed_amount": 77917,
+    "expected_payable_amount": 77917,
+    "payable_basis": "final",
+    "deductions": [],
+    "reasons": [
+      "All charges within policy limits; no waiting period or exclusion applies"
+    ],
+    "expected_policy_rule": "base_coverage",
+    "expected_risk_flags": [],
+    "expected_missing_documents": [],
+    "has_scanned_copy": false
+  },
+  {
+    "claim_id": "CLM-002",
+    "scenario_type": "covered",
+    "subtype": "base",
+    "policy_id": "POL-PREM",
+    "diagnosis": "Primary Osteoarthritis of Knee",
+    "icd10": "M17.11",
+    "expected_decision": "approve",
+    "claimed_amount": 337262,
+    "expected_payable_amount": 337262,
+    "payable_basis": "final",
+    "deductions": [],
+    "reasons": [
+      "All charges within policy limits; no waiting period or exclusion applies"
+    ],
+    "expected_policy_rule": "base_coverage",
+    "expected_risk_flags": [],
+    "expected_missing_documents": [],
+    "has_scanned_copy": false
+  },
+  {
+    "claim_id": "CLM-003",
+    "scenario_type": "covered",
+    "subtype": "base",
+    "policy_id": "POL-STD",
+    "diagnosis": "Primary Osteoarthritis of Knee",
+    "icd10": "M17.11",
+    "expected_decision": "approve",
+    "claimed_amount": 391436,
+    "expected_payable_amount": 391436,
+    "payable_basis": "final",
+    "deductions": [],
+    "reasons": [
+      "All charges within policy limits; no waiting period or exclusion applies"
+    ],
+    "expected_policy_rule": "base_coverage",
+    "expected_risk_flags": [],
+    "expected_missing_documents": [],
+    "has_scanned_copy": false
+  },
+  {
+    "claim_id": "CLM-004",
+    "scenario_type": "incomplete",
+    "subtype": "missing_discharge_summary",
+    "policy_id": "POL-PREM",
+    "diagnosis": "Dengue Fever with Thrombocytopenia",
+    "icd10": "A90",
+    "expected_decision": "request_documents",
+    "claimed_amount": 103319,
+    "expected_payable_amount": null,
+    "payable_basis": "not_determinable",
+    "deductions": [],
+    "reasons": [
+      "Missing or unreadable: discharge_summary"
+    ],
+    "expected_policy_rule": "document_completeness",
+    "expected_risk_flags": [],
+    "expected_missing_documents": [
+      "discharge_summary"
+    ],
+    "has_scanned_copy": true
+  },
+  {
+    "claim_id": "CLM-005",
+    "scenario_type": "rejected",
+    "subtype": "specific_waiting:hernia",
+    "policy_id": "POL-STD",
+    "diagnosis": "Inguinal Hernia",
+    "icd10": "K40.90",
+    "expected_decision": "reject",
+    "claimed_amount": 71412,
+    "expected_payable_amount": 0,
+    "payable_basis": "final",
+    "deductions": [
+      {
+        "rule": "specific_disease_waiting.hernia",
+        "description": "hernia has a 24-month waiting period; only 22 months elapsed",
+        "amount": 71412
+      }
+    ],
+    "reasons": [
+      "hernia has a 24-month waiting period; only 22 months elapsed"
+    ],
+    "expected_policy_rule": "specific_disease_waiting.hernia",
+    "expected_risk_flags": [],
+    "expected_missing_documents": [],
+    "has_scanned_copy": false
+  },
+  {
+    "claim_id": "CLM-006",
+    "scenario_type": "rejected",
+    "subtype": "specific_waiting:cataract",
+    "policy_id": "POL-PREM",
+    "diagnosis": "Senile Cataract",
+    "icd10": "H25.9",
+    "expected_decision": "reject",
+    "claimed_amount": 40868,
+    "expected_payable_amount": 0,
+    "payable_basis": "final",
+    "deductions": [
+      {
+        "rule": "specific_disease_waiting.cataract",
+        "description": "cataract has a 12-month waiting period; only 7 months elapsed",
+        "amount": 40868
+      }
+    ],
+    "reasons": [
+      "cataract has a 12-month waiting period; only 7 months elapsed"
+    ],
+    "expected_policy_rule": "specific_disease_waiting.cataract",
+    "expected_risk_flags": [],
+    "expected_missing_documents": [],
+    "has_scanned_copy": false
+  },
+  {
+    "claim_id": "CLM-007",
+    "scenario_type": "risk",
+    "subtype": "high_bill",
+    "policy_id": "POL-STD",
+    "diagnosis": "Fracture Shaft of Tibia (road traffic accident)",
+    "icd10": "S82.201A",
+    "expected_decision": "flag_for_review",
+    "claimed_amount": 492608,
+    "expected_payable_amount": 492608,
+    "payable_basis": "provisional",
+    "deductions": [],
+    "reasons": [
+      "Bill total is far above the typical cost range for this diagnosis"
+    ],
+    "expected_policy_rule": "risk.bill_exceeds_typical_range",
+    "expected_risk_flags": [
+      "bill_exceeds_typical_range"
+    ],
+    "expected_missing_documents": [],
+    "has_scanned_copy": false
+  },
+  {
+    "claim_id": "CLM-008",
+    "scenario_type": "covered",
+    "subtype": "base",
+    "policy_id": "POL-STD",
+    "diagnosis": "Enteric Fever (Typhoid)",
+    "icd10": "A01.0",
+    "expected_decision": "approve",
+    "claimed_amount": 55045,
+    "expected_payable_amount": 55045,
+    "payable_basis": "final",
+    "deductions": [],
+    "reasons": [
+      "All charges within policy limits; no waiting period or exclusion applies"
+    ],
+    "expected_policy_rule": "base_coverage",
+    "expected_risk_flags": [],
+    "expected_missing_documents": [],
+    "has_scanned_copy": false
+  },
+  {
+    "claim_id": "CLM-009",
+    "scenario_type": "covered",
+    "subtype": "base",
+    "policy_id": "POL-STD",
+    "diagnosis": "Inguinal Hernia",
+    "icd10": "K40.90",
+    "expected_decision": "approve",
+    "claimed_amount": 101119,
+    "expected_payable_amount": 101119,
+    "payable_basis": "final",
+    "deductions": [],
+    "reasons": [
+      "All charges within policy limits; no waiting period or exclusion applies"
+    ],
+    "expected_policy_rule": "base_coverage",
+    "expected_risk_flags": [],
+    "expected_missing_documents": [],
+    "has_scanned_copy": false
+  },
+  {
+    "claim_id": "CLM-010",
+    "scenario_type": "risk",
+    "subtype": "date_mismatch",
+    "policy_id": "POL-STD",
+    "diagnosis": "Community Acquired Pneumonia",
+    "icd10": "J18.9",
+    "expected_decision": "flag_for_review",
+    "claimed_amount": 83111,
+    "expected_payable_amount": 83111,
+    "payable_basis": "provisional",
+    "deductions": [],
+    "reasons": [
+      "Admission/discharge dates differ between bill and discharge summary"
+    ],
+    "expected_policy_rule": "risk.date_mismatch_between_documents",
+    "expected_risk_flags": [
+      "date_mismatch_between_documents"
+    ],
+    "expected_missing_documents": [],
+    "has_scanned_copy": true
+  },
+  {
+    "claim_id": "CLM-011",
+    "scenario_type": "partial",
+    "subtype": "room_rent",
+    "policy_id": "POL-STD",
+    "diagnosis": "Cholelithiasis (Gallstones) with Cholecystitis",
+    "icd10": "K80.20",
+    "expected_decision": "partial_approve",
+    "claimed_amount": 95353,
+    "expected_payable_amount": 76333,
+    "payable_basis": "final",
+    "deductions": [
+      {
+        "rule": "room_rent_limit",
+        "description": "Room rent Rs 7700/day exceeds limit Rs 5000/day; proportionate deduction of 35.1% on room_rent, professional_fees, ot_charges",
+        "amount": 19020
+      }
+    ],
+    "reasons": [
+      "Room rent Rs 7700/day exceeds limit Rs 5000/day; proportionate deduction of 35.1% on room_rent, professional_fees, ot_charges"
+    ],
+    "expected_policy_rule": "room_rent_limit",
+    "expected_risk_flags": [],
+    "expected_missing_documents": [],
+    "has_scanned_copy": true
+  },
+  {
+    "claim_id": "CLM-012",
+    "scenario_type": "rejected",
+    "subtype": "exclusion:obesity_treatment",
+    "policy_id": "POL-PREM",
+    "diagnosis": "Morbid Obesity",
+    "icd10": "E66.01",
+    "expected_decision": "reject",
+    "claimed_amount": 316424,
+    "expected_payable_amount": 0,
+    "payable_basis": "final",
+    "deductions": [
+      {
+        "rule": "exclusions.obesity_treatment",
+        "description": "Treatment excluded by policy: obesity_treatment",
+        "amount": 316424
+      }
+    ],
+    "reasons": [
+      "Treatment excluded by policy: obesity_treatment"
+    ],
+    "expected_policy_rule": "exclusions.obesity_treatment",
+    "expected_risk_flags": [],
+    "expected_missing_documents": [],
+    "has_scanned_copy": false
+  },
+  {
+    "claim_id": "CLM-013",
+    "scenario_type": "rejected",
+    "subtype": "initial_waiting",
+    "policy_id": "POL-PREM",
+    "diagnosis": "Senile Cataract",
+    "icd10": "H25.9",
+    "expected_decision": "reject",
+    "claimed_amount": 51851,
+    "expected_payable_amount": 0,
+    "payable_basis": "final",
+    "deductions": [
+      {
+        "rule": "initial_waiting_days",
+        "description": "Admission 10 days after policy start, within the 30-day initial waiting period",
+        "amount": 51851
+      }
+    ],
+    "reasons": [
+      "Admission 10 days after policy start, within the 30-day initial waiting period"
+    ],
+    "expected_policy_rule": "initial_waiting_days",
+    "expected_risk_flags": [],
+    "expected_missing_documents": [],
+    "has_scanned_copy": false
+  },
+  {
+    "claim_id": "CLM-014",
+    "scenario_type": "partial",
+    "subtype": "room_rent",
+    "policy_id": "POL-AS",
+    "diagnosis": "Acute Appendicitis",
+    "icd10": "K35.80",
+    "expected_decision": "partial_approve",
+    "claimed_amount": 71415,
+    "expected_payable_amount": 53666,
+    "payable_basis": "final",
+    "deductions": [
+      {
+        "rule": "room_rent_limit",
+        "description": "Room rent Rs 8400/day exceeds limit Rs 5000/day; proportionate deduction of 40.5% on room_rent, professional_fees, ot_charges",
+        "amount": 14924
+      },
+      {
+        "rule": "co_pay_percent",
+        "description": "5% co-pay on Rs 56491",
+        "amount": 2825
+      }
+    ],
+    "reasons": [
+      "Room rent Rs 8400/day exceeds limit Rs 5000/day; proportionate deduction of 40.5% on room_rent, professional_fees, ot_charges",
+      "5% co-pay on Rs 56491"
+    ],
+    "expected_policy_rule": "room_rent_limit",
+    "expected_risk_flags": [],
+    "expected_missing_documents": [],
+    "has_scanned_copy": false
+  },
+  {
+    "claim_id": "CLM-015",
+    "scenario_type": "covered",
+    "subtype": "base",
+    "policy_id": "POL-PREM",
+    "diagnosis": "Inguinal Hernia",
+    "icd10": "K40.90",
+    "expected_decision": "approve",
+    "claimed_amount": 64127,
+    "expected_payable_amount": 64127,
+    "payable_basis": "final",
+    "deductions": [],
+    "reasons": [
+      "All charges within policy limits; no waiting period or exclusion applies"
+    ],
+    "expected_policy_rule": "base_coverage",
+    "expected_risk_flags": [],
+    "expected_missing_documents": [],
+    "has_scanned_copy": false
+  },
+  {
+    "claim_id": "CLM-016",
+    "scenario_type": "risk",
+    "subtype": "discharge_before_admission",
+    "policy_id": "POL-STD",
+    "diagnosis": "Dengue Fever with Thrombocytopenia",
+    "icd10": "A90",
+    "expected_decision": "flag_for_review",
+    "claimed_amount": 122797,
+    "expected_payable_amount": 122797,
+    "payable_basis": "provisional",
+    "deductions": [],
+    "reasons": [
+      "Discharge date is earlier than the admission date"
+    ],
+    "expected_policy_rule": "risk.discharge_before_admission",
+    "expected_risk_flags": [
+      "discharge_before_admission"
+    ],
+    "expected_missing_documents": [],
+    "has_scanned_copy": false
+  },
+  {
+    "claim_id": "CLM-017",
+    "scenario_type": "risk",
+    "subtype": "high_bill",
+    "policy_id": "POL-STD",
+    "diagnosis": "Fracture Shaft of Tibia (road traffic accident)",
+    "icd10": "S82.201A",
+    "expected_decision": "flag_for_review",
+    "claimed_amount": 524620,
+    "expected_payable_amount": 500000,
+    "payable_basis": "provisional",
+    "deductions": [
+      {
+        "rule": "sum_insured",
+        "description": "Eligible amount exceeds sum insured Rs 500000",
+        "amount": 24620
+      }
+    ],
+    "reasons": [
+      "Bill total is far above the typical cost range for this diagnosis"
+    ],
+    "expected_policy_rule": "risk.bill_exceeds_typical_range",
+    "expected_risk_flags": [
+      "bill_exceeds_typical_range"
+    ],
+    "expected_missing_documents": [],
+    "has_scanned_copy": false
+  },
+  {
+    "claim_id": "CLM-018",
+    "scenario_type": "rejected",
+    "subtype": "pre_existing",
+    "policy_id": "POL-AS",
+    "diagnosis": "Diabetic Ketoacidosis",
+    "icd10": "E11.10",
+    "expected_decision": "reject",
+    "claimed_amount": 140038,
+    "expected_payable_amount": 0,
+    "payable_basis": "final",
+    "deductions": [
+      {
+        "rule": "pre_existing_waiting_months",
+        "description": "Pre-existing condition waiting period of 48 months not completed (39 months elapsed)",
+        "amount": 140038
+      }
+    ],
+    "reasons": [
+      "Pre-existing condition waiting period of 48 months not completed (39 months elapsed)"
+    ],
+    "expected_policy_rule": "pre_existing_waiting_months",
+    "expected_risk_flags": [],
+    "expected_missing_documents": [],
+    "has_scanned_copy": false
+  },
+  {
+    "claim_id": "CLM-019",
+    "scenario_type": "covered",
+    "subtype": "base",
+    "policy_id": "POL-PREM",
+    "diagnosis": "Cholelithiasis (Gallstones) with Cholecystitis",
+    "icd10": "K80.20",
+    "expected_decision": "approve",
+    "claimed_amount": 114905,
+    "expected_payable_amount": 114905,
+    "payable_basis": "final",
+    "deductions": [],
+    "reasons": [
+      "All charges within policy limits; no waiting period or exclusion applies"
+    ],
+    "expected_policy_rule": "base_coverage",
+    "expected_risk_flags": [],
+    "expected_missing_documents": [],
+    "has_scanned_copy": false
+  },
+  {
+    "claim_id": "CLM-020",
+    "scenario_type": "partial",
+    "subtype": "copay",
+    "policy_id": "POL-AS",
+    "diagnosis": "Dengue Fever with Thrombocytopenia",
+    "icd10": "A90",
+    "expected_decision": "partial_approve",
+    "claimed_amount": 97275,
+    "expected_payable_amount": 92411,
+    "payable_basis": "final",
+    "deductions": [
+      {
+        "rule": "co_pay_percent",
+        "description": "5% co-pay on Rs 97275",
+        "amount": 4864
+      }
+    ],
+    "reasons": [
+      "5% co-pay on Rs 97275"
+    ],
+    "expected_policy_rule": "co_pay_percent",
+    "expected_risk_flags": [],
+    "expected_missing_documents": [],
+    "has_scanned_copy": false
+  },
+  {
+    "claim_id": "CLM-021",
+    "scenario_type": "partial",
+    "subtype": "sub_limit",
+    "policy_id": "POL-PREM",
+    "diagnosis": "Senile Cataract",
+    "icd10": "H25.9",
+    "expected_decision": "partial_approve",
+    "claimed_amount": 67535,
+    "expected_payable_amount": 60000,
+    "payable_basis": "final",
+    "deductions": [
+      {
+        "rule": "sub_limits.cataract",
+        "description": "Sub-limit for cataract is Rs 60000 (per_eye); eligible amount was Rs 67535",
+        "amount": 7535
+      }
+    ],
+    "reasons": [
+      "Sub-limit for cataract is Rs 60000 (per_eye); eligible amount was Rs 67535"
+    ],
+    "expected_policy_rule": "sub_limits.cataract",
+    "expected_risk_flags": [],
+    "expected_missing_documents": [],
+    "has_scanned_copy": false
+  },
+  {
+    "claim_id": "CLM-022",
+    "scenario_type": "risk",
+    "subtype": "early_admission",
+    "policy_id": "POL-AS",
+    "diagnosis": "Fracture Shaft of Tibia (road traffic accident)",
+    "icd10": "S82.201A",
+    "expected_decision": "flag_for_review",
+    "claimed_amount": 162081,
+    "expected_payable_amount": 95000,
+    "payable_basis": "provisional",
+    "deductions": [
+      {
+        "rule": "sum_insured",
+        "description": "Eligible amount exceeds sum insured Rs 100000",
+        "amount": 62081
+      },
+      {
+        "rule": "co_pay_percent",
+        "description": "5% co-pay on Rs 100000",
+        "amount": 5000
+      }
+    ],
+    "reasons": [
+      "Admission occurred within days of policy inception"
+    ],
+    "expected_policy_rule": "risk.admission_soon_after_policy_start",
+    "expected_risk_flags": [
+      "admission_soon_after_policy_start"
+    ],
+    "expected_missing_documents": [],
+    "has_scanned_copy": false
+  },
+  {
+    "claim_id": "CLM-023",
+    "scenario_type": "incomplete",
+    "subtype": "blank_field",
+    "policy_id": "POL-PREM",
+    "diagnosis": "Community Acquired Pneumonia",
+    "icd10": "J18.9",
+    "expected_decision": "request_documents",
+    "claimed_amount": 105066,
+    "expected_payable_amount": null,
+    "payable_basis": "not_determinable",
+    "deductions": [],
+    "reasons": [
+      "Missing or unreadable: discharge_summary.admission_date"
+    ],
+    "expected_policy_rule": "document_completeness",
+    "expected_risk_flags": [],
+    "expected_missing_documents": [
+      "discharge_summary.admission_date"
+    ],
+    "has_scanned_copy": true
+  },
+  {
+    "claim_id": "CLM-024",
+    "scenario_type": "rejected",
+    "subtype": "exclusion:dental_unless_accident",
+    "policy_id": "POL-PREM",
+    "diagnosis": "Partial Edentulism (loss of teeth)",
+    "icd10": "K08.109",
+    "expected_decision": "reject",
+    "claimed_amount": 85772,
+    "expected_payable_amount": 0,
+    "payable_basis": "final",
+    "deductions": [
+      {
+        "rule": "exclusions.dental_unless_accident",
+        "description": "Treatment excluded by policy: dental_unless_accident",
+        "amount": 85772
+      }
+    ],
+    "reasons": [
+      "Treatment excluded by policy: dental_unless_accident"
+    ],
+    "expected_policy_rule": "exclusions.dental_unless_accident",
+    "expected_risk_flags": [],
+    "expected_missing_documents": [],
+    "has_scanned_copy": true
+  },
+  {
+    "claim_id": "CLM-025",
+    "scenario_type": "partial",
+    "subtype": "copay",
+    "policy_id": "POL-AS",
+    "diagnosis": "Community Acquired Pneumonia",
+    "icd10": "J18.9",
+    "expected_decision": "partial_approve",
+    "claimed_amount": 135610,
+    "expected_payable_amount": 128830,
+    "payable_basis": "final",
+    "deductions": [
+      {
+        "rule": "co_pay_percent",
+        "description": "5% co-pay on Rs 135610",
+        "amount": 6780
+      }
+    ],
+    "reasons": [
+      "5% co-pay on Rs 135610"
+    ],
+    "expected_policy_rule": "co_pay_percent",
+    "expected_risk_flags": [],
+    "expected_missing_documents": [],
+    "has_scanned_copy": false
+  },
+  {
+    "claim_id": "CLM-026",
+    "scenario_type": "partial",
+    "subtype": "copay",
+    "policy_id": "POL-AS",
+    "diagnosis": "Fracture Shaft of Tibia (road traffic accident)",
+    "icd10": "S82.201A",
+    "expected_decision": "partial_approve",
+    "claimed_amount": 135992,
+    "expected_payable_amount": 129192,
+    "payable_basis": "final",
+    "deductions": [
+      {
+        "rule": "co_pay_percent",
+        "description": "5% co-pay on Rs 135992",
+        "amount": 6800
+      }
+    ],
+    "reasons": [
+      "5% co-pay on Rs 135992"
+    ],
+    "expected_policy_rule": "co_pay_percent",
+    "expected_risk_flags": [],
+    "expected_missing_documents": [],
+    "has_scanned_copy": false
+  },
+  {
+    "claim_id": "CLM-027",
+    "scenario_type": "incomplete",
+    "subtype": "unreadable_bill_total",
+    "policy_id": "POL-PREM",
+    "diagnosis": "Acute Appendicitis",
+    "icd10": "K35.80",
+    "expected_decision": "request_documents",
+    "claimed_amount": 85013,
+    "expected_payable_amount": null,
+    "payable_basis": "not_determinable",
+    "deductions": [],
+    "reasons": [
+      "Missing or unreadable: hospital_bill.total_amount"
+    ],
+    "expected_policy_rule": "document_completeness",
+    "expected_risk_flags": [],
+    "expected_missing_documents": [
+      "hospital_bill.total_amount"
+    ],
+    "has_scanned_copy": true
+  },
+  {
+    "claim_id": "CLM-028",
+    "scenario_type": "risk",
+    "subtype": "duplicate_items",
+    "policy_id": "POL-STD",
+    "diagnosis": "Acute Appendicitis",
+    "icd10": "K35.80",
+    "expected_decision": "flag_for_review",
+    "claimed_amount": 127391,
+    "expected_payable_amount": 120409,
+    "payable_basis": "provisional",
+    "deductions": [
+      {
+        "rule": "duplicate_line_items",
+        "description": "Duplicated bill line items removed from payable amount",
+        "amount": 6982
+      }
+    ],
+    "reasons": [
+      "Bill contains duplicated line items"
+    ],
+    "expected_policy_rule": "risk.duplicate_line_items",
+    "expected_risk_flags": [
+      "duplicate_line_items"
+    ],
+    "expected_missing_documents": [],
+    "has_scanned_copy": false
+  },
+  {
+    "claim_id": "CLM-029",
+    "scenario_type": "covered",
+    "subtype": "base",
+    "policy_id": "POL-PREM",
+    "diagnosis": "Senile Cataract",
+    "icd10": "H25.9",
+    "expected_decision": "approve",
+    "claimed_amount": 57619,
+    "expected_payable_amount": 57619,
+    "payable_basis": "final",
+    "deductions": [],
+    "reasons": [
+      "All charges within policy limits; no waiting period or exclusion applies"
+    ],
+    "expected_policy_rule": "base_coverage",
+    "expected_risk_flags": [],
+    "expected_missing_documents": [],
+    "has_scanned_copy": false
+  },
+  {
+    "claim_id": "CLM-030",
+    "scenario_type": "covered",
+    "subtype": "base",
+    "policy_id": "POL-PREM",
+    "diagnosis": "Inguinal Hernia",
+    "icd10": "K40.90",
+    "expected_decision": "approve",
+    "claimed_amount": 72747,
+    "expected_payable_amount": 72747,
+    "payable_basis": "final",
+    "deductions": [],
+    "reasons": [
+      "All charges within policy limits; no waiting period or exclusion applies"
+    ],
+    "expected_policy_rule": "base_coverage",
+    "expected_risk_flags": [],
+    "expected_missing_documents": [],
+    "has_scanned_copy": false
+  },
+  {
+    "claim_id": "CLM-031",
+    "scenario_type": "incomplete",
+    "subtype": "missing_policy_number",
+    "policy_id": "POL-STD",
+    "diagnosis": "Senile Cataract",
+    "icd10": "H25.9",
+    "expected_decision": "request_documents",
+    "claimed_amount": 70218,
+    "expected_payable_amount": null,
+    "payable_basis": "not_determinable",
+    "deductions": [],
+    "reasons": [
+      "Missing or unreadable: claim_form.policy_number"
+    ],
+    "expected_policy_rule": "document_completeness",
+    "expected_risk_flags": [],
+    "expected_missing_documents": [
+      "claim_form.policy_number"
+    ],
+    "has_scanned_copy": false
+  },
+  {
+    "claim_id": "CLM-032",
+    "scenario_type": "rejected",
+    "subtype": "exclusion:cosmetic_surgery",
+    "policy_id": "POL-AS",
+    "diagnosis": "Nasal Deformity (aesthetic correction)",
+    "icd10": "Z41.1",
+    "expected_decision": "reject",
+    "claimed_amount": 134057,
+    "expected_payable_amount": 0,
+    "payable_basis": "final",
+    "deductions": [
+      {
+        "rule": "exclusions.cosmetic_surgery",
+        "description": "Treatment excluded by policy: cosmetic_surgery",
+        "amount": 134057
+      }
+    ],
+    "reasons": [
+      "Treatment excluded by policy: cosmetic_surgery"
+    ],
+    "expected_policy_rule": "exclusions.cosmetic_surgery",
+    "expected_risk_flags": [],
+    "expected_missing_documents": [],
+    "has_scanned_copy": false
+  },
+  {
+    "claim_id": "CLM-033",
+    "scenario_type": "covered",
+    "subtype": "base",
+    "policy_id": "POL-PREM",
+    "diagnosis": "Cholelithiasis (Gallstones) with Cholecystitis",
+    "icd10": "K80.20",
+    "expected_decision": "approve",
+    "claimed_amount": 117174,
+    "expected_payable_amount": 117174,
+    "payable_basis": "final",
+    "deductions": [],
+    "reasons": [
+      "All charges within policy limits; no waiting period or exclusion applies"
+    ],
+    "expected_policy_rule": "base_coverage",
+    "expected_risk_flags": [],
+    "expected_missing_documents": [],
+    "has_scanned_copy": true
+  },
+  {
+    "claim_id": "CLM-034",
+    "scenario_type": "covered",
+    "subtype": "base",
+    "policy_id": "POL-PREM",
+    "diagnosis": "Acute Appendicitis",
+    "icd10": "K35.80",
+    "expected_decision": "approve",
+    "claimed_amount": 134190,
+    "expected_payable_amount": 134190,
+    "payable_basis": "final",
+    "deductions": [],
+    "reasons": [
+      "All charges within policy limits; no waiting period or exclusion applies"
+    ],
+    "expected_policy_rule": "base_coverage",
+    "expected_risk_flags": [],
+    "expected_missing_documents": [],
+    "has_scanned_copy": true
+  },
+  {
+    "claim_id": "CLM-035",
+    "scenario_type": "covered",
+    "subtype": "base",
+    "policy_id": "POL-STD",
+    "diagnosis": "Dengue Fever with Thrombocytopenia",
+    "icd10": "A90",
+    "expected_decision": "approve",
+    "claimed_amount": 83298,
+    "expected_payable_amount": 83298,
+    "payable_basis": "final",
+    "deductions": [],
+    "reasons": [
+      "All charges within policy limits; no waiting period or exclusion applies"
+    ],
+    "expected_policy_rule": "base_coverage",
+    "expected_risk_flags": [],
+    "expected_missing_documents": [],
+    "has_scanned_copy": true
+  },
+  {
+    "claim_id": "CLM-036",
+    "scenario_type": "covered",
+    "subtype": "base",
+    "policy_id": "POL-STD",
+    "diagnosis": "Inguinal Hernia",
+    "icd10": "K40.90",
+    "expected_decision": "approve",
+    "claimed_amount": 79846,
+    "expected_payable_amount": 79846,
+    "payable_basis": "final",
+    "deductions": [],
+    "reasons": [
+      "All charges within policy limits; no waiting period or exclusion applies"
+    ],
+    "expected_policy_rule": "base_coverage",
+    "expected_risk_flags": [],
+    "expected_missing_documents": [],
+    "has_scanned_copy": false
+  },
+  {
+    "claim_id": "CLM-037",
+    "scenario_type": "partial",
+    "subtype": "room_rent",
+    "policy_id": "POL-STD",
+    "diagnosis": "Acute Appendicitis",
+    "icd10": "K35.80",
+    "expected_decision": "partial_approve",
+    "claimed_amount": 127952,
+    "expected_payable_amount": 107343,
+    "payable_basis": "final",
+    "deductions": [
+      {
+        "rule": "room_rent_limit",
+        "description": "Room rent Rs 7400/day exceeds limit Rs 5000/day; proportionate deduction of 32.4% on room_rent, professional_fees, ot_charges",
+        "amount": 20609
+      }
+    ],
+    "reasons": [
+      "Room rent Rs 7400/day exceeds limit Rs 5000/day; proportionate deduction of 32.4% on room_rent, professional_fees, ot_charges"
+    ],
+    "expected_policy_rule": "room_rent_limit",
+    "expected_risk_flags": [],
+    "expected_missing_documents": [],
+    "has_scanned_copy": false
+  },
+  {
+    "claim_id": "CLM-038",
+    "scenario_type": "partial",
+    "subtype": "sub_limit",
+    "policy_id": "POL-STD",
+    "diagnosis": "Senile Cataract",
+    "icd10": "H25.9",
+    "expected_decision": "partial_approve",
+    "claimed_amount": 69508,
+    "expected_payable_amount": 30000,
+    "payable_basis": "final",
+    "deductions": [
+      {
+        "rule": "sub_limits.cataract",
+        "description": "Sub-limit for cataract is Rs 30000 (per_eye); eligible amount was Rs 69508",
+        "amount": 39508
+      }
+    ],
+    "reasons": [
+      "Sub-limit for cataract is Rs 30000 (per_eye); eligible amount was Rs 69508"
+    ],
+    "expected_policy_rule": "sub_limits.cataract",
+    "expected_risk_flags": [],
+    "expected_missing_documents": [],
+    "has_scanned_copy": true
+  },
+  {
+    "claim_id": "CLM-039",
+    "scenario_type": "covered",
+    "subtype": "base",
+    "policy_id": "POL-PREM",
+    "diagnosis": "Dengue Fever with Thrombocytopenia",
+    "icd10": "A90",
+    "expected_decision": "approve",
+    "claimed_amount": 96652,
+    "expected_payable_amount": 96652,
+    "payable_basis": "final",
+    "deductions": [],
+    "reasons": [
+      "All charges within policy limits; no waiting period or exclusion applies"
+    ],
+    "expected_policy_rule": "base_coverage",
+    "expected_risk_flags": [],
+    "expected_missing_documents": [],
+    "has_scanned_copy": false
+  },
+  {
+    "claim_id": "CLM-040",
+    "scenario_type": "covered",
+    "subtype": "base",
+    "policy_id": "POL-PREM",
+    "diagnosis": "Cholelithiasis (Gallstones) with Cholecystitis",
+    "icd10": "K80.20",
+    "expected_decision": "approve",
+    "claimed_amount": 116467,
+    "expected_payable_amount": 116467,
+    "payable_basis": "final",
+    "deductions": [],
+    "reasons": [
+      "All charges within policy limits; no waiting period or exclusion applies"
+    ],
+    "expected_policy_rule": "base_coverage",
+    "expected_risk_flags": [],
+    "expected_missing_documents": [],
+    "has_scanned_copy": false
+  }
+]

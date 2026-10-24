@@ -1,0 +1,24 @@
+{
+  "claim_id": "CLM-002",
+  "claimant": {
+    "name": "Vanya Thakur",
+    "age": 60,
+    "gender": "Female",
+    "phone": "9849531029",
+    "email": "vanya86@example.com",
+    "address": "39/641, Sachdeva Ganj, Durg-767704",
+    "relationship_to_insured": "self"
+  },
+  "policy_id": "POL-PREM",
+  "policy_number": "POL-PREM/2024/3449925",
+  "policy_start_date": "2024-09-10",
+  "sum_insured": 2500000,
+  "hospital_name": "Sanjivani Heart & General Hospital",
+  "hospital_city": "Nagpur",
+  "diagnosis": "Primary Osteoarthritis of Knee",
+  "admission_date": "2026-08-13",
+  "discharge_date": "2026-08-19",
+  "pre_existing_conditions": [],
+  "is_accident_case": false,
+  "claimed_amount": 337262
+}

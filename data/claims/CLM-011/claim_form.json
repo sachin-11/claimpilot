@@ -1,0 +1,24 @@
+{
+  "claim_id": "CLM-011",
+  "claimant": {
+    "name": "Widisha Bedi",
+    "age": 55,
+    "gender": "Female",
+    "phone": "3233615171",
+    "email": "widisha23@example.com",
+    "address": "88/798, Dhingra Marg, Nagaon-548776",
+    "relationship_to_insured": "self"
+  },
+  "policy_id": "POL-STD",
+  "policy_number": "POL-STD/2023/8459741",
+  "policy_start_date": "2023-05-07",
+  "sum_insured": 500000,
+  "hospital_name": "Arya Vaidya Hospital",
+  "hospital_city": "Jaipur",
+  "diagnosis": "Cholelithiasis (Gallstones) with Cholecystitis",
+  "admission_date": "2025-08-11",
+  "discharge_date": "2025-08-14",
+  "pre_existing_conditions": [],
+  "is_accident_case": false,
+  "claimed_amount": 95353
+}

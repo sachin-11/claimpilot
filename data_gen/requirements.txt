@@ -1,0 +1,10 @@
+Faker>=30.0
+reportlab>=4.0
+PyMuPDF>=1.24
+Pillow>=10.0
+numpy>=1.26
+pydantic>=2.6
+PyYAML>=6.0
+typer>=0.12
+openai>=1.40  # optional: only used when OPENAI_API_KEY is set
+pytest>=8.0

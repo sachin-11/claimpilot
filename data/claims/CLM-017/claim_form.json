@@ -1,0 +1,24 @@
+{
+  "claim_id": "CLM-017",
+  "claimant": {
+    "name": "Amaira Kuruvilla",
+    "age": 61,
+    "gender": "Female",
+    "phone": "+917051734335",
+    "email": "amaira58@example.com",
+    "address": "43, Hayer Nagar, Bhusawal-651471",
+    "relationship_to_insured": "self"
+  },
+  "policy_id": "POL-STD",
+  "policy_number": "POL-STD/2025/7612147",
+  "policy_start_date": "2025-09-01",
+  "sum_insured": 500000,
+  "hospital_name": "Lotus Care Multispeciality Hospital",
+  "hospital_city": "Pune",
+  "diagnosis": "Fracture Shaft of Tibia (road traffic accident)",
+  "admission_date": "2026-07-16",
+  "discharge_date": "2026-07-21",
+  "pre_existing_conditions": [],
+  "is_accident_case": true,
+  "claimed_amount": 524620
+}

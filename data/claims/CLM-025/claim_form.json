@@ -1,0 +1,24 @@
+{
+  "claim_id": "CLM-025",
+  "claimant": {
+    "name": "Deepa Saini",
+    "age": 43,
+    "gender": "Female",
+    "phone": "+915516095476",
+    "email": "deepa61@example.com",
+    "address": "62/002, Narula Chowk, Vadodara-895831",
+    "relationship_to_insured": "self"
+  },
+  "policy_id": "POL-AS",
+  "policy_number": "POL-AS/2025/2315940",
+  "policy_start_date": "2025-05-20",
+  "sum_insured": 200000,
+  "hospital_name": "Lotus Care Multispeciality Hospital",
+  "hospital_city": "Pune",
+  "diagnosis": "Community Acquired Pneumonia",
+  "admission_date": "2026-01-23",
+  "discharge_date": "2026-01-30",
+  "pre_existing_conditions": [],
+  "is_accident_case": false,
+  "claimed_amount": 135610
+}

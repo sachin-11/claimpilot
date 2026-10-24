@@ -1,0 +1,24 @@
+{
+  "claim_id": "CLM-012",
+  "claimant": {
+    "name": "Gabriel Ratti",
+    "age": 46,
+    "gender": "Male",
+    "phone": "+914177509059",
+    "email": "gabriel52@example.com",
+    "address": "74, Sur Path, Eluru 009699",
+    "relationship_to_insured": "self"
+  },
+  "policy_id": "POL-PREM",
+  "policy_number": "POL-PREM/2023/3812714",
+  "policy_start_date": "2023-11-13",
+  "sum_insured": 1500000,
+  "hospital_name": "Vedanta Health Institute",
+  "hospital_city": "Delhi",
+  "diagnosis": "Morbid Obesity",
+  "admission_date": "2026-01-01",
+  "discharge_date": "2026-01-04",
+  "pre_existing_conditions": [],
+  "is_accident_case": false,
+  "claimed_amount": 316424
+}

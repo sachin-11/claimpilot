@@ -1,0 +1,104 @@
+# VERIFY these values against the downloaded policy wording PDFs before final use.
+#
+# The generator computes every expected outcome ONLY from this file, so the golden
+# dataset stays consistent with whatever values are put here. Values below are
+# placeholders modelled loosely on common Indian health-insurance wordings.
+#
+# Conventions
+#   room_rent_limit / icu_limit : per-day cap = min(percent_of_si_per_day % of SI, max_per_day).
+#                                 Leave both null for "no limit".
+#   proportionate_categories    : bill categories reduced proportionately when the chosen room
+#                                 rent exceeds the limit (limit / actual room rent).
+#   sub_limits                  : keyed by diagnosis key (see typical_costs.yaml); unit is
+#                                 per_eye (x number of eyes operated) or per_admission.
+#   exclusions                  : *_unless_accident entries exclude the claim only when the
+#                                 admission is not accident-related.
+#   specific_disease_waiting    : diagnosis key -> months from policy start.
+
+policies:
+  - policy_id: POL-AS
+    name: Arogya Sanjeevani Policy (standard product)
+    source_pdf: arogya_sanjeevani.pdf
+    sum_insured_options: [100000, 200000, 300000, 500000]
+    room_rent_limit:
+      percent_of_si_per_day: 2.0
+      max_per_day: 5000
+    icu_limit:
+      percent_of_si_per_day: 5.0
+      max_per_day: 10000
+    co_pay_percent: 5
+    initial_waiting_days: 30
+    specific_disease_waiting:
+      cataract: 24
+      hernia: 24
+      knee_replacement: 24
+      cholecystectomy: 24
+    pre_existing_waiting_months: 48
+    sub_limits:
+      cataract:
+        amount: 40000
+        unit: per_eye
+    exclusions: [cosmetic_surgery, dental_unless_accident, obesity_treatment]
+    maternity:
+      covered: false
+      waiting_months: 0
+    proportionate_categories: [room_rent, professional_fees, ot_charges]
+
+  - policy_id: POL-STD
+    name: Standard Individual Health Plan
+    source_pdf: standard_individual_plan.pdf
+    sum_insured_options: [300000, 500000, 750000, 1000000]
+    room_rent_limit:
+      percent_of_si_per_day: 1.0
+      max_per_day: 5000
+    icu_limit:
+      percent_of_si_per_day: 2.0
+      max_per_day: 10000
+    co_pay_percent: 0
+    initial_waiting_days: 30
+    specific_disease_waiting:
+      cataract: 24
+      hernia: 24
+      knee_replacement: 24
+      cholecystectomy: 24
+    pre_existing_waiting_months: 36
+    sub_limits:
+      cataract:
+        amount: 30000
+        unit: per_eye
+    exclusions: [cosmetic_surgery, dental_unless_accident, obesity_treatment]
+    maternity:
+      covered: false
+      waiting_months: 0
+    proportionate_categories: [room_rent, professional_fees, ot_charges]
+
+  - policy_id: POL-PREM
+    name: Premium Health Shield
+    source_pdf: premium_health_shield.pdf
+    sum_insured_options: [1000000, 1500000, 2500000]
+    room_rent_limit:
+      percent_of_si_per_day: null
+      max_per_day: null
+    icu_limit:
+      percent_of_si_per_day: null
+      max_per_day: null
+    co_pay_percent: 0
+    initial_waiting_days: 30
+    specific_disease_waiting:
+      cataract: 12
+      hernia: 12
+      knee_replacement: 12
+      cholecystectomy: 12
+    pre_existing_waiting_months: 24
+    sub_limits:
+      cataract:
+        amount: 60000
+        unit: per_eye
+      maternity:
+        amount: 100000
+        unit: per_admission
+    exclusions: [cosmetic_surgery, dental_unless_accident, obesity_treatment]
+    maternity:
+      covered: true
+      waiting_months: 24
+    proportionate_categories: [room_rent, professional_fees, ot_charges]

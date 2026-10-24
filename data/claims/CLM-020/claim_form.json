@@ -1,0 +1,24 @@
+{
+  "claim_id": "CLM-020",
+  "claimant": {
+    "name": "Ekanta Choudhary",
+    "age": 60,
+    "gender": "Female",
+    "phone": "3277192703",
+    "email": "ekanta48@example.com",
+    "address": "72/13, Bhatti, Bikaner 153006",
+    "relationship_to_insured": "self"
+  },
+  "policy_id": "POL-AS",
+  "policy_number": "POL-AS/2025/4776757",
+  "policy_start_date": "2025-01-30",
+  "sum_insured": 300000,
+  "hospital_name": "Shree Dhanvantari Hospital",
+  "hospital_city": "Mumbai",
+  "diagnosis": "Dengue Fever with Thrombocytopenia",
+  "admission_date": "2025-07-10",
+  "discharge_date": "2025-07-14",
+  "pre_existing_conditions": [],
+  "is_accident_case": false,
+  "claimed_amount": 97275
+}

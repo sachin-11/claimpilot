@@ -1,0 +1,24 @@
+{
+  "claim_id": "CLM-030",
+  "claimant": {
+    "name": "Isaac Rajagopalan",
+    "age": 45,
+    "gender": "Male",
+    "phone": "3053788806",
+    "email": "isaac13@example.com",
+    "address": "028, Bahl Marg, Dehri-565578",
+    "relationship_to_insured": "self"
+  },
+  "policy_id": "POL-PREM",
+  "policy_number": "POL-PREM/2024/9931187",
+  "policy_start_date": "2024-04-26",
+  "sum_insured": 1000000,
+  "hospital_name": "Sunrise Life Hospital",
+  "hospital_city": "Kolkata",
+  "diagnosis": "Inguinal Hernia",
+  "admission_date": "2026-07-11",
+  "discharge_date": "2026-07-14",
+  "pre_existing_conditions": [],
+  "is_accident_case": false,
+  "claimed_amount": 72747
+}

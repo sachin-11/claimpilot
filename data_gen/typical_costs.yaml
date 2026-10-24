@@ -1,0 +1,184 @@
+# Typical INR cost ranges per diagnosis (total hospital bill). Used to size generated
+# bills and to define "unusually high" for risk scenarios. Fictional, rough estimates.
+#
+# kind: medical | surgical | daycare
+# specific_wait_key  -> key in policy specific_disease_waiting
+# sub_limit_key      -> key in policy sub_limits
+# exclusion_tag      -> entry that must appear in policy exclusions to reject the claim
+# ped_condition      -> pre-existing condition the admission is related to
+# implant            -> implant line shown in the bill consumables
+
+diagnoses:
+  - key: dengue
+    name: Dengue Fever with Thrombocytopenia
+    icd10: A90
+    kind: medical
+    stay_days: [3, 6]
+    cost_range: [35000, 140000]
+    icu_probability: 0.1
+    tests: [NS1 Antigen, Dengue IgM/IgG Serology, Platelet Count Serial, Complete Blood Count]
+
+  - key: typhoid
+    name: Enteric Fever (Typhoid)
+    icd10: A01.0
+    kind: medical
+    stay_days: [3, 6]
+    cost_range: [25000, 90000]
+    icu_probability: 0.0
+    tests: [Widal Test, Blood Culture, Complete Blood Count, Liver Function Test]
+
+  - key: pneumonia
+    name: Community Acquired Pneumonia
+    icd10: J18.9
+    kind: medical
+    stay_days: [4, 8]
+    cost_range: [45000, 180000]
+    icu_probability: 0.25
+    tests: [Chest X-Ray, Sputum Culture, Complete Blood Count, Arterial Blood Gas]
+
+  - key: appendicitis
+    name: Acute Appendicitis
+    icd10: K35.80
+    procedure: Laparoscopic Appendectomy
+    kind: surgical
+    stay_days: [2, 4]
+    cost_range: [60000, 150000]
+    icu_probability: 0.0
+    tests: [USG Abdomen, Complete Blood Count, Pre-anaesthetic Check-up]
+
+  - key: cataract
+    name: Senile Cataract
+    icd10: H25.9
+    procedure: Phacoemulsification with IOL Implant
+    kind: daycare
+    stay_days: [1, 1]
+    cost_range: [25000, 80000]
+    icu_probability: 0.0
+    age_range: [55, 80]
+    implant: Intraocular Lens (IOL)
+    sub_limit_key: cataract
+    specific_wait_key: cataract
+    tests: [Biometry (A-Scan), Pre-operative Blood Work]
+
+  - key: knee_replacement
+    name: Primary Osteoarthritis of Knee
+    icd10: M17.11
+    procedure: Total Knee Replacement (Unilateral)
+    kind: surgical
+    stay_days: [5, 7]
+    cost_range: [180000, 450000]
+    icu_probability: 0.1
+    age_range: [55, 78]
+    implant: Knee Prosthesis Implant
+    specific_wait_key: knee_replacement
+    tests: [X-Ray Knee AP/Lateral, MRI Knee, Complete Blood Count, Pre-anaesthetic Check-up]
+
+  - key: hernia
+    name: Inguinal Hernia
+    icd10: K40.90
+    procedure: Laparoscopic Inguinal Hernia Repair (Mesh)
+    kind: surgical
+    stay_days: [2, 3]
+    cost_range: [50000, 120000]
+    icu_probability: 0.0
+    implant: Surgical Mesh
+    specific_wait_key: hernia
+    tests: [USG Abdomen/Inguinal Region, Complete Blood Count, Pre-anaesthetic Check-up]
+
+  - key: cholecystectomy
+    name: Cholelithiasis (Gallstones) with Cholecystitis
+    icd10: K80.20
+    procedure: Laparoscopic Cholecystectomy
+    kind: surgical
+    stay_days: [2, 4]
+    cost_range: [70000, 160000]
+    icu_probability: 0.0
+    specific_wait_key: cholecystectomy
+    tests: [USG Abdomen, Liver Function Test, Complete Blood Count, Pre-anaesthetic Check-up]
+
+  - key: fracture
+    name: Fracture Shaft of Tibia (road traffic accident)
+    icd10: S82.201A
+    procedure: Open Reduction and Internal Fixation (ORIF)
+    kind: surgical
+    stay_days: [3, 6]
+    cost_range: [80000, 220000]
+    icu_probability: 0.0
+    accident: true
+    implant: Orthopaedic Plate and Screws
+    tests: [X-Ray Tibia/Fibula AP/Lateral, Complete Blood Count, Pre-anaesthetic Check-up]
+
+  - key: maternity_normal
+    name: Normal Vaginal Delivery
+    icd10: O80
+    procedure: Normal Vaginal Delivery
+    kind: surgical
+    stay_days: [2, 3]
+    cost_range: [40000, 90000]
+    icu_probability: 0.0
+    age_range: [22, 36]
+    gender: female
+    is_maternity: true
+    sub_limit_key: maternity
+    tests: [Obstetric USG, Complete Blood Count, Blood Grouping]
+
+  - key: maternity_cesarean
+    name: Delivery by Caesarean Section
+    icd10: O82
+    procedure: Lower Segment Caesarean Section (LSCS)
+    kind: surgical
+    stay_days: [3, 5]
+    cost_range: [80000, 170000]
+    icu_probability: 0.0
+    age_range: [22, 36]
+    gender: female
+    is_maternity: true
+    sub_limit_key: maternity
+    tests: [Obstetric USG, Complete Blood Count, Pre-anaesthetic Check-up]
+
+  - key: cosmetic_rhinoplasty
+    name: Nasal Deformity (aesthetic correction)
+    icd10: Z41.1
+    procedure: Rhinoplasty (Cosmetic)
+    kind: surgical
+    stay_days: [1, 2]
+    cost_range: [80000, 250000]
+    icu_probability: 0.0
+    age_range: [20, 45]
+    exclusion_tag: cosmetic_surgery
+    tests: [Pre-anaesthetic Check-up, Complete Blood Count]
+
+  - key: bariatric
+    name: Morbid Obesity
+    icd10: E66.01
+    procedure: Laparoscopic Sleeve Gastrectomy
+    kind: surgical
+    stay_days: [3, 5]
+    cost_range: [250000, 450000]
+    icu_probability: 0.0
+    age_range: [25, 55]
+    exclusion_tag: obesity_treatment
+    tests: [Upper GI Endoscopy, Complete Blood Count, Pre-anaesthetic Check-up]
+
+  - key: dental_implant
+    name: Partial Edentulism (loss of teeth)
+    icd10: K08.109
+    procedure: Dental Implant Placement
+    kind: daycare
+    stay_days: [1, 1]
+    cost_range: [30000, 120000]
+    icu_probability: 0.0
+    age_range: [30, 65]
+    exclusion_tag: dental_unless_accident
+    implant: Titanium Dental Implant
+    tests: [OPG X-Ray, CBCT Scan]
+
+  - key: diabetic_ketoacidosis
+    name: Diabetic Ketoacidosis
+    icd10: E11.10
+    kind: medical
+    stay_days: [3, 6]
+    cost_range: [45000, 150000]
+    icu_probability: 0.3
+    ped_condition: Type 2 Diabetes Mellitus
+    tests: [Blood Ketones, HbA1c, Arterial Blood Gas, Serum Electrolytes]

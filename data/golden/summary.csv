@@ -1,0 +1,41 @@
+claim_id,scenario_type,subtype,policy_id,diagnosis,icd10,claimed_amount,expected_payable_amount,expected_decision,expected_policy_rule,expected_risk_flags,expected_missing_documents,has_scanned_copy
+CLM-001,covered,base,POL-PREM,Normal Vaginal Delivery,O80,77917,77917,approve,base_coverage,,,False
+CLM-002,covered,base,POL-PREM,Primary Osteoarthritis of Knee,M17.11,337262,337262,approve,base_coverage,,,False
+CLM-003,covered,base,POL-STD,Primary Osteoarthritis of Knee,M17.11,391436,391436,approve,base_coverage,,,False
+CLM-004,incomplete,missing_discharge_summary,POL-PREM,Dengue Fever with Thrombocytopenia,A90,103319,,request_documents,document_completeness,,discharge_summary,True
+CLM-005,rejected,specific_waiting:hernia,POL-STD,Inguinal Hernia,K40.90,71412,0,reject,specific_disease_waiting.hernia,,,False
+CLM-006,rejected,specific_waiting:cataract,POL-PREM,Senile Cataract,H25.9,40868,0,reject,specific_disease_waiting.cataract,,,False
+CLM-007,risk,high_bill,POL-STD,Fracture Shaft of Tibia (road traffic accident),S82.201A,492608,492608,flag_for_review,risk.bill_exceeds_typical_range,bill_exceeds_typical_range,,False
+CLM-008,covered,base,POL-STD,Enteric Fever (Typhoid),A01.0,55045,55045,approve,base_coverage,,,False
+CLM-009,covered,base,POL-STD,Inguinal Hernia,K40.90,101119,101119,approve,base_coverage,,,False
+CLM-010,risk,date_mismatch,POL-STD,Community Acquired Pneumonia,J18.9,83111,83111,flag_for_review,risk.date_mismatch_between_documents,date_mismatch_between_documents,,True
+CLM-011,partial,room_rent,POL-STD,Cholelithiasis (Gallstones) with Cholecystitis,K80.20,95353,76333,partial_approve,room_rent_limit,,,True
+CLM-012,rejected,exclusion:obesity_treatment,POL-PREM,Morbid Obesity,E66.01,316424,0,reject,exclusions.obesity_treatment,,,False
+CLM-013,rejected,initial_waiting,POL-PREM,Senile Cataract,H25.9,51851,0,reject,initial_waiting_days,,,False
+CLM-014,partial,room_rent,POL-AS,Acute Appendicitis,K35.80,71415,53666,partial_approve,room_rent_limit,,,False
+CLM-015,covered,base,POL-PREM,Inguinal Hernia,K40.90,64127,64127,approve,base_coverage,,,False
+CLM-016,risk,discharge_before_admission,POL-STD,Dengue Fever with Thrombocytopenia,A90,122797,122797,flag_for_review,risk.discharge_before_admission,discharge_before_admission,,False
+CLM-017,risk,high_bill,POL-STD,Fracture Shaft of Tibia (road traffic accident),S82.201A,524620,500000,flag_for_review,risk.bill_exceeds_typical_range,bill_exceeds_typical_range,,False
+CLM-018,rejected,pre_existing,POL-AS,Diabetic Ketoacidosis,E11.10,140038,0,reject,pre_existing_waiting_months,,,False
+CLM-019,covered,base,POL-PREM,Cholelithiasis (Gallstones) with Cholecystitis,K80.20,114905,114905,approve,base_coverage,,,False
+CLM-020,partial,copay,POL-AS,Dengue Fever with Thrombocytopenia,A90,97275,92411,partial_approve,co_pay_percent,,,False
+CLM-021,partial,sub_limit,POL-PREM,Senile Cataract,H25.9,67535,60000,partial_approve,sub_limits.cataract,,,False
+CLM-022,risk,early_admission,POL-AS,Fracture Shaft of Tibia (road traffic accident),S82.201A,162081,95000,flag_for_review,risk.admission_soon_after_policy_start,admission_soon_after_policy_start,,False
+CLM-023,incomplete,blank_field,POL-PREM,Community Acquired Pneumonia,J18.9,105066,,request_documents,document_completeness,,discharge_summary.admission_date,True
+CLM-024,rejected,exclusion:dental_unless_accident,POL-PREM,Partial Edentulism (loss of teeth),K08.109,85772,0,reject,exclusions.dental_unless_accident,,,True
+CLM-025,partial,copay,POL-AS,Community Acquired Pneumonia,J18.9,135610,128830,partial_approve,co_pay_percent,,,False
+CLM-026,partial,copay,POL-AS,Fracture Shaft of Tibia (road traffic accident),S82.201A,135992,129192,partial_approve,co_pay_percent,,,False
+CLM-027,incomplete,unreadable_bill_total,POL-PREM,Acute Appendicitis,K35.80,85013,,request_documents,document_completeness,,hospital_bill.total_amount,True
+CLM-028,risk,duplicate_items,POL-STD,Acute Appendicitis,K35.80,127391,120409,flag_for_review,risk.duplicate_line_items,duplicate_line_items,,False
+CLM-029,covered,base,POL-PREM,Senile Cataract,H25.9,57619,57619,approve,base_coverage,,,False
+CLM-030,covered,base,POL-PREM,Inguinal Hernia,K40.90,72747,72747,approve,base_coverage,,,False
+CLM-031,incomplete,missing_policy_number,POL-STD,Senile Cataract,H25.9,70218,,request_documents,document_completeness,,claim_form.policy_number,False
+CLM-032,rejected,exclusion:cosmetic_surgery,POL-AS,Nasal Deformity (aesthetic correction),Z41.1,134057,0,reject,exclusions.cosmetic_surgery,,,False
+CLM-033,covered,base,POL-PREM,Cholelithiasis (Gallstones) with Cholecystitis,K80.20,117174,117174,approve,base_coverage,,,True
+CLM-034,covered,base,POL-PREM,Acute Appendicitis,K35.80,134190,134190,approve,base_coverage,,,True
+CLM-035,covered,base,POL-STD,Dengue Fever with Thrombocytopenia,A90,83298,83298,approve,base_coverage,,,True
+CLM-036,covered,base,POL-STD,Inguinal Hernia,K40.90,79846,79846,approve,base_coverage,,,False
+CLM-037,partial,room_rent,POL-STD,Acute Appendicitis,K35.80,127952,107343,partial_approve,room_rent_limit,,,False
+CLM-038,partial,sub_limit,POL-STD,Senile Cataract,H25.9,69508,30000,partial_approve,sub_limits.cataract,,,True
+CLM-039,covered,base,POL-PREM,Dengue Fever with Thrombocytopenia,A90,96652,96652,approve,base_coverage,,,False
+CLM-040,covered,base,POL-PREM,Cholelithiasis (Gallstones) with Cholecystitis,K80.20,116467,116467,approve,base_coverage,,,False

@@ -1,0 +1,24 @@
+{
+  "claim_id": "CLM-033",
+  "claimant": {
+    "name": "Wriddhish Mallick",
+    "age": 31,
+    "gender": "Male",
+    "phone": "+916429901944",
+    "email": "wriddhish24@example.com",
+    "address": "H.No. 16, Char Nagar, Mehsana-343687",
+    "relationship_to_insured": "self"
+  },
+  "policy_id": "POL-PREM",
+  "policy_number": "POL-PREM/2024/5905879",
+  "policy_start_date": "2024-08-28",
+  "sum_insured": 2500000,
+  "hospital_name": "Aastha Super Speciality Hospital",
+  "hospital_city": "Ahmedabad",
+  "diagnosis": "Cholelithiasis (Gallstones) with Cholecystitis",
+  "admission_date": "2026-01-05",
+  "discharge_date": "2026-01-09",
+  "pre_existing_conditions": [],
+  "is_accident_case": false,
+  "claimed_amount": 117174
+}

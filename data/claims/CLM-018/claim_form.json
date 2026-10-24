@@ -1,0 +1,26 @@
+{
+  "claim_id": "CLM-018",
+  "claimant": {
+    "name": "Patrick Jani",
+    "age": 60,
+    "gender": "Male",
+    "phone": "3640770675",
+    "email": "patrick49@example.com",
+    "address": "05, Johal Street, Maheshtala-692927",
+    "relationship_to_insured": "self"
+  },
+  "policy_id": "POL-AS",
+  "policy_number": "POL-AS/2022/3453796",
+  "policy_start_date": "2022-07-12",
+  "sum_insured": 500000,
+  "hospital_name": "Lotus Care Multispeciality Hospital",
+  "hospital_city": "Pune",
+  "diagnosis": "Diabetic Ketoacidosis",
+  "admission_date": "2025-10-22",
+  "discharge_date": "2025-10-26",
+  "pre_existing_conditions": [
+    "Type 2 Diabetes Mellitus (since 2022)"
+  ],
+  "is_accident_case": false,
+  "claimed_amount": 140038
+}

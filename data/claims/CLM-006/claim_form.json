@@ -1,0 +1,24 @@
+{
+  "claim_id": "CLM-006",
+  "claimant": {
+    "name": "Warhi Lad",
+    "age": 72,
+    "gender": "Female",
+    "phone": "+913021922381",
+    "email": "warhi31@example.com",
+    "address": "H.No. 703, Bail Circle, Imphal-415923",
+    "relationship_to_insured": "self"
+  },
+  "policy_id": "POL-PREM",
+  "policy_number": "POL-PREM/2025/7877887",
+  "policy_start_date": "2025-10-11",
+  "sum_insured": 1500000,
+  "hospital_name": "Arya Vaidya Hospital",
+  "hospital_city": "Jaipur",
+  "diagnosis": "Senile Cataract",
+  "admission_date": "2026-05-28",
+  "discharge_date": "2026-05-29",
+  "pre_existing_conditions": [],
+  "is_accident_case": false,
+  "claimed_amount": 40868
+}

@@ -1,0 +1,24 @@
+{
+  "claim_id": "CLM-015",
+  "claimant": {
+    "name": "Jagrati Rastogi",
+    "age": 30,
+    "gender": "Female",
+    "phone": "+913781780665",
+    "email": "jagrati76@example.com",
+    "address": "54, Bhavsar Road, Jalandhar-224246",
+    "relationship_to_insured": "self"
+  },
+  "policy_id": "POL-PREM",
+  "policy_number": "POL-PREM/2023/8644745",
+  "policy_start_date": "2023-08-04",
+  "sum_insured": 2500000,
+  "hospital_name": "Medicare Plus Hospital",
+  "hospital_city": "Hyderabad",
+  "diagnosis": "Inguinal Hernia",
+  "admission_date": "2026-07-23",
+  "discharge_date": "2026-07-25",
+  "pre_existing_conditions": [],
+  "is_accident_case": false,
+  "claimed_amount": 64127
+}

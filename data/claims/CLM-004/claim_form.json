@@ -1,0 +1,24 @@
+{
+  "claim_id": "CLM-004",
+  "claimant": {
+    "name": "Zayyan Subramaniam",
+    "age": 65,
+    "gender": "Male",
+    "phone": "01295951689",
+    "email": "zayyan62@example.com",
+    "address": "987, Sha Chowk, Chinsurah-450657",
+    "relationship_to_insured": "self"
+  },
+  "policy_id": "POL-PREM",
+  "policy_number": "POL-PREM/2025/6045547",
+  "policy_start_date": "2025-03-20",
+  "sum_insured": 2500000,
+  "hospital_name": "Aastha Super Speciality Hospital",
+  "hospital_city": "Ahmedabad",
+  "diagnosis": "Dengue Fever with Thrombocytopenia",
+  "admission_date": "2025-08-21",
+  "discharge_date": "2025-08-26",
+  "pre_existing_conditions": [],
+  "is_accident_case": false,
+  "claimed_amount": 103319
+}

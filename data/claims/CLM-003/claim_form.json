@@ -1,0 +1,24 @@
+{
+  "claim_id": "CLM-003",
+  "claimant": {
+    "name": "Aarnav Kothari",
+    "age": 69,
+    "gender": "Male",
+    "phone": "02185208466",
+    "email": "aarnav83@example.com",
+    "address": "H.No. 239, Boase Path, Coimbatore-947840",
+    "relationship_to_insured": "self"
+  },
+  "policy_id": "POL-STD",
+  "policy_number": "POL-STD/2022/7518680",
+  "policy_start_date": "2022-06-13",
+  "sum_insured": 500000,
+  "hospital_name": "Aastha Super Speciality Hospital",
+  "hospital_city": "Ahmedabad",
+  "diagnosis": "Primary Osteoarthritis of Knee",
+  "admission_date": "2025-09-15",
+  "discharge_date": "2025-09-22",
+  "pre_existing_conditions": [],
+  "is_accident_case": false,
+  "claimed_amount": 391436
+}

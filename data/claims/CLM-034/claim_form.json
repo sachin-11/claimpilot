@@ -1,0 +1,24 @@
+{
+  "claim_id": "CLM-034",
+  "claimant": {
+    "name": "Vasana Mallick",
+    "age": 56,
+    "gender": "Female",
+    "phone": "4913117465",
+    "email": "vasana28@example.com",
+    "address": "10/23, Bandi Chowk, Mango 424222",
+    "relationship_to_insured": "self"
+  },
+  "policy_id": "POL-PREM",
+  "policy_number": "POL-PREM/2025/8133523",
+  "policy_start_date": "2025-04-03",
+  "sum_insured": 2500000,
+  "hospital_name": "Shree Dhanvantari Hospital",
+  "hospital_city": "Mumbai",
+  "diagnosis": "Acute Appendicitis",
+  "admission_date": "2026-08-16",
+  "discharge_date": "2026-08-19",
+  "pre_existing_conditions": [],
+  "is_accident_case": false,
+  "claimed_amount": 134190
+}
