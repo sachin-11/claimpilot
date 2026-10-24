@@ -10,8 +10,11 @@ from app.core.config import get_settings, has_real_key
 from app.core.db import create_engine
 from app.core.llm import get_embeddings
 from app.core.logging import setup_logging
+from app.core.redis import create_redis
 from app.ingestion.config import get_ingestion_settings
 from app.ingestion.pipeline import IngestionPipeline, IngestResult
+from app.rag.cache import SemanticCache
+from app.rag.config import get_rag_settings
 from app.repositories import PolicyRepository
 
 
@@ -55,6 +58,8 @@ async def main(argv: list[str] | None = None) -> int:
         return 2
 
     engine = create_engine(settings.database_url)
+    redis = create_redis(settings.redis_url)
+    cache = SemanticCache(redis, get_rag_settings())
     exit_code = 0
     try:
         async with async_sessionmaker(engine, expire_on_commit=False)() as session:
@@ -72,15 +77,18 @@ async def main(argv: list[str] | None = None) -> int:
                 session,
                 None if args.dry_run else get_embeddings(),
                 get_ingestion_settings(),
+                on_policy_changed=cache.invalidate_policy,
             )
             for policy in policies:
                 result = await pipeline.ingest(policy, force=args.force, dry_run=args.dry_run)
                 if not args.dry_run:
                     await session.commit()  # one transaction per policy
+                    await pipeline.after_commit(result)
                 sys.stdout.write(format_result(result) + "\n")
                 if result.status == "failed":
                     exit_code = 1
     finally:
+        await redis.aclose()
         await engine.dispose()
     return exit_code
 

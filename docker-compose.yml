@@ -26,7 +26,10 @@ services:
       retries: 10
 
   backend:
-    build: ./backend
+    build:
+      context: ./backend
+      args:
+        INSTALL_LOCAL_RERANKER: ${INSTALL_LOCAL_RERANKER:-false}
     env_file: .env
     environment:
       # File watching over a Docker Desktop bind mount is unreliable without polling.

@@ -8,7 +8,7 @@ from typing import Protocol
 import openai
 from tenacity import (
     AsyncRetrying,
-    retry_if_exception_type,
+    retry_if_exception,
     stop_after_attempt,
     wait_exponential,
 )
@@ -26,6 +26,13 @@ RETRYABLE = (
     openai.InternalServerError,
     TimeoutError,
 )
+
+
+def is_retryable(exc: BaseException) -> bool:
+    """Rate limits / timeouts are worth retrying; an exhausted quota is not (waiting won't help)."""
+    if getattr(exc, "code", None) == "insufficient_quota":
+        return False
+    return isinstance(exc, RETRYABLE)
 
 
 class AsyncEmbedder(Protocol):
@@ -83,7 +90,7 @@ async def embed_texts(
         texts, counts, settings.embed_batch_size, settings.embed_max_batch_tokens
     ):
         retrying = AsyncRetrying(
-            retry=retry_if_exception_type(RETRYABLE),
+            retry=retry_if_exception(is_retryable),
             stop=stop_after_attempt(settings.embed_max_retries),
             wait=wait_exponential(
                 multiplier=settings.embed_retry_min_seconds,

@@ -75,3 +75,23 @@ async def test_nothing_to_embed_makes_no_call(tmp_path) -> None:
     embedder = FakeEmbedder()
     result = await embed_texts([], embedder, ingestion_settings(tmp_path))
     assert result.vectors == [] and embedder.calls == []
+
+
+async def test_exhausted_quota_is_not_retried(tmp_path) -> None:
+    response = httpx.Response(429, request=httpx.Request("POST", "http://x"))
+
+    class NoCredits(FakeEmbedder):
+        async def aembed_documents(self, texts):
+            self.calls.append(texts)
+            raise openai.RateLimitError(
+                "no credits",
+                response=response,
+                body={"code": "insufficient_quota", "message": "no credits"},
+            )
+
+    embedder = NoCredits()
+    with pytest.raises(openai.RateLimitError):
+        await embed_texts(
+            ["a"], embedder, ingestion_settings(tmp_path), tokens=whitespace_tokens, sleep=no_sleep
+        )
+    assert len(embedder.calls) == 1  # failed fast, no backoff loop

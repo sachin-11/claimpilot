@@ -257,12 +257,27 @@ def _clause_numbers(units: list[_Unit]) -> list[str]:
     return numbers
 
 
+def _drop_excluded_sections(blocks: list[Block], settings: IngestionSettings) -> list[Block]:
+    patterns = [re.compile(p, re.IGNORECASE) for p in settings.exclude_section_patterns]
+    if not patterns:
+        return blocks
+    kept = [
+        b
+        for b in blocks
+        if not any(p.search(b.section_path.split(PATH_SEP, 1)[0]) for p in patterns)
+    ]
+    if len(kept) != len(blocks):
+        logger.info("sections_excluded", extra={"blocks_dropped": len(blocks) - len(kept)})
+    return kept
+
+
 def chunk_blocks(
     blocks: list[Block],
     settings: IngestionSettings,
     tokens: TokenCounter = count_tokens,
 ) -> list[Chunk]:
     """Blocks (with section paths) -> citation-ready chunks."""
+    blocks = _drop_excluded_sections(blocks, settings)
     sections = [s for s in _build_sections(blocks, tokens) if s.has_body]
     sections = _merge_small(sections, settings)
 

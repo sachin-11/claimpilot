@@ -9,6 +9,7 @@ import asyncio
 import hashlib
 import json
 import logging
+from collections.abc import Awaitable, Callable
 from dataclasses import dataclass, field
 from datetime import UTC, datetime
 from pathlib import Path
@@ -139,7 +140,9 @@ class IngestionPipeline:
         embedder: AsyncEmbedder | None,
         settings: IngestionSettings,
         tokens: TokenCounter = count_tokens,
+        on_policy_changed: Callable[[str], Awaitable[object]] | None = None,
     ) -> None:
+        self.on_policy_changed = on_policy_changed
         self.session = session
         self.embedder = embedder
         self.settings = settings
@@ -205,6 +208,21 @@ class IngestionPipeline:
             result.chunks_embedded = result.tokens_used = 0
         await self._finish(run, policy, result)
         return result
+
+    async def after_commit(self, result: IngestResult) -> None:
+        """Call once the caller has COMMITTED the transaction. Tells the world (e.g. the answer
+        cache) that a policy's chunks changed. Doing it before the commit would let a concurrent
+        query re-fill the cache from the old chunks."""
+        if self.on_policy_changed is None or result.status != "success":
+            return
+        if not (result.chunks_new or result.chunks_updated or result.chunks_deleted):
+            return  # nothing changed (unchanged file or identical chunks)
+        try:
+            await self.on_policy_changed(result.policy_code)
+        except Exception:  # noqa: BLE001 - a cache problem must not fail an ingestion
+            logger.warning(
+                "policy_changed_hook_failed", extra={"policy": result.policy_code}, exc_info=True
+            )
 
     # ----------------------------------------------------------------------------------
 

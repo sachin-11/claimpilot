@@ -1,4 +1,4 @@
-.PHONY: up down logs test lint fmt migrate seed ingest ingest-dry revision shell
+.PHONY: up down logs test lint fmt migrate seed ingest ingest-dry try-queries revision shell
 
 up:
 	docker compose up -d --build
@@ -30,6 +30,10 @@ ingest:
 
 ingest-dry:
 	docker compose exec backend python -m app.ingestion.run --all --dry-run
+
+# manual retrieval check against real data (needs `make ingest` first); pass ARGS="--reranker local"
+try-queries:
+	docker compose exec backend python -m app.rag.try_queries $(ARGS)
 
 # usage: make revision m="add claims table"
 revision:

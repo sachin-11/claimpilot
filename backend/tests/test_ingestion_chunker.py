@@ -227,3 +227,21 @@ def test_chunks_record_headings_and_clause_numbers_for_citation(tmp_path) -> Non
         "7.5 Cosmetic surgery: (Code- Excl08)",
         "7.6 Sports (Code- Excl09)",
     ]
+
+
+def test_excluded_top_level_sections_are_not_chunked(tmp_path) -> None:
+    blocks = [
+        Block("10 Terms", 1, "10 Terms", H),
+        Block(paragraph(0, 4), 1, "10 Terms", P),
+        Block("11 Get in touch with us:", 2, "11 Get in touch with us:", H),
+        Block("Call us.", 2, "11 Get in touch with us:", P),
+        Block("AHMEDABAD", 2, "11 Get in touch with us: > AHMEDABAD", H),
+        Block(paragraph(20, 4), 2, "11 Get in touch with us: > AHMEDABAD", P),
+        Block("Annexure C", 3, "Annexure C", H),
+        Block(paragraph(40, 4), 3, "Annexure C", P),
+    ]
+    cfg = settings(tmp_path, chunk_min_tokens=5, exclude_section_patterns=["get in touch"])
+
+    chunks = chunk_blocks(blocks, cfg, whitespace_tokens)
+
+    assert [c.section_path for c in chunks] == ["10 Terms", "Annexure C"]

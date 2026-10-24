@@ -1,7 +1,7 @@
 """Policy ingestion endpoints. No auth yet: that arrives with Module 10."""
 
 import logging
-from collections.abc import Callable
+from collections.abc import Awaitable, Callable
 from uuid import UUID
 
 from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Query, Request
@@ -14,6 +14,8 @@ from app.ingestion.config import IngestionSettings, get_ingestion_settings
 from app.ingestion.embedder import AsyncEmbedder
 from app.ingestion.pipeline import IngestionPipeline
 from app.models import Policy, PolicyChunk
+from app.rag.cache import SemanticCache
+from app.rag.config import get_rag_settings
 from app.repositories import IngestionRunRepository, PolicyRepository
 from app.schemas.ingestion import (
     IngestRequest,
@@ -34,6 +36,7 @@ async def run_ingestion_task(
     settings: IngestionSettings,
     runs: list[tuple[UUID, str]],
     force: bool,
+    on_policy_changed: Callable[[str], Awaitable[object]] | None = None,
 ) -> None:
     """Background job: one session and one transaction per policy."""
     for run_id, policy_code in runs:
@@ -43,9 +46,12 @@ async def run_ingestion_task(
                 policy = await PolicyRepository(session).get_by_code(policy_code)
                 if run is None or policy is None:
                     continue
-                pipeline = IngestionPipeline(session, embedder_factory(), settings)
-                await pipeline.ingest(policy, force=force, run=run)
+                pipeline = IngestionPipeline(
+                    session, embedder_factory(), settings, on_policy_changed=on_policy_changed
+                )
+                result = await pipeline.ingest(policy, force=force, run=run)
                 await session.commit()
+                await pipeline.after_commit(result)
             except Exception:
                 logger.exception("ingest_task_failed", extra={"policy": policy_code})
                 await session.rollback()
@@ -88,6 +94,7 @@ async def start_ingestion(
         get_ingestion_settings(),
         [(r.run_id, r.policy_code) for r in refs],
         body.force,
+        SemanticCache(request.app.state.redis, get_rag_settings()).invalidate_policy,
     )
     return IngestStarted(run_id=refs[0].run_id, runs=refs)
 

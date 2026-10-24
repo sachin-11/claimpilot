@@ -31,6 +31,10 @@ class IngestionSettings(BaseSettings):
     chunk_overlap_tokens: int = 120
     chunk_min_tokens: int = 80
 
+    # Regexes (case-insensitive) matched against the TOP-LEVEL section title; matching sections
+    # are not ingested (e.g. ["get in touch with us"] for contact / ombudsman address lists).
+    exclude_section_patterns: list[str] = Field(default_factory=list)
+
     # Parsing: a page with fewer extractable characters than this is treated as scanned.
     min_page_chars: int = 30
 
