@@ -1,0 +1,13 @@
+# USD per 1M tokens, used for the cost estimates in the report.
+# ASSUMPTIONS from public list prices: check the provider pricing pages and edit when they change.
+# A model is matched by the longest name prefix ("gpt-4o-mini-2024-07-18" -> "gpt-4o-mini").
+models:
+  gpt-4o-mini:
+    input_per_million: 0.15
+    output_per_million: 0.60
+  gpt-4o:
+    input_per_million: 2.50
+    output_per_million: 10.00
+  llama-3.3-70b-versatile:
+    input_per_million: 0.59
+    output_per_million: 0.79

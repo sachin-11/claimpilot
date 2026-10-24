@@ -1,0 +1,5 @@
+name: hybrid_rerank_local
+description: Hybrid RRF + local cross-encoder reranker (BAAI/bge-reranker-base). Needs the image built with INSTALL_LOCAL_RERANKER=true.
+extends: hybrid_no_rerank
+settings:
+  reranker: local

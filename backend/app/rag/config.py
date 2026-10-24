@@ -1,7 +1,7 @@
 from functools import lru_cache
 from typing import Literal
 
-from pydantic import SecretStr
+from pydantic import SecretStr, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -12,7 +12,9 @@ class RagSettings(BaseSettings):
         env_file=("../.env", ".env"), env_file_encoding="utf-8", extra="ignore"
     )
 
-    # Retrieval
+    # Retrieval. The switches exist for evaluation (vector-only / keyword-only baselines).
+    vector_search_enabled: bool = True
+    keyword_search_enabled: bool = True
     vector_top_k: int = 20
     keyword_top_k: int = 20
     fused_top_k: int = 20
@@ -42,6 +44,12 @@ class RagSettings(BaseSettings):
     cache_ttl_seconds: int = 86_400
     cache_max_entries_per_filter: int = 200
     cache_prefix: str = "rag:cache"
+
+    @model_validator(mode="after")
+    def at_least_one_search(self) -> "RagSettings":
+        if not (self.vector_search_enabled or self.keyword_search_enabled):
+            raise ValueError("enable vector and/or keyword search")
+        return self
 
 
 @lru_cache

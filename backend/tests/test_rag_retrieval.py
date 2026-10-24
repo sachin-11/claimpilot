@@ -141,3 +141,34 @@ async def test_query_with_only_stopwords_still_returns_vector_hits(
 
     assert all(c.keyword_rank is None for c in result.chunks)
     assert contents(result.chunks) == [A_LAW, A_ROOM]  # nearest two by cosine distance
+
+
+async def test_search_switches_give_vector_only_and_keyword_only_baselines(
+    session_factory: async_sessionmaker[AsyncSession],
+) -> None:
+    both = await Retriever(session_factory, rag_settings()).hybrid("cataract 24 months", QUERY_VEC)
+    vector_only = await Retriever(
+        session_factory, rag_settings(keyword_search_enabled=False)
+    ).hybrid("cataract 24 months", QUERY_VEC)
+    keyword_only = await Retriever(
+        session_factory, rag_settings(vector_search_enabled=False)
+    ).hybrid("cataract 24 months", QUERY_VEC)
+
+    assert all(c.keyword_rank is None for c in vector_only.chunks)
+    assert set(vector_only.timings_ms) == {"vector", "fuse"}
+    assert (
+        contents(vector_only.chunks)[0] == A_LAW
+    )  # pure cosine order: the cataract clause is last
+    assert contents(vector_only.chunks)[-1] == A_CATARACT
+
+    assert all(c.vector_rank is None for c in keyword_only.chunks)
+    assert set(keyword_only.timings_ms) == {"keyword", "fuse"}
+    assert contents(keyword_only.chunks)[0] == A_CATARACT
+    assert keyword_only.warnings == []  # switched off on purpose: not a degraded search
+
+    assert {c.chunk_id for c in both.chunks} >= {c.chunk_id for c in keyword_only.chunks}
+
+
+def test_at_least_one_search_mode_must_stay_enabled() -> None:
+    with pytest.raises(ValueError, match="enable vector and/or keyword"):
+        rag_settings(vector_search_enabled=False, keyword_search_enabled=False)

@@ -1,4 +1,4 @@
-.PHONY: up down logs test lint fmt migrate seed ingest ingest-dry try-queries eval-candidates eval-review revision shell
+.PHONY: up down logs test lint fmt migrate seed ingest ingest-dry try-queries eval-candidates eval-review eval-rag eval-run revision shell
 
 up:
 	docker compose up -d --build
@@ -41,6 +41,14 @@ eval-candidates:
 
 eval-review:
 	docker compose exec backend python -m eval.rag.review $(ARGS)
+
+# RAG regression gate: default config vs eval/rag/thresholds.yaml (exit 1 if below)
+eval-rag:
+	docker compose exec -T backend python -m eval.rag.run_eval --gate
+
+# usage: make eval-run ARGS="--configs hybrid_no_rerank hybrid_rerank_local --no-ragas"
+eval-run:
+	docker compose exec -T backend python -m eval.rag.run_eval $(ARGS)
 
 # usage: make revision m="add claims table"
 revision:

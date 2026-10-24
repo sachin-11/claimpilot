@@ -30,6 +30,7 @@ services:
       context: ./backend
       args:
         INSTALL_LOCAL_RERANKER: ${INSTALL_LOCAL_RERANKER:-false}
+        INSTALL_EVAL: ${INSTALL_EVAL:-true}
     env_file: .env
     environment:
       # File watching over a Docker Desktop bind mount is unreliable without polling.

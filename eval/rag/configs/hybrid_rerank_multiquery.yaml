@@ -1,0 +1,5 @@
+name: hybrid_rerank_multiquery
+description: hybrid_rerank_local plus multi-query (2 extra phrasings, merged before reranking).
+extends: hybrid_rerank_local
+settings:
+  multi_query: true

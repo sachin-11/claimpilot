@@ -1,0 +1,7 @@
+# Installed into /opt/ragas-venv by backend/Dockerfile (NOT into the app environment).
+# Install order matters: ragas first (pulls its own LangChain stack), then the community pin
+# with --no-deps.
+ragas==0.4.3
+# pip install --no-deps langchain-community==0.3.31
+#   ragas 0.4.3 does `from langchain_community.chat_models.vertexai import ChatVertexAI`,
+#   which langchain-community>=0.4 removed.

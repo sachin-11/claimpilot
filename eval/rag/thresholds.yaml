@@ -1,0 +1,8 @@
+# Regression gate for `make eval-rag`: the default config must reach every threshold.
+# First guesses: tune them after the first real run (see report.md).
+default_config: hybrid_rerank_local
+thresholds:
+  hit_at_5: 0.85
+  faithfulness: 0.85
+  must_contain_rate: 0.80
+  unanswerable_accuracy: 0.75

@@ -211,28 +211,27 @@ class Retriever:
             finally:
                 timings[name] = round((time.perf_counter() - start) * 1000, 1)
 
-        tasks = [
-            timed(
+        tasks = {}
+        if self.settings.keyword_search_enabled:
+            tasks["keyword"] = timed(
                 "keyword",
                 self.keyword_search(
                     query, policy_codes=policy_codes, section_prefix=section_prefix
                 ),
             )
-        ]
-        if embedding is not None:
-            tasks.append(
-                timed(
+        if self.settings.vector_search_enabled:
+            if embedding is not None:
+                tasks["vector"] = timed(
                     "vector",
                     self.vector_search(
                         embedding, policy_codes=policy_codes, section_prefix=section_prefix
                     ),
                 )
-            )
-        else:
-            warnings.append("vector search skipped: no query embedding (keyword results only)")
-        results = await asyncio.gather(*tasks)
-        keyword_hits = results[0]
-        vector_hits = results[1] if embedding is not None else []
+            else:
+                warnings.append("vector search skipped: no query embedding (keyword results only)")
+        results = dict(zip(tasks, await asyncio.gather(*tasks.values()), strict=True))
+        keyword_hits = results.get("keyword", [])
+        vector_hits = results.get("vector", [])
 
         start = time.perf_counter()
         fused = rrf_fuse(

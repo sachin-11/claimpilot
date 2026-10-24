@@ -1,0 +1,8 @@
+name: baseline_vector_only
+description: Vector (pgvector cosine) search only, no keyword search, no reranker.
+settings:
+  vector_search_enabled: true
+  keyword_search_enabled: false
+  reranker: none
+  rerank_top_n: 5
+  multi_query: false

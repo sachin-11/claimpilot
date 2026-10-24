@@ -1,0 +1,5 @@
+name: topn_8
+description: hybrid_rerank_local but the top 8 clauses are sent to the model.
+extends: hybrid_rerank_local
+settings:
+  rerank_top_n: 8
