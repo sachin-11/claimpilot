@@ -64,3 +64,4 @@ extend-immutable-calls = ["fastapi.Depends", "fastapi.Query"]
 [tool.ruff.lint.isort]
 # backend/alembic/ (migrations dir) would otherwise be mistaken for first-party code.
 known-third-party = ["alembic"]
+known-first-party = ["app", "eval"]

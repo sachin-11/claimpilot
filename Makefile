@@ -1,4 +1,4 @@
-.PHONY: up down logs test lint fmt migrate seed ingest ingest-dry try-queries revision shell
+.PHONY: up down logs test lint fmt migrate seed ingest ingest-dry try-queries eval-candidates eval-review revision shell
 
 up:
 	docker compose up -d --build
@@ -14,10 +14,10 @@ test:
 	docker compose run --rm backend pytest
 
 lint:
-	docker compose run --rm --no-deps backend ruff check .
+	docker compose run --rm --no-deps backend ruff check --config pyproject.toml . ../eval
 
 fmt:
-	docker compose run --rm --no-deps backend sh -c "ruff format . && ruff check --fix ."
+	docker compose run --rm --no-deps backend sh -c "ruff format --config pyproject.toml . ../eval && ruff check --config pyproject.toml --fix . ../eval"
 
 migrate:
 	docker compose exec backend alembic upgrade head
@@ -34,6 +34,13 @@ ingest-dry:
 # manual retrieval check against real data (needs `make ingest` first); pass ARGS="--reranker local"
 try-queries:
 	docker compose exec backend python -m app.rag.try_queries $(ARGS)
+
+# Golden set for RAG eval: generate candidates, then review them (interactive terminal)
+eval-candidates:
+	docker compose exec backend python -m eval.rag.build_candidates $(ARGS)
+
+eval-review:
+	docker compose exec backend python -m eval.rag.review $(ARGS)
 
 # usage: make revision m="add claims table"
 revision:

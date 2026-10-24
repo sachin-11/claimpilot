@@ -10,3 +10,6 @@ node_modules/
 dist/
 .DS_Store
 data/debug/
+# RAG eval: keep report.md / summary.json, drop the big raw per-question dumps
+eval/rag/results/*/per_question.jsonl
+eval/rag/results/*/raw/

@@ -34,6 +34,8 @@ services:
     environment:
       # File watching over a Docker Desktop bind mount is unreliable without polling.
       WATCHFILES_FORCE_POLLING: "true"
+      # makes `python -m eval.rag.run_eval` importable (/eval is mounted above)
+      PYTHONPATH: /app:/
     command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
     ports:
       - "${BACKEND_HOST_PORT:-8000}:8000"
@@ -41,6 +43,7 @@ services:
       - ./backend:/app
       - ./data:/data
       - ./data_gen:/data_gen:ro
+      - ./eval:/eval
     depends_on:
       postgres:
         condition: service_healthy
