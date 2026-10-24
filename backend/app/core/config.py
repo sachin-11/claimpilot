@@ -1,4 +1,5 @@
 from functools import lru_cache
+from pathlib import Path
 
 from pydantic import SecretStr
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -12,6 +13,10 @@ def has_real_key(key: SecretStr | None) -> bool:
     return bool(value) and not value.lower().endswith("replace-me")
 
 
+# backend/app/core/config.py -> repo root on the host, "/" in the container (code lives in /app).
+_ROOT = Path(__file__).resolve().parents[3]
+
+
 class Settings(BaseSettings):
     # Later files win: backend/.env overrides the repo-root .env (docker uses real env vars).
     model_config = SettingsConfigDict(
@@ -22,7 +27,17 @@ class Settings(BaseSettings):
     log_level: str = "INFO"
 
     database_url: str = "postgresql+asyncpg://claimpilot:claimpilot@localhost:5432/claimpilot"
+    # Optional: separate database for pytest (defaults to "<database name>_test").
+    test_database_url: str | None = None
     redis_url: str = "redis://localhost:6379/0"
+
+    # Seed data (Module 2). Stored paths in the DB are relative to data_dir.
+    data_dir: Path = _ROOT / "data"
+    policy_rules_path: Path = _ROOT / "data_gen" / "policy_rules.yaml"
+    seed_admin_email: str = "admin@example.com"
+    seed_admin_password: SecretStr | None = None
+    seed_officer_email: str = "officer@example.com"
+    seed_officer_password: SecretStr | None = None
 
     openai_api_key: SecretStr | None = None
     groq_api_key: SecretStr | None = None

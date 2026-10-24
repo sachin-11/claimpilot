@@ -37,6 +37,7 @@ services:
     volumes:
       - ./backend:/app
       - ./data:/data
+      - ./data_gen:/data_gen:ro
     depends_on:
       postgres:
         condition: service_healthy

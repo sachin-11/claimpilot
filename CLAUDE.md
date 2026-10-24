@@ -29,8 +29,11 @@ claimpilot/
       main.py            # app factory, lifespan, middleware, routers
       api/               # routers (health.py now; more per module)
       core/              # config, logging, db, redis, llm, errors
-      models/            # SQLAlchemy models (Module 2)
-    alembic/             # async migrations; 0001 enables pgvector
+      models/            # SQLAlchemy models + enums (Module 2)
+      schemas/           # Pydantic Create/Read schemas
+      repositories/      # thin async repositories (flush only, caller commits)
+      scripts/seed.py    # python -m app.scripts.seed
+    alembic/             # async migrations; 0001 pgvector, 0002 core schema
     tests/
   mcp_servers/           # MCP servers (Module 7)
   frontend/              # React app (Module 11)
@@ -49,9 +52,9 @@ claimpilot/
 - Lint/format with ruff (`make lint`, `make fmt`). Schema changes go through Alembic.
 
 ## Module roadmap
-0. Setup  (done here)
-1. Data generation
-2. DB schema
+0. Setup  (done)
+1. Data generation  (done)
+2. DB schema  (done)
 3. Policy ingestion
 4. RAG retrieval
 5. RAG eval
@@ -64,4 +67,29 @@ claimpilot/
 12. Deploy + docs
 
 ## Commands
-`make up | down | logs | test | lint | fmt | migrate | revision m="msg" | shell`
+`make up | down | logs | test | lint | fmt | migrate | seed | revision m="msg" | shell`
+
+## Database schema (Module 2)
+All tables: UUID pk (`gen_random_uuid()`), `created_at`/`updated_at` (audit_logs has no
+`updated_at`). Constraint naming convention lives on `Base` in `core/db.py`.
+```
+policies 1-* policy_chunks     (embedding vector(1536) + HNSW cosine; search_tsv GENERATED + GIN;
+                                unique (policy_id, content_hash); python attr `meta` = column "metadata")
+policies 1-* customer_policies *-1 customers
+customer_policies 1-* claims   (claims.customer_policy_id is NULL if the claim has no policy number)
+claims 1-* claim_documents | claim_extractions (version) | claim_decisions
+claim_decisions 1-* claim_approvals *-1 users
+audit_logs                     (no FKs: entity_type + entity_id; append-only via DB trigger)
+```
+- Native PG enums: claim_status, claim_source, doc_type, decision_type, approval_action,
+  user_role, actor_type. Python enums in `models/enums.py` (decision values = Module 1's).
+- Repositories flush but never commit. Every claim status change goes through
+  `ClaimRepository.update_status`, which writes an `audit_logs` row in the same transaction.
+- Seed (`make seed`) is idempotent, loads policies from `data_gen/policy_rules.yaml` and claims
+  from `data/claims/*`, never `data/golden`. `claims.icd10_code` stays NULL (only in golden;
+  Module 6 fills it). `customer_policies.end_date` is NULL (open-ended). Document paths are
+  relative to `data_dir`. Seed users come from `SEED_*` env vars.
+- LangGraph checkpointer tables are NOT here; `PostgresSaver.setup()` creates them in Module 8.
+- Tests: `make test` (needs postgres). They use `<db>_test` (or `TEST_DATABASE_URL`), migrate once
+  per session, and roll back per test. `data_gen` is not importable in the backend container;
+  only `data_gen/policy_rules.yaml` is mounted (read-only at `/data_gen`).
