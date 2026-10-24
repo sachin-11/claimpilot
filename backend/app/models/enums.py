@@ -48,3 +48,9 @@ class ActorType(StrEnum):
     USER = "user"
     AGENT = "agent"
     SYSTEM = "system"
+
+
+class IngestionStatus(StrEnum):
+    RUNNING = "running"
+    SUCCESS = "success"
+    FAILED = "failed"

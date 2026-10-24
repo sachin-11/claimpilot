@@ -3,6 +3,7 @@ from uuid import UUID
 
 from sqlalchemy import delete, func, select
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import defer
 
 from app.models import Policy, PolicyChunk
 from app.schemas.policy import BulkUpsertResult, PolicyChunkCreate
@@ -64,15 +65,17 @@ class PolicyChunkRepository:
         """Insert new chunks; skip the ones whose content_hash already exists.
 
         A matching hash means identical content, so the embedding is never touched. Only the
-        position fields (index, section, pages) are refreshed if they moved.
+        position fields (index, section, pages, metadata) are refreshed if they changed.
         """
         result = BulkUpsertResult()
         existing_rows = await self.session.execute(
-            select(PolicyChunk).where(PolicyChunk.policy_id == policy_id)
+            select(PolicyChunk)
+            .where(PolicyChunk.policy_id == policy_id)
+            .options(defer(PolicyChunk.embedding), defer(PolicyChunk.search_tsv))
         )
         existing = {c.content_hash: c for c in existing_rows.scalars()}
 
-        position = ("chunk_index", "section_path", "page_start", "page_end", "token_count")
+        position = ("chunk_index", "section_path", "page_start", "page_end", "token_count", "meta")
         seen: set[str] = set()
         for data in chunks:
             if data.content_hash in seen:  # duplicate inside the same batch

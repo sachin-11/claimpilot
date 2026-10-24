@@ -16,8 +16,10 @@ from app.models.enums import (
     ClaimStatus,
     DecisionType,
     DocType,
+    IngestionStatus,
     UserRole,
 )
+from app.models.ingestion import IngestionRun
 from app.models.policy import Policy, PolicyChunk
 from app.models.user import User
 
@@ -36,6 +38,8 @@ __all__ = [
     "CustomerPolicy",
     "DecisionType",
     "DocType",
+    "IngestionRun",
+    "IngestionStatus",
     "Policy",
     "PolicyChunk",
     "User",

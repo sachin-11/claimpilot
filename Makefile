@@ -1,4 +1,4 @@
-.PHONY: up down logs test lint fmt migrate seed revision shell
+.PHONY: up down logs test lint fmt migrate seed ingest ingest-dry revision shell
 
 up:
 	docker compose up -d --build
@@ -24,6 +24,12 @@ migrate:
 
 seed:
 	docker compose exec backend python -m app.scripts.seed
+
+ingest:
+	docker compose exec backend python -m app.ingestion.run --all
+
+ingest-dry:
+	docker compose exec backend python -m app.ingestion.run --all --dry-run
 
 # usage: make revision m="add claims table"
 revision:

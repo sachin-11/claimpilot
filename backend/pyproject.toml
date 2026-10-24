@@ -19,6 +19,9 @@ dependencies = [
   "pyyaml>=6",
   "bcrypt>=4",
   "pypdf>=4",
+  "pymupdf>=1.24.3",
+  "tiktoken>=0.7",
+  "tenacity>=8.2",
   "redis>=5.0.1",
   "langchain-core>=0.3",
   "langchain-openai>=0.3",
@@ -31,6 +34,7 @@ dev = [
   "pytest-asyncio>=0.24",
   "httpx>=0.27",
   "ruff>=0.6",
+  "reportlab>=4",
 ]
 
 [tool.setuptools.packages.find]
@@ -47,6 +51,9 @@ extend-exclude = ["alembic/versions"]
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B", "ASYNC"]
+
+[tool.ruff.lint.flake8-bugbear]
+extend-immutable-calls = ["fastapi.Depends", "fastapi.Query"]
 
 [tool.ruff.lint.isort]
 # backend/alembic/ (migrations dir) would otherwise be mistaken for first-party code.

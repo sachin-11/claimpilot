@@ -8,10 +8,11 @@ from fastapi import FastAPI, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.ext.asyncio import async_sessionmaker
 
-from app.api import health
+from app.api import health, policies
 from app.core.config import Settings, get_settings
 from app.core.db import create_engine
 from app.core.errors import register_exception_handlers
+from app.core.llm import get_embeddings
 from app.core.logging import request_id_ctx, setup_logging
 from app.core.redis import create_redis
 
@@ -25,6 +26,7 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     app.state.engine = create_engine(settings.database_url)
     app.state.session_factory = async_sessionmaker(app.state.engine, expire_on_commit=False)
     app.state.redis = create_redis(settings.redis_url)
+    app.state.embedder_factory = get_embeddings  # tests swap in a fake
     logger.info("app_started", extra={"env": settings.app_env})
     try:
         yield
@@ -77,6 +79,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
 
     register_exception_handlers(app)
     app.include_router(health.router)
+    app.include_router(policies.router)
     return app
 
 

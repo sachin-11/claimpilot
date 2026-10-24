@@ -1,3 +1,4 @@
+from datetime import UTC, datetime
 from decimal import Decimal
 
 import pytest
@@ -67,8 +68,13 @@ async def test_latest_decision_for_claim(session: AsyncSession) -> None:
     repo = DecisionRepository(session)
     assert await repo.latest_for_claim(claim.id) is None
 
-    await repo.create(ClaimDecisionCreate(claim_id=claim.id, decision=DecisionType.FLAG_FOR_REVIEW))
-    await session.execute(text("SELECT pg_sleep(0.01)"))
+    older = await repo.create(
+        ClaimDecisionCreate(claim_id=claim.id, decision=DecisionType.FLAG_FOR_REVIEW)
+    )
+    # created_at defaults to now(), which is the transaction start time, so two rows made in one
+    # transaction tie. Real decisions arrive in separate transactions; make the order explicit.
+    older.created_at = datetime(2020, 1, 1, tzinfo=UTC)
+    await session.flush()
     newest = await repo.create(
         ClaimDecisionCreate(
             claim_id=claim.id,
