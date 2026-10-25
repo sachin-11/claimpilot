@@ -1,16 +1,16 @@
 # Self-hosted Langfuse (v4) for local tracing. Opt-in: it is NOT part of `make up`.
 #   make langfuse-up      # docker compose -f docker-compose.yml -f docker-compose.langfuse.yml ... up -d
-#   UI: http://localhost:3000   login: LANGFUSE_INIT_USER_EMAIL / LANGFUSE_INIT_USER_PASSWORD (.env)
+#   UI: http://localhost:3001   login: LANGFUSE_INIT_USER_EMAIL / LANGFUSE_INIT_USER_PASSWORD (.env)
 # Derived from the official compose of the pinned release (https://github.com/langfuse/langfuse), cut down to
 # what tracing needs: web + worker + Postgres + ClickHouse + Redis + MinIO. Needs about 4 GB of RAM.
 # Python SDK v5 needs Langfuse server >= 4.59.0. Every value marked CHANGEME must be replaced outside
-# local development. Only the UI (3000) is published; MinIO is internal, so media (image) uploads from
+# local development. Only the UI (host port 3001, the app itself uses 3000) is published; MinIO is internal, so media (image) uploads from
 # the browser do not work, which tracing does not need.
 #
 # Do not use Langfuse Cloud and this stack together: pick one and set LANGFUSE_BASE_URL accordingly.
 
 x-langfuse-env: &langfuse-env
-  NEXTAUTH_URL: ${LANGFUSE_NEXTAUTH_URL:-http://localhost:3000}
+  NEXTAUTH_URL: ${LANGFUSE_NEXTAUTH_URL:-http://localhost:3001}
   DATABASE_URL: postgresql://postgres:${LANGFUSE_DB_PASSWORD:-postgres}@langfuse-postgres:5432/postgres # CHANGEME
   SALT: ${LANGFUSE_SALT:-mysalt} # CHANGEME
   ENCRYPTION_KEY: ${LANGFUSE_ENCRYPTION_KEY:-0000000000000000000000000000000000000000000000000000000000000000} # CHANGEME: openssl rand -hex 32
@@ -55,7 +55,7 @@ services:
     restart: unless-stopped
     depends_on: *langfuse-depends
     ports:
-      - "127.0.0.1:3000:3000"
+      - "127.0.0.1:3001:3000"
     environment:
       <<: *langfuse-env
       NEXTAUTH_SECRET: ${LANGFUSE_NEXTAUTH_SECRET:-mysecret} # CHANGEME

@@ -10,6 +10,7 @@ Everything expires after a week; the checkpoint in Postgres stays the source of 
 
 import json
 import logging
+from datetime import UTC, datetime
 from typing import Any
 
 logger = logging.getLogger(__name__)
@@ -49,7 +50,11 @@ class RunBus:
         key = self.stream_key(run_id, epoch)
         await self.redis.xadd(
             key,
-            {"event": event, "data": json.dumps(data, default=str)},
+            {
+                "event": event,
+                "data": json.dumps(data, default=str),
+                "ts": datetime.now(UTC).isoformat(timespec="milliseconds"),
+            },
             maxlen=MAX_EVENTS,
             approximate=True,
         )
@@ -57,14 +62,21 @@ class RunBus:
 
     async def read(
         self, run_id: str, epoch: int, last_id: str = "0-0", block_ms: int = 1000
-    ) -> list[tuple[str, str, dict[str, Any]]]:
-        """(entry id, event, data) after `last_id`; waits up to `block_ms` for something new."""
+    ) -> list[tuple[str, str, dict[str, Any], str]]:
+        """(entry id, event, data, timestamp) after `last_id`; waits up to `block_ms`."""
         reply = await self.redis.xread(
             {self.stream_key(run_id, epoch): last_id}, count=100, block=block_ms
         )
-        out: list[tuple[str, str, dict[str, Any]]] = []
+        out: list[tuple[str, str, dict[str, Any], str]] = []
         for _, entries in reply or []:
             for entry_id, fields in entries:
                 values = {_text(k): _text(v) for k, v in fields.items()}
-                out.append((_text(entry_id), values["event"], json.loads(values["data"])))
+                out.append(
+                    (
+                        _text(entry_id),
+                        values["event"],
+                        json.loads(values["data"]),
+                        values.get("ts", ""),
+                    )
+                )
         return out

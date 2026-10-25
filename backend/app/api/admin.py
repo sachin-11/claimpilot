@@ -13,8 +13,9 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.auth.deps import CurrentUser, require_admin
 from app.core.db import get_session
-from app.models import ActorType, AuditLog, User, UserRole
-from app.observability.usage import IST, read_spend, today
+from app.core.eval_results import EvalNotFoundError, list_eval_runs, read_eval_run
+from app.models import ActorType, AuditLog, Claim, ClaimStatus, User, UserRole
+from app.observability.usage import IST, read_runs, read_spend, today
 from app.repositories.audit import AuditLogRepository
 
 router = APIRouter(prefix="/admin", tags=["admin"], dependencies=[Depends(require_admin)])
@@ -215,3 +216,61 @@ async def update_user(
         )
     await session.commit()
     return _user(user)
+
+
+# ------------------------------------------------------------------ evaluation results
+
+
+@router.get("/evals")
+async def evals(request: Request) -> list[dict[str, Any]]:
+    """The RAG and end-to-end evaluation runs found on disk, newest first."""
+    return list_eval_runs(request.app.state.settings.eval_dir)
+
+
+@router.get("/evals/{eval_id}")
+async def eval_run(eval_id: str, request: Request) -> dict[str, Any]:
+    """One run (`<kind>:<folder>`, from the list): its report.md and headline numbers."""
+    try:
+        return read_eval_run(request.app.state.settings.eval_dir, eval_id)
+    except EvalNotFoundError as exc:
+        raise HTTPException(404, "evaluation run not found") from exc
+
+
+# ------------------------------------------------------------------ dashboard numbers
+
+FALLBACK_PROVIDERS = frozenset({"groq"})
+
+
+@router.get("/metrics/summary")
+async def metrics_summary(
+    request: Request, session: AsyncSession = Depends(get_session)
+) -> dict[str, Any]:
+    """What the admin dashboard shows: today's spend against the budget, how often the fallback
+    model answered, agent runs by outcome today and the claims by status. Spend and runs are counted
+    by the API and the worker into Redis, so this is the same number whichever process asks."""
+    settings = request.app.state.settings
+    redis = request.app.state.redis
+    day = today()
+    spend = await read_spend(redis, day)
+    runs = await read_runs(redis, day)
+    by_provider = spend["calls_by_provider"]
+    total_calls = sum(by_provider.values())
+    fallback_calls = sum(n for p, n in by_provider.items() if p in FALLBACK_PROVIDERS)
+    budget = settings.daily_llm_budget_inr
+    claim_rows = (
+        await session.execute(select(Claim.status, func.count()).group_by(Claim.status))
+    ).all()
+    by_status = {status.value: 0 for status in ClaimStatus}
+    by_status.update({status.value: count for status, count in claim_rows})
+    return {
+        "day": day,
+        "spend_inr": spend["inr"],
+        "budget_inr": budget,
+        "budget_used_percent": round(100 * spend["inr"] / budget, 1) if budget > 0 else None,
+        "llm_calls": total_calls,
+        "calls_by_provider": by_provider,
+        "fallback_calls": fallback_calls,
+        "fallback_rate": round(fallback_calls / total_calls, 4) if total_calls else None,
+        "runs_today": runs,
+        "claims_by_status": by_status,
+    }

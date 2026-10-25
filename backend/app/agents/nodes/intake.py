@@ -24,15 +24,20 @@ REQUIRED_FIELDS = {
 }
 
 
-def missing_items(missing_documents: list[str], issues: list[dict[str, Any]]) -> list[str]:
-    """Missing documents plus required fields that are blank or unreadable (`document.field`)."""
+def missing_items(
+    missing_documents: list[str], issues: list[dict[str, Any]], *, policy_known: bool = False
+) -> list[str]:
+    """Missing documents plus required fields that are blank or unreadable (`document.field`).
+
+    `policy_known`: the claim is already tied to a customer policy (an upload asks for the policy
+    number, and a claim form carries it), so a blank policy number is not missing."""
     items = list(missing_documents)
     for issue in issues:
         if issue.get("type") != "missing_field":
             continue
         for name in issue.get("fields") or []:
             required = REQUIRED_FIELDS.get(name)
-            if required is None:
+            if required is None or (name == "policy_number" and policy_known):
                 continue
             document, field_name = required
             detail = str(issue.get("detail") or "")
@@ -104,6 +109,7 @@ def make_intake_node(deps: AgentDeps):  # type: ignore[no-untyped-def]
             "missing_documents": missing_items(
                 extraction.get("missing_documents") or [],
                 extraction.get("consistency_issues") or [],
+                policy_known=bool(claim.get("policy_code")),
             ),
             "consistency_issues": extraction.get("consistency_issues") or [],
             "policy_code": claim.get("policy_code"),

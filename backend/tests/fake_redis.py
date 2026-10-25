@@ -27,6 +27,16 @@ class FakeRedis:
     async def get(self, key: str) -> bytes | None:
         return str(self.values[key]).encode() if self._alive(key) and key in self.values else None
 
+    async def set(
+        self, key: str, value: Any, ex: int | None = None, nx: bool = False
+    ) -> bool | None:
+        if nx and self._alive(key):
+            return None
+        self.values[key] = value
+        if ex is not None:
+            self.expiry[key] = self.now + ex
+        return True
+
     async def incr(self, key: str) -> int:
         self._alive(key)
         self.values[key] = int(self.values.get(key, 0)) + 1

@@ -1,0 +1,74 @@
+# Isolated stack for the browser end-to-end tests (Playwright) and for a no-cost demo.
+#
+#   make e2e-up      # builds, migrates, seeds, loads the demo data (synthetic wordings, demo users)
+#   make e2e         # runs the Playwright tests against http://localhost:3300
+#   make e2e-down    # stops it AND deletes its volumes
+#
+# A separate compose project (own Postgres/Redis volumes and storage, other host ports), so the tests never
+# touch the development database. MOCK_LLM=true is set by the Makefile: no OpenAI/Groq/Anthropic calls, no
+# cost. Tracing keys are blanked so mock runs do not show up in Langfuse.
+name: claimpilot-e2e
+
+x-e2e-env: &e2e-env
+  MOCK_LLM: "true"
+  LANGFUSE_PUBLIC_KEY: ""
+  LANGFUSE_SECRET_KEY: ""
+  APP_ENV: development
+
+services:
+  postgres:
+    ports: !override []
+  redis:
+    ports: !override []
+  backend:
+    image: claimpilot-backend  # the image the development stack already built (code is bind-mounted)
+    pull_policy: never
+    build: !reset null
+    environment:
+      <<: *e2e-env
+      PYTHONPATH: /app:/
+      WATCHFILES_FORCE_POLLING: "true"
+      USE_WORKER: "true"
+    ports: !override []  # reached through the frontend proxy only
+    volumes:
+      - ./backend:/app
+      - ./data:/data
+      - ./data_gen:/data_gen:ro
+      - ./eval:/eval
+      - ./mcp_servers:/mcp_servers
+      - e2e-storage:/storage
+  worker:
+    environment:
+      <<: *e2e-env
+      PYTHONPATH: /app:/
+      USE_WORKER: "true"
+    volumes:
+      - ./backend:/app
+      - ./data:/data
+      - ./data_gen:/data_gen:ro
+      - ./mcp_servers:/mcp_servers
+      - e2e-storage:/storage
+  mcp-policy-docs:
+    ports: !override []
+    environment:
+      <<: *e2e-env
+      PYTHONPATH: /app:/
+      WRITE_ENABLED: "false"
+  mcp-claims-db:
+    ports: !override []
+    environment:
+      <<: *e2e-env
+      PYTHONPATH: /app:/
+      WRITE_ENABLED: "true"
+  mcp-notify:
+    ports: !override []
+    environment:
+      <<: *e2e-env
+      PYTHONPATH: /app:/
+      WRITE_ENABLED: "true"
+  frontend:
+    ports: !override
+      - "${E2E_FRONTEND_PORT:-3300}:80"
+
+volumes:
+  e2e-storage:

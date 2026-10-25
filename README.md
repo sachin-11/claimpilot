@@ -3,8 +3,8 @@
 Health-insurance claims copilot: RAG over policy wordings (with clause citations), LangGraph agents
 (intake, coverage, risk, decision and a supervisor) with human approval, MCP servers for data access,
 and an evaluation harness that measures all of it. Built module by module; [CLAUDE.md](CLAUDE.md) is
-the project record and the roadmap. Status: modules 0-10 done (backend, agents, evaluation,
-observability and hardening); the React UI and the cloud deployment come next.
+the project record and the roadmap. Status: modules 0-11 done (backend, agents, evaluation,
+observability and hardening, the React web app); the cloud deployment comes next.
 
 ## Run
 
@@ -13,7 +13,32 @@ cp .env.example .env     # fill in OPENAI_API_KEY (GROQ_API_KEY for the fallback
 make up                  # postgres, redis, backend, worker, and the three MCP servers
 make migrate && make seed
 curl localhost:8000/health/ready     # the port is BACKEND_HOST_PORT (default 8000)
+# the web app: http://localhost:3000 (FRONTEND_HOST_PORT)
 ```
+
+### Try it without API keys
+
+`MOCK_LLM=true` swaps the chat model and the embeddings for deterministic fakes, so the whole app runs with no
+keys and no cost (it reads the real documents and the policy text; it is not a model). `make e2e-up` starts an
+isolated stack with it (own database, http://localhost:3300) and loads synthetic policy wordings and demo users:
+
+| User | Role |
+|---|---|
+| `demo-officer@example.test`, `demo-officer2@example.test` | officer |
+| `demo-admin@example.test` | admin |
+
+Password `demo-pass-12345` (`DEMO_PASSWORD` to change). Upload the two PDFs of any folder in `data/claims/`, press
+*Run full processing*, watch the agents, open a citation, and approve as the second officer. `make e2e` runs the
+browser tests against it; `make e2e-down` removes it. Mock mode is refused when `APP_ENV=production`.
+
+### Screenshots
+
+| | |
+|---|---|
+| ![Claim with the live agent timeline](docs/screenshots/04-agent-timeline.png) | ![Citation drawer](docs/screenshots/06-citation-drawer.png) |
+| ![Decision and deductions](docs/screenshots/08-decision.png) | ![Policy chat in dark theme](docs/screenshots/15-dark-theme.png) |
+
+More in [docs/screenshots/](docs/screenshots/).
 
 Every endpoint but `/health`, `/health/ready`, `/auth/login` and `/auth/refresh` needs a token:
 
@@ -38,7 +63,9 @@ uploaded (an admin can, with a written reason that goes to the audit log).
 | `make audit` | pip-audit over the installed dependencies |
 | `make revision m="msg"` | new Alembic autogenerate revision |
 | `make eval-rag` / `make eval-e2e` | RAG evaluation / end-to-end agent evaluation (spend API credits) |
-| `make langfuse-up` | optional self-hosted Langfuse on http://localhost:3000 |
+| `make e2e-up` / `make e2e` / `make e2e-down` | isolated MOCK_LLM stack + Playwright browser tests (no API cost) |
+| `cd frontend && npm test` / `npm run lint` | Vitest + ESLint + `tsc` for the web app, see [frontend/README.md](frontend/README.md) |
+| `make langfuse-up` | optional self-hosted Langfuse on http://localhost:3001 |
 | `make shell` / `make logs` | bash in the backend container / follow its logs |
 
 CI (`.github/workflows/ci.yml`) runs ruff, pytest against Postgres + pgvector and Redis, and pip-audit
@@ -62,7 +89,9 @@ default). The ones you will touch:
 | `DAILY_LLM_BUDGET_INR`, `USD_INR_RATE` | Estimated daily spend limit (0 = off) and the rate used to convert. |
 | `USE_WORKER`, `WORKER_*` | Run agent runs, extraction and ingestion in the arq worker (default in compose). |
 | `LANGFUSE_PUBLIC_KEY`, `LANGFUSE_SECRET_KEY`, `LANGFUSE_HOST` (or `LANGFUSE_BASE_URL`) | Optional tracing. Without the keys nothing is traced and nothing is sent. |
-| `CORS_ORIGINS` | Comma-separated allowed origins. |
+| `CORS_ORIGINS` | Comma-separated allowed origins (the web app is same-origin through its `/api` proxy and does not need it). |
+| `MOCK_LLM` | `true`: fake model and embeddings, no keys, never allowed in production. |
+| `FRONTEND_HOST_PORT` | Host port of the web app (default 3000). |
 | `MCP_<SERVER>_TOKENS` | Bearer tokens of the MCP servers (placeholders are refused in production). |
 
 ## Observability

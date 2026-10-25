@@ -1,7 +1,7 @@
 from functools import lru_cache
 from pathlib import Path
 
-from pydantic import SecretStr
+from pydantic import SecretStr, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -34,6 +34,7 @@ class Settings(BaseSettings):
     # Seed data (Module 2). Stored paths in the DB are relative to data_dir.
     data_dir: Path = _ROOT / "data"
     policy_rules_path: Path = _ROOT / "data_gen" / "policy_rules.yaml"
+    eval_dir: Path = _ROOT / "eval"  # where the evaluation runs write their results
     seed_admin_email: str = "admin@example.com"
     seed_admin_password: SecretStr | None = None
     seed_officer_email: str = "officer@example.com"
@@ -63,6 +64,9 @@ class Settings(BaseSettings):
     jwt_secret: SecretStr = SecretStr("dev-insecure-jwt-secret-change-me")
     jwt_algorithm: str = "HS256"
     access_token_minutes: int = 15
+    auth_cookie_name: str = "claimpilot_refresh"
+    # Empty = derive it: "/auth", or "<X-Forwarded-Prefix>/auth" behind a proxy (nginx / Vite: /api)
+    auth_cookie_path: str = ""
     refresh_token_days: int = 7
     login_max_failures: int = 5  # per email + IP ...
     login_window_minutes: int = 15  # ... in this window
@@ -81,6 +85,9 @@ class Settings(BaseSettings):
     # Agent runs, extraction and ingestion run in the arq worker (Redis queue) when true; in the
     # API process otherwise (tests, the evaluation harness and a single-process dev setup).
     use_worker: bool = False
+    # Deterministic fake chat model and embeddings: UI end-to-end tests and demos without API
+    # keys. Settings refuses it when APP_ENV=production.
+    mock_llm: bool = False
     # /health/ready also pings the MCP servers and the worker heartbeat (off in tests, which
     # have neither; the checks themselves are tested one by one).
     readiness_extra_checks: bool = True
@@ -100,6 +107,12 @@ class Settings(BaseSettings):
     reranker_timeout_seconds: float = 15.0
     cors_allow_credentials: bool = True
 
+    @model_validator(mode="after")
+    def mock_llm_is_never_production(self) -> "Settings":
+        if self.mock_llm and self.app_env.lower() == "production":
+            raise ValueError("MOCK_LLM=true is not allowed when APP_ENV=production")
+        return self
+
     @property
     def is_production(self) -> bool:
         return self.app_env.lower() == "production"
@@ -116,6 +129,8 @@ class InsecureConfigurationError(RuntimeError):
 def production_problems(settings: Settings) -> list[str]:
     """Everything that must not reach production (empty list = fine)."""
     problems: list[str] = []
+    if settings.mock_llm:
+        problems.append("MOCK_LLM is enabled")
     secret = settings.jwt_secret.get_secret_value()
     if secret == "dev-insecure-jwt-secret-change-me" or len(secret) < 32:
         problems.append("JWT_SECRET is the development default or shorter than 32 characters")

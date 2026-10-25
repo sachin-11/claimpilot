@@ -83,10 +83,10 @@ async def test_events_are_kept_per_phase_and_replayable(bus: RunBus) -> None:
     await bus.publish("r1", 0, "awaiting_approval", {"claim_number": "CLM-1"})
     await bus.publish("r1", 1, "completed", {"run_id": "r1"})
     first = await bus.read("r1", 0, block_ms=10)
-    assert [e for _, e, _ in first] == ["node_started", "awaiting_approval"]
+    assert [e for _, e, _, _ in first] == ["node_started", "awaiting_approval"]
     again = await bus.read("r1", 0, first[0][0], block_ms=10)  # a reconnecting client
-    assert [e for _, e, _ in again] == ["awaiting_approval"]
-    assert [e for _, e, _ in await bus.read("r1", 1, block_ms=10)] == ["completed"]
+    assert [e for _, e, _, _ in again] == ["awaiting_approval"]
+    assert [e for _, e, _, _ in await bus.read("r1", 1, block_ms=10)] == ["completed"]
     assert await bus.read("r1", 2, block_ms=10) == []
     assert TERMINAL_EVENTS == {"awaiting_approval", "completed", "error"}
 
@@ -258,7 +258,7 @@ async def test_a_transient_failure_is_retried_with_backoff(
     await burst(pool, [tasks.run_agent], {"runtime": runtime, "bus": bus, "max_tries": 4})
     assert runtime.calls == 3  # two failures, then the run
     assert (await bus.get_meta("r-flaky"))["state"] == "idle"
-    assert [e for _, e, _ in await bus.read("r-flaky", 0, block_ms=10)] == ["completed"]
+    assert [e for _, e, _, _ in await bus.read("r-flaky", 0, block_ms=10)] == ["completed"]
 
 
 async def test_a_bug_is_not_retried(pool: ArqRedis, bus: RunBus) -> None:

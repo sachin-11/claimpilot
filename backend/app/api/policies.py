@@ -5,6 +5,7 @@ from collections.abc import Awaitable, Callable
 from uuid import UUID
 
 from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Query, Request
+from pydantic import BaseModel
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
 
@@ -141,6 +142,47 @@ async def list_policies(session: AsyncSession = Depends(get_session)) -> list[Po
             )
         )
     return summaries
+
+
+class PolicyClauseRead(BaseModel):
+    """One clause as the citation drawer shows it."""
+
+    id: UUID
+    policy_code: str
+    policy_name: str
+    chunk_index: int
+    section_path: str | None
+    page_start: int | None
+    page_end: int | None
+    clauses: list[str]
+    content: str
+
+
+@router.get("/chunks/{chunk_id}")
+async def get_chunk(
+    chunk_id: UUID, session: AsyncSession = Depends(get_session)
+) -> PolicyClauseRead:
+    row = (
+        await session.execute(
+            select(PolicyChunk, Policy.policy_code, Policy.name)
+            .join(Policy, Policy.id == PolicyChunk.policy_id)
+            .where(PolicyChunk.id == chunk_id)
+        )
+    ).first()
+    if row is None:
+        raise HTTPException(404, "clause not found")
+    chunk, code, name = row
+    return PolicyClauseRead(
+        id=chunk.id,
+        policy_code=code,
+        policy_name=name,
+        chunk_index=chunk.chunk_index,
+        section_path=chunk.section_path,
+        page_start=chunk.page_start,
+        page_end=chunk.page_end,
+        clauses=[str(c) for c in (chunk.meta or {}).get("clauses", [])],
+        content=chunk.content,
+    )
 
 
 @router.get("/{policy_code}/chunks")

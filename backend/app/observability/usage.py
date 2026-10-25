@@ -63,10 +63,37 @@ def record_spend(*, provider: str, model: str, inr: float, tokens_in: int, token
         pipe.hincrby(key, "tokens_in", tokens_in)
         pipe.hincrby(key, "tokens_out", tokens_out)
         pipe.hincrbyfloat(key, f"inr:{provider}:{model}", inr)
+        pipe.hincrby(key, f"calls:{provider}", 1)
         pipe.expire(key, KEEP_DAYS * 86400)
         pipe.execute()
     except Exception:  # noqa: BLE001 - spend tracking must never break an LLM call
         logger.warning("spend_record_failed", exc_info=True)
+
+
+def runs_key(day: str) -> str:
+    return f"agent_runs:{day}"
+
+
+def record_run(status: str) -> None:
+    """One agent run ended in `status` today (shared by the API and the worker)."""
+    if not _tracking:
+        return
+    try:
+        key = runs_key(today())
+        pipe = _sync_client().pipeline()
+        pipe.hincrby(key, status, 1)
+        pipe.expire(key, KEEP_DAYS * 86400)
+        pipe.execute()
+    except Exception:  # noqa: BLE001 - counting must never break a run
+        logger.warning("run_record_failed", exc_info=True)
+
+
+async def read_runs(redis: Any, day: str) -> dict[str, int]:
+    raw = await redis.hgetall(runs_key(day))
+    return {
+        (k.decode() if isinstance(k, bytes) else k): int(v.decode() if isinstance(v, bytes) else v)
+        for k, v in raw.items()
+    }
 
 
 async def read_spend(redis: Any, day: str) -> dict[str, Any]:
@@ -84,8 +111,14 @@ async def read_spend(redis: Any, day: str) -> dict[str, Any]:
         for name, v in data.items()
         if name.startswith("inr:")
     }
+    calls_by_provider = {
+        name.removeprefix("calls:"): int(v.decode() if isinstance(v, bytes) else v)
+        for name, v in data.items()
+        if name.startswith("calls:")
+    }
     return {
         "day": day,
+        "calls_by_provider": calls_by_provider,
         "inr": round(num("inr", float), 4),
         "calls": num("calls", int),
         "tokens_in": num("tokens_in", int),

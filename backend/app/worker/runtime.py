@@ -85,9 +85,9 @@ class QueuedAgentRuntime(AgentRuntime):
         deadline = time.monotonic() + STREAM_WAIT_SECONDS
         while time.monotonic() < deadline:
             entries = await self.bus.read(run_id, epoch, last_id, block_ms=1000)
-            for entry_id, event, data in entries:
+            for entry_id, event, data, ts in entries:
                 last_id = entry_id
-                yield {"seq": seq, "event": event, "data": data}
+                yield {"seq": seq, "event": event, "data": data, "ts": ts}
                 seq += 1
                 if event in TERMINAL_EVENTS:
                     return

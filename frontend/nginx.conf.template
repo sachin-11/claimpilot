@@ -1,0 +1,58 @@
+server {
+    listen 80;
+    server_name _;
+    root /usr/share/nginx/html;
+    index index.html;
+
+    gzip on;
+    gzip_vary on;
+    gzip_min_length 1024;
+    gzip_types text/plain text/css application/json application/javascript text/javascript image/svg+xml application/wasm;
+
+    add_header X-Content-Type-Options "nosniff" always;
+    add_header X-Frame-Options "DENY" always;
+    add_header Referrer-Policy "same-origin" always;
+
+    location = /healthz {
+        access_log off;
+        default_type text/plain;
+        return 200 "ok";
+    }
+
+    # API: the browser only talks to this origin. The prefix is stripped, and X-Forwarded-Prefix lets the
+    # backend scope the refresh cookie to /api/auth.
+    location /api/ {
+        proxy_pass ${BACKEND_URL}/;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-Forwarded-Prefix /api;
+        proxy_set_header Connection "";
+        # server-sent events: no buffering, long-lived connections
+        proxy_buffering off;
+        proxy_cache off;
+        proxy_read_timeout 1h;
+        client_max_body_size 110m;
+    }
+
+    # .mjs (the pdf.js worker) is not in nginx's mime.types: browsers refuse module scripts that are not JavaScript
+    location ~* \.mjs$ {
+        default_type text/javascript;
+        add_header Cache-Control "public, max-age=31536000, immutable";
+        try_files $uri =404;
+    }
+
+    # fingerprinted build output never changes: cache for a year
+    location /assets/ {
+        add_header Cache-Control "public, max-age=31536000, immutable";
+        try_files $uri =404;
+    }
+
+    # the app shell must always be revalidated; every unknown path is a client-side route
+    location / {
+        add_header Cache-Control "no-cache";
+        try_files $uri $uri/ /index.html;
+    }
+}

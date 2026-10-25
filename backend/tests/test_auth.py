@@ -90,6 +90,29 @@ async def client_for(
         yield http, redis, settings
 
 
+COOKIE = "claimpilot_refresh"
+AJAX = {"X-Requested-With": "fetch"}
+
+
+def cookie_value(http: httpx.AsyncClient) -> str | None:
+    return http.cookies.get(COOKIE)
+
+
+def as_cookie(value: str) -> dict[str, str]:
+    """A request that carries exactly this refresh token (the cookie jar is bypassed)."""
+    return {"Cookie": f"{COOKIE}={value}"}
+
+
+async def refresh(http: httpx.AsyncClient, cookie: str | None = None, **kw: Any) -> httpx.Response:
+    headers = {**AJAX, **(as_cookie(cookie) if cookie is not None else {})}
+    return await http.post("/auth/refresh", headers=headers, **kw)
+
+
+async def logout(http: httpx.AsyncClient, cookie: str | None = None, **kw: Any) -> httpx.Response:
+    headers = {**AJAX, **(as_cookie(cookie) if cookie is not None else {})}
+    return await http.post("/auth/logout", headers=headers, **kw)
+
+
 async def login(http: httpx.AsyncClient, email: str, password: str = PASSWORD) -> httpx.Response:
     return await http.post("/auth/login", json={"email": email, "password": password})
 
@@ -97,24 +120,60 @@ async def login(http: httpx.AsyncClient, email: str, password: str = PASSWORD) -
 # ------------------------------------------------------------------ login / refresh / logout
 
 
-async def test_login_returns_tokens_and_me_works(session: AsyncSession) -> None:
+async def test_login_returns_an_access_token_and_a_refresh_cookie(session: AsyncSession) -> None:
     user = await make_user(session, "asha@example.com")
     async with client_for(session) as (http, _, settings):
         resp = await login(http, "asha@example.com")
         assert resp.status_code == 200, resp.text
         body = resp.json()
+        assert (
+            "refresh_token" not in body
+        )  # never in a response body: a script cannot read a cookie
         assert body["token_type"] == "bearer" and body["user"]["role"] == "officer"
         claims = decode_access_token(settings, body["access_token"])
         assert claims.user_id == user.id and claims.role == UserRole.OFFICER
         assert (claims.expires_at - datetime.now(UTC)) <= timedelta(minutes=15, seconds=5)
         me = await http.get("/auth/me", headers={"Authorization": f"Bearer {body['access_token']}"})
         assert me.status_code == 200 and me.json()["email"] == "asha@example.com"
+        token = cookie_value(http)
+        header = resp.headers["set-cookie"].lower()
+    assert f"{COOKIE}=" in header and "httponly" in header and "samesite=strict" in header
+    assert "path=/auth" in header and "secure" not in header  # Secure only in production
+    assert "max-age=604800" in header
     stored = (await session.execute(select(RefreshToken))).scalar_one()
-    assert stored.token_hash == hash_refresh_token(body["refresh_token"])  # only the hash is stored
-    assert body["refresh_token"] not in {stored.token_hash}
+    assert token and stored.token_hash == hash_refresh_token(token)  # only the hash is stored
+    assert token != stored.token_hash
     assert (stored.expires_at - datetime.now(UTC)) > timedelta(days=6)
     audit = (await session.execute(select(AuditLog.action))).scalars().all()
     assert "login" in audit
+
+
+async def test_the_cookie_is_secure_in_production_and_follows_the_proxy_prefix(
+    session: AsyncSession,
+) -> None:
+    await make_user(session, "asha@example.com")
+    settings = make_settings(
+        app_env="production",
+        openai_api_key="sk-real-key-123",
+        database_url="postgresql+asyncpg://app:Zx83kQ@db.internal:5432/claimpilot",
+        cors_origins="https://claims.example.com",
+    )
+    async with client_for(session, settings) as (http, _, _):
+        resp = await http.post(
+            "/auth/login",
+            json={"email": "asha@example.com", "password": PASSWORD},
+            headers={"X-Forwarded-Prefix": "/api"},
+        )
+    header = resp.headers["set-cookie"].lower()
+    assert "secure" in header and "path=/api/auth" in header
+
+    async with client_for(session) as (http, _, _):  # a hostile prefix is ignored
+        resp = await http.post(
+            "/auth/login",
+            json={"email": "asha@example.com", "password": PASSWORD},
+            headers={"X-Forwarded-Prefix": "/x; Domain=evil.example"},
+        )
+    assert "path=/auth" in resp.headers["set-cookie"].lower()
 
 
 async def test_wrong_password_unknown_user_and_disabled_account_look_the_same(
@@ -165,23 +224,35 @@ async def test_lockout_is_per_ip_not_global(session: AsyncSession) -> None:
         assert (await login(elsewhere, "asha@example.com")).status_code == 200
 
 
+async def test_refresh_needs_the_cookie_and_the_ajax_header(session: AsyncSession) -> None:
+    await make_user(session, "asha@example.com")
+    async with client_for(session) as (http, _, _):
+        assert (await login(http, "asha@example.com")).status_code == 200
+        no_header = await http.post("/auth/refresh")  # what a cross-site form post would send
+        assert no_header.status_code == 403
+        assert (await http.post("/auth/logout")).status_code == 403
+        http.cookies.clear()
+        assert (await refresh(http)).status_code == 401  # no cookie
+
+
 async def test_refresh_rotates_and_a_reused_token_revokes_everything(session: AsyncSession) -> None:
     await make_user(session, "asha@example.com")
     async with client_for(session) as (http, _, _):
-        first = (await login(http, "asha@example.com")).json()
-        second = (
-            await http.post("/auth/refresh", json={"refresh_token": first["refresh_token"]})
-        ).json()
-        assert second["refresh_token"] != first["refresh_token"]
-        assert second["access_token"] != first["access_token"]
+        first_access = (await login(http, "asha@example.com")).json()["access_token"]
+        first_cookie = cookie_value(http)
+        second = await refresh(http)
+        assert second.status_code == 200 and "refresh_token" not in second.json()
+        second_cookie = cookie_value(http)
+        assert second_cookie and second_cookie != first_cookie  # rotated
+        assert second.json()["access_token"] != first_access
         # the old token again: theft. 401, and the new one dies too
-        reuse = await http.post("/auth/refresh", json={"refresh_token": first["refresh_token"]})
+        reuse = await refresh(http, cookie=first_cookie)
         assert reuse.status_code == 401
-        after = await http.post("/auth/refresh", json={"refresh_token": second["refresh_token"]})
-        assert after.status_code == 401
         assert (
-            await http.post("/auth/refresh", json={"refresh_token": "x" * 40})
-        ).status_code == 401
+            await refresh(http, cookie=second_cookie)
+        ).status_code == 401  # the new one died too
+        failed = await refresh(http, cookie="x" * 40)
+        assert failed.status_code == 401 and "max-age=0" in failed.headers["set-cookie"].lower()
     rows = (await session.execute(select(RefreshToken))).scalars().all()
     assert len(rows) == 2 and all(r.revoked_at is not None for r in rows)
     assert "refresh_token_reuse" in (await session.execute(select(AuditLog.action))).scalars().all()
@@ -190,42 +261,38 @@ async def test_refresh_rotates_and_a_reused_token_revokes_everything(session: As
 async def test_expired_refresh_token_is_rejected(session: AsyncSession) -> None:
     await make_user(session, "asha@example.com")
     async with client_for(session) as (http, _, _):
-        token = (await login(http, "asha@example.com")).json()["refresh_token"]
+        await login(http, "asha@example.com")
         row = (await session.execute(select(RefreshToken))).scalar_one()
         row.expires_at = datetime.now(UTC) - timedelta(seconds=1)
         await session.flush()
-        assert (await http.post("/auth/refresh", json={"refresh_token": token})).status_code == 401
+        assert (await refresh(http, cookie=cookie_value(http))).status_code == 401
 
 
-async def test_logout_revokes_the_refresh_token_and_is_idempotent(session: AsyncSession) -> None:
+async def test_logout_revokes_the_refresh_token_clears_the_cookie_and_is_idempotent(
+    session: AsyncSession,
+) -> None:
     await make_user(session, "asha@example.com")
     async with client_for(session) as (http, _, _):
-        tokens = (await login(http, "asha@example.com")).json()
-        assert (
-            await http.post("/auth/logout", json={"refresh_token": tokens["refresh_token"]})
-        ).status_code == 204
-        assert (
-            await http.post("/auth/logout", json={"refresh_token": tokens["refresh_token"]})
-        ).status_code == 204
-        assert (
-            await http.post("/auth/logout", json={"refresh_token": "y" * 40})
-        ).status_code == 204
-        assert (
-            await http.post("/auth/refresh", json={"refresh_token": tokens["refresh_token"]})
-        ).status_code == 401
+        await login(http, "asha@example.com")
+        token = cookie_value(http) or ""
+        out = await logout(http)
+        assert out.status_code == 204 and "max-age=0" in out.headers["set-cookie"].lower()
+        assert cookie_value(http) is None  # the browser drops it
+        assert (await logout(http)).status_code == 204  # nothing left: still fine
+        assert (await logout(http, cookie="y" * 40)).status_code == 204  # an unknown token too
+        assert (await refresh(http, cookie=token)).status_code == 401  # the revoked one is dead
 
 
 async def test_logout_everywhere_revokes_every_session(session: AsyncSession) -> None:
     await make_user(session, "asha@example.com")
     async with client_for(session) as (http, _, _):
-        a = (await login(http, "asha@example.com")).json()
-        b = (await login(http, "asha@example.com")).json()
-        await http.post(
-            "/auth/logout", json={"refresh_token": a["refresh_token"], "everywhere": True}
-        )
-        assert (
-            await http.post("/auth/refresh", json={"refresh_token": b["refresh_token"]})
-        ).status_code == 401
+        await login(http, "asha@example.com")
+        a = cookie_value(http) or ""
+        await login(http, "asha@example.com")
+        b = cookie_value(http) or ""
+        assert a != b
+        await logout(http, cookie=a, json={"everywhere": True})
+        assert (await refresh(http, cookie=b)).status_code == 401
 
 
 # ------------------------------------------------------------------ access tokens
@@ -591,7 +658,8 @@ def test_well_known_seed_passwords_are_refused_in_production() -> None:
 async def test_refresh_tokens_are_not_stored_in_clear(session: AsyncSession) -> None:
     await make_user(session, "asha@example.com")
     async with client_for(session) as (http, _, _):
-        token = (await login(http, "asha@example.com")).json()["refresh_token"]
+        await login(http, "asha@example.com")
+        token = cookie_value(http) or ""
     stored = (await session.execute(select(func.count()).select_from(RefreshToken))).scalar_one()
     rows = (await session.execute(select(RefreshToken.token_hash))).scalars().all()
     assert stored == 1 and token not in rows and len(rows[0]) == 64

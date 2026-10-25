@@ -560,6 +560,22 @@ def test_blank_required_fields_become_missing_items() -> None:
     assert missing_items([], issues[3:]) == []
 
 
+def test_a_blank_policy_number_is_not_missing_when_the_claim_already_has_a_policy() -> None:
+    from app.agents.nodes.intake import missing_items
+
+    # an uploaded claim has no claim form: its policy number was typed at upload and matched
+    issues = [
+        {"type": "missing_field", "fields": ["policy_number"], "detail": "claim_form: blank"},
+        {
+            "type": "missing_field",
+            "fields": ["bill_total"],
+            "detail": "bill total could not be read",
+        },
+    ]
+    assert missing_items([], issues) == ["claim_form.policy_number", "hospital_bill.total_amount"]
+    assert missing_items([], issues, policy_known=True) == ["hospital_bill.total_amount"]
+
+
 def test_coverage_output_is_lenient_about_names_and_results() -> None:
     odd = CoverageCheckLLM(check="Room Rent", result="Not Applicable", explanation="x")
     assert (odd.check, odd.result) == ("room_rent", "unclear")

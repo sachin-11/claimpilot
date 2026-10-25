@@ -437,6 +437,11 @@ def get_chat_model(
     temperature: float = 0, **kwargs: Any
 ) -> Runnable[LanguageModelInput, BaseMessage]:
     settings = get_settings()
+    if settings.mock_llm:  # demos and UI tests: no provider, no keys, no cost
+        from app.core.mock_llm import MockChat, assert_allowed  # noqa: PLC0415
+
+        assert_allowed(settings.is_production)
+        return MockChat()  # type: ignore[return-value]
     return build_chat_model(settings, get_breaker(settings), temperature, **kwargs)
 
 
@@ -445,6 +450,11 @@ def get_embeddings() -> OpenAIEmbeddings:
     # (and dimension), so vectors from a fallback model can't be compared with the ones already
     # stored in pgvector. Mixing them would silently wreck retrieval. Fail loudly instead.
     settings = get_settings()
+    if settings.mock_llm:
+        from app.core.mock_llm import MockEmbeddings, assert_allowed  # noqa: PLC0415
+
+        assert_allowed(settings.is_production)
+        return MockEmbeddings()  # type: ignore[return-value]
     return OpenAIEmbeddings(
         model=settings.embedding_model,
         api_key=settings.openai_api_key,

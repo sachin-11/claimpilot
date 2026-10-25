@@ -17,7 +17,7 @@ from prometheus_client import (
 )
 
 from app.observability.pricing import cost_usd
-from app.observability.usage import record_spend
+from app.observability.usage import record_run, record_spend
 
 HTTP_REQUESTS = Counter("http_requests_total", "HTTP requests", ["method", "route", "status"])
 HTTP_DURATION = Histogram(
@@ -91,6 +91,7 @@ def record_llm_call(
 
 def record_agent_run(status: str, seconds: float) -> None:
     AGENT_RUNS.labels(status).inc()
+    record_run(status)
     AGENT_RUN_DURATION.observe(seconds)
 
 

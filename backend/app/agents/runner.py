@@ -12,6 +12,7 @@ import time
 import uuid
 from collections.abc import AsyncIterator, Awaitable, Callable
 from dataclasses import dataclass, field
+from datetime import UTC, datetime
 from typing import Any
 from uuid import UUID
 
@@ -58,7 +59,14 @@ class RunChannel:
 
     async def publish(self, event: str, data: dict[str, Any]) -> None:
         async with self.changed:
-            self.events.append({"seq": len(self.events), "event": event, "data": data})
+            self.events.append(
+                {
+                    "seq": len(self.events),
+                    "event": event,
+                    "data": data,
+                    "ts": datetime.now(UTC).isoformat(timespec="milliseconds"),
+                }
+            )
             self.changed.notify_all()
         if self.sink is not None:
             try:

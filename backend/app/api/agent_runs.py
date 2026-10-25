@@ -141,6 +141,10 @@ async def process_claim(
     except RunNotFoundError as exc:
         raise HTTPException(404, str(exc)) from exc
     bind_run_trace(request, run_id)
+    try:  # so a reload of the claim page finds the run that is still going
+        await request.app.state.redis.set(f"claim:{claim_id}:latest_run", run_id, ex=7 * 86400)
+    except Exception:  # noqa: BLE001 - only a hint
+        logger.warning("latest_run_hint_failed", exc_info=True)
     return ProcessResponse(claim_id=claim_id, run_id=run_id)
 
 
@@ -168,7 +172,10 @@ async def stream_run(
 
     async def events() -> AsyncIterator[str]:
         async for item in runtime.stream_run(run_id):
-            yield _sse(item["event"], item["data"])
+            data = item["data"]
+            if isinstance(data, dict) and item.get("ts"):
+                data = {**data, "ts": item["ts"]}  # when it happened, for the timeline
+            yield _sse(item["event"], data)
 
     return StreamingResponse(
         events(),
@@ -179,7 +186,10 @@ async def stream_run(
 
 @router.get("/{claim_id}/runs/{run_id}", dependencies=[Depends(bind_run_trace)])
 async def get_run(
-    claim_id: UUID, run_id: str, runtime: AgentRuntime = Depends(get_runtime)
+    claim_id: UUID,
+    run_id: str,
+    request: Request,
+    runtime: AgentRuntime = Depends(get_runtime),
 ) -> dict:
     snapshot = await _owned_run(runtime, claim_id, run_id)
     state = snapshot["state"]
@@ -197,6 +207,7 @@ async def get_run(
         "notification": state.get("notification"),
         "errors": state.get("errors", []),
         "models_used": state.get("models_used", {}),
+        "fallback_model": request.app.state.settings.fallback_model,  # for the "fallback" badge
     }
 
 
