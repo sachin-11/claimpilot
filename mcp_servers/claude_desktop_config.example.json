@@ -1,0 +1,42 @@
+{
+  "mcpServers": {
+    "claimpilot-policy-docs": {
+      "command": "docker",
+      "args": [
+        "compose",
+        "-f",
+        "<ABSOLUTE_PATH_TO_REPO>/docker-compose.yml",
+        "exec",
+        "-T",
+        "backend",
+        "env",
+        "WRITE_ENABLED=false",
+        "MCP_CALLER_ID=claude-desktop",
+        "python",
+        "-m",
+        "mcp_servers.policy_docs.server",
+        "--transport",
+        "stdio"
+      ]
+    },
+    "claimpilot-claims-db": {
+      "command": "docker",
+      "args": [
+        "compose",
+        "-f",
+        "<ABSOLUTE_PATH_TO_REPO>/docker-compose.yml",
+        "exec",
+        "-T",
+        "backend",
+        "env",
+        "WRITE_ENABLED=false",
+        "MCP_CALLER_ID=claude-desktop",
+        "python",
+        "-m",
+        "mcp_servers.claims_db.server",
+        "--transport",
+        "stdio"
+      ]
+    }
+  }
+}

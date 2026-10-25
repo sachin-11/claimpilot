@@ -1,4 +1,4 @@
-.PHONY: up down logs test lint fmt migrate seed ingest ingest-dry try-queries eval-candidates eval-review eval-rag eval-run revision shell
+.PHONY: mcp-smoke up down logs test lint fmt migrate seed ingest ingest-dry try-queries eval-candidates eval-review eval-rag eval-run revision shell
 
 up:
 	docker compose up -d --build
@@ -14,13 +14,16 @@ test:
 	docker compose run --rm backend pytest
 
 lint:
-	docker compose run --rm --no-deps backend ruff check --config pyproject.toml . ../eval
+	docker compose run --rm --no-deps backend ruff check --config pyproject.toml . ../eval ../mcp_servers
 
 fmt:
-	docker compose run --rm --no-deps backend sh -c "ruff format --config pyproject.toml . ../eval && ruff check --config pyproject.toml --fix . ../eval"
+	docker compose run --rm --no-deps backend sh -c "ruff format --config pyproject.toml . ../eval ../mcp_servers && ruff check --config pyproject.toml --fix . ../eval ../mcp_servers"
 
 migrate:
 	docker compose exec backend alembic upgrade head
+
+mcp-smoke:
+	docker compose exec backend python -m app.mcp_client.smoke
 
 seed:
 	docker compose exec backend python -m app.scripts.seed

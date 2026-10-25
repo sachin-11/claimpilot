@@ -1,0 +1,12 @@
+{% if channel == "sms" -%}
+ClaimPilot: Good news {{ name }}! Claim {{ claim_number }} is approved{% if approved_amount %} for Rs {{ approved_amount }}{% endif %}.
+{%- else -%}
+Subject: Claim {{ claim_number }} approved
+
+Namaste {{ name }},
+
+Good news. Your claim {{ claim_number }} has been approved{% if approved_amount %} for Rs {{ approved_amount }}{% endif %}. The payment will follow as per your policy terms.
+
+Regards,
+ClaimPilot Claims Team
+{%- endif %}

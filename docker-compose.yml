@@ -1,3 +1,24 @@
+x-mcp-env: &mcp-env
+  PYTHONPATH: /app:/
+  WRITE_ENABLED: "false"
+
+x-mcp-server: &mcp-server
+  # Same image as the backend service (build it with `docker compose build backend`).
+  image: claimpilot-backend
+  pull_policy: never
+  env_file: .env
+  environment: *mcp-env
+  volumes:
+    - ./backend:/app
+    - ./data:/data
+    - ./data_gen:/data_gen:ro
+    - ./mcp_servers:/mcp_servers
+  depends_on:
+    postgres:
+      condition: service_healthy
+    redis:
+      condition: service_healthy
+
 services:
   postgres:
     image: pgvector/pgvector:pg16
@@ -45,12 +66,53 @@ services:
       - ./data:/data
       - ./data_gen:/data_gen:ro
       - ./eval:/eval
+      - ./mcp_servers:/mcp_servers
       - ./storage:/storage
     depends_on:
       postgres:
         condition: service_healthy
       redis:
         condition: service_healthy
+
+  # --- MCP servers (Module 7): same image as the backend, HTTP mode, bearer-token protected ---
+  mcp-policy-docs:
+    <<: *mcp-server
+    command: python -m mcp_servers.policy_docs.server --transport http --host 0.0.0.0 --port 8101
+    ports:
+      - "${MCP_POLICY_DOCS_HOST_PORT:-8101}:8101"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request as u; u.urlopen('http://localhost:8101/healthz')"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  mcp-claims-db:
+    <<: *mcp-server
+    command: python -m mcp_servers.claims_db.server --transport http --host 0.0.0.0 --port 8102
+    environment:
+      <<: *mcp-env
+      WRITE_ENABLED: ${MCP_CLAIMS_DB_WRITE_ENABLED:-true}
+    ports:
+      - "${MCP_CLAIMS_DB_HOST_PORT:-8102}:8102"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request as u; u.urlopen('http://localhost:8102/healthz')"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  mcp-notify:
+    <<: *mcp-server
+    command: python -m mcp_servers.notify.server --transport http --host 0.0.0.0 --port 8103
+    environment:
+      <<: *mcp-env
+      WRITE_ENABLED: ${MCP_NOTIFY_WRITE_ENABLED:-true}
+    ports:
+      - "${MCP_NOTIFY_HOST_PORT:-8103}:8103"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request as u; u.urlopen('http://localhost:8103/healthz')"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
 
 volumes:
   pgdata:

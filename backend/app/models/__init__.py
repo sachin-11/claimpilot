@@ -17,9 +17,13 @@ from app.models.enums import (
     DecisionType,
     DocType,
     IngestionStatus,
+    NotificationChannel,
+    NotificationStatus,
     UserRole,
 )
+from app.models.idempotency import ToolIdempotency
 from app.models.ingestion import IngestionRun
+from app.models.notification import Notification
 from app.models.policy import Policy, PolicyChunk
 from app.models.user import User
 
@@ -40,8 +44,12 @@ __all__ = [
     "DocType",
     "IngestionRun",
     "IngestionStatus",
+    "Notification",
+    "NotificationChannel",
+    "NotificationStatus",
     "Policy",
     "PolicyChunk",
+    "ToolIdempotency",
     "User",
     "UserRole",
 ]

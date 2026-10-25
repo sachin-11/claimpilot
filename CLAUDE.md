@@ -35,9 +35,10 @@ claimpilot/
       scripts/seed.py    # python -m app.scripts.seed
       ingestion/         # PDF -> chunks -> embeddings (Module 3)
       rag/               # hybrid retrieval + grounded answers (Module 4)
-    alembic/             # async migrations; 0001 pgvector, 0002 core schema
+      mcp_client/        # tokens.py, client.py (MultiServerMCPClient), smoke.py (Module 7)
+    alembic/             # async migrations; 0001 pgvector, 0002 core schema, 0004 notifications + tool_idempotency
     tests/
-  mcp_servers/           # MCP servers (Module 7)
+  mcp_servers/           # common/, policy_docs/, claims_db/, notify/ (Module 7), README.md
   frontend/              # React app (Module 11)
   data/{policies,claims,golden}/
   eval/                  # RAGAS + end-to-end eval (Modules 5, 9)
@@ -61,7 +62,7 @@ claimpilot/
 4. RAG retrieval  (done; manually verified on POL-AS only)
 5. RAG eval
 6. OCR + intake extraction
-7. MCP servers
+7. MCP servers  (done)
 8. LangGraph agents
 9. End-to-end eval
 10. Observability + hardening
@@ -69,7 +70,7 @@ claimpilot/
 12. Deploy + docs
 
 ## Commands
-`make up | down | logs | test | lint | fmt | migrate | seed | ingest | ingest-dry | try-queries | revision m="msg" | shell`
+`make up | down | logs | test | lint | fmt | migrate | seed | ingest | ingest-dry | try-queries | mcp-smoke | revision m="msg" | shell`
 
 ## Database schema (Module 2)
 All tables: UUID pk (`gen_random_uuid()`), `created_at`/`updated_at` (audit_logs has no
@@ -150,3 +151,44 @@ CLI `python -m app.ingestion.run --policy POL-AS | --all [--force] [--dry-run]`;
   and/or RERANK_MAX_CHARS. Default stays RERANKER=none (no torch in the default image).
 - The LLM cites clauses by short number (`clause_n`), not UUID: gpt-4o-mini wrote "9.3" as a chunk id
   and that used to fail the whole request. Unresolvable citations are dropped and logged.
+
+## MCP servers (Module 7) - status: done
+`mcp_servers/` (top-level package; mounted at `/mcp_servers`, `PYTHONPATH=/app:/`, pytest `pythonpath=[".."]`).
+Official SDK pinned `mcp==1.30.0` (+ `langchain-mcp-adapters==0.3.2`; mcp 2.x exists but the adapters need 1.x).
+Details, tool lists, Claude Desktop demo: `mcp_servers/README.md`.
+- Servers (FastMCP, each `python -m mcp_servers.<name>.server --transport stdio|http --host H --port P`):
+  `policy_docs` 8101 (read-only), `claims_db` 8102, `notify` 8103. Compose services `mcp-policy-docs`,
+  `mcp-claims-db`, `mcp-notify` reuse the `claimpilot-backend` image (rebuild it after dependency changes).
+- Each server module exposes `create_server(deps: ServerDeps | None, *, host=...)`; tests inject a
+  rolled-back DB session and a fake RAG service (`tests/mcp_helpers.py`, `tests/test_mcp_servers.py`).
+- Tools: policy_docs `list_policies search_policy answer_policy_question get_policy_rules` (+ resources
+  `policy://{code}/sections`, `policy://{code}/chunk/{id}`); claims_db read `get_claim get_claim_extraction
+  get_customer_history list_claims`, write `update_claim_status save_decision_draft`; notify `send_status_update`.
+- Write tools are not registered when `WRITE_ENABLED=false` (default; compose sets true for claims_db / notify).
+- `claims_db/state_machine.py`: agents may do submitted->processing->awaiting_approval|documents_requested,
+  documents_requested->processing, open->failed. approved / partially_approved / rejected are HUMAN-ONLY
+  (Module 8 approval API sets them, never an MCP tool). `save_decision_draft` needs status `processing`,
+  verifies cited chunk_ids, never changes status.
+- Idempotency: `tool_idempotency` (tool, key) stores the first response; notify uses `notifications.idempotency_key`.
+  Writes audit as `actor_type=agent`, `actor_id=<caller>`.
+- notify: recipient only from the claim's customer record (`extra` allows just `missing_documents`, `reason`);
+  approved/partially_approved/rejected templates need the claim to already have that status; mocked delivery
+  (`sent_mock`); `NOTIFY_MAX_PER_CLAIM_PER_HOUR=5`. Templates: `mcp_servers/notify/templates/*.j2`.
+- HTTP auth: bearer token, `MCP_<SERVER>_TOKENS="identity=token,..."` or `MCP_<SERVER>_TOKEN`; identity goes to
+  the audit log; server refuses to start without a token; `/healthz` is open. stdio: identity `MCP_CALLER_ID`;
+  logs go to stderr there. One `tool_call` JSON log line per call (no arguments / results).
+- Client: `app.mcp_client.client.get_mcp_tools({"policy_docs": ["search_policy"]}, caller="coverage-agent")`;
+  `make mcp-smoke`.
+
+### Permissions matrix (what each Module 8 agent gets)
+| agent | tools |
+|---|---|
+| Intake | claims_db: get_claim, get_claim_extraction, update_claim_status |
+| Coverage | policy_docs: list_policies, search_policy, get_policy_rules (answer_policy_question optional) |
+| Risk | claims_db: get_claim, get_claim_extraction, get_customer_history, list_claims |
+| Decision | claims_db: save_decision_draft, update_claim_status (-> awaiting_approval) |
+| Notify | notify: send_status_update, only after human approval |
+
+### Known issues
+- 25 intake/PII tests fail (`tests/test_intake_*`): `spacy.load("en_core_web_sm")` raises OverflowError in the
+  current image (also in a pristine container). Not related to Module 7; 193 other tests pass.

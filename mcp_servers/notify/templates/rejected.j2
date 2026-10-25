@@ -1,0 +1,16 @@
+{% if channel == "sms" -%}
+ClaimPilot: {{ name }}, we are sorry - claim {{ claim_number }} could not be approved. Details sent by email.
+{%- else -%}
+Subject: Update on claim {{ claim_number }}
+
+Namaste {{ name }},
+
+We are sorry to share that your claim {{ claim_number }} could not be approved under your policy terms.
+{% if reason %}
+Reason: {{ reason }}
+{% endif %}
+If you think this is a mistake, you can ask for a review by replying to this message.
+
+Regards,
+ClaimPilot Claims Team
+{%- endif %}

@@ -1,0 +1,16 @@
+{% if channel == "sms" -%}
+ClaimPilot: {{ name }}, claim {{ claim_number }} is partly approved{% if approved_amount %} for Rs {{ approved_amount }}{% endif %}. Details sent by email.
+{%- else -%}
+Subject: Claim {{ claim_number }} partly approved
+
+Namaste {{ name }},
+
+Your claim {{ claim_number }} has been partly approved{% if approved_amount %} for Rs {{ approved_amount }}{% endif %}{% if claimed_amount %} (you claimed Rs {{ claimed_amount }}){% endif %}. Some items are not payable under your policy terms.
+{% if reason %}
+Reason: {{ reason }}
+{% endif %}
+If you have questions, please reply to this message.
+
+Regards,
+ClaimPilot Claims Team
+{%- endif %}

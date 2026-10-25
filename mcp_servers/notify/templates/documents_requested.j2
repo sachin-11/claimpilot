@@ -1,0 +1,15 @@
+{% if channel == "sms" -%}
+ClaimPilot: Namaste {{ name }}, claim {{ claim_number }} ke liye kuch documents chahiye{% if missing_documents %}: {{ missing_documents | join(", ") }}{% endif %}. Please upload them soon.
+{%- else -%}
+Subject: Documents needed for claim {{ claim_number }}
+
+Namaste {{ name }},
+
+To continue with your claim {{ claim_number }}, we need the following documents:
+{% for doc in missing_documents or ["the documents mentioned in our earlier request"] %}- {{ doc }}
+{% endfor %}
+Please upload them at the earliest so your claim is not delayed.
+
+Regards,
+ClaimPilot Claims Team
+{%- endif %}

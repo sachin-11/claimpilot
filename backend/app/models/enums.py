@@ -54,3 +54,13 @@ class IngestionStatus(StrEnum):
     RUNNING = "running"
     SUCCESS = "success"
     FAILED = "failed"
+
+
+class NotificationChannel(StrEnum):
+    EMAIL = "email"
+    SMS = "sms"
+
+
+class NotificationStatus(StrEnum):
+    QUEUED = "queued"
+    SENT_MOCK = "sent_mock"

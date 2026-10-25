@@ -1,0 +1,14 @@
+{% if channel == "sms" -%}
+ClaimPilot: Namaste {{ name }}, aapka claim {{ claim_number }} receive ho gaya hai. We will update you soon.
+{%- else -%}
+Subject: Claim {{ claim_number }} received
+
+Namaste {{ name }},
+
+We have received your health insurance claim {{ claim_number }}{% if claimed_amount %} for Rs {{ claimed_amount }}{% endif %}. Our team is checking your documents and we will keep you updated.
+
+You do not need to do anything right now.
+
+Regards,
+ClaimPilot Claims Team
+{%- endif %}
