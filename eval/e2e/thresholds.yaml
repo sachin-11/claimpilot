@@ -1,0 +1,9 @@
+# Regression gate for `make eval-e2e`: the default config must reach every threshold.
+# First guesses (the task's starting values): tune them after the first real run.
+default_config: default
+thresholds:
+  decision_accuracy: 0.85
+  amount_within_tolerance: 0.85
+  adversarial_pass_rate: 1.0
+max_thresholds:
+  error_rate: 0.05

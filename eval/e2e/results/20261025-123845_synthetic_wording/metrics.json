@@ -1,0 +1,155 @@
+{
+  "all": {
+    "claims": 40,
+    "decision_accuracy": 0.95,
+    "decision_accuracy_by_scenario": {
+      "covered": {
+        "n": 15,
+        "accuracy": 0.9333333333333333
+      },
+      "incomplete": {
+        "n": 4,
+        "accuracy": 1.0
+      },
+      "partial": {
+        "n": 8,
+        "accuracy": 1.0
+      },
+      "rejected": {
+        "n": 7,
+        "accuracy": 0.8571428571428571
+      },
+      "risk": {
+        "n": 6,
+        "accuracy": 1.0
+      }
+    },
+    "confusion": {
+      "approve": {
+        "approve": 14,
+        "flag_for_review": 1
+      },
+      "partial_approve": {
+        "partial_approve": 8
+      },
+      "reject": {
+        "reject": 6,
+        "flag_for_review": 1
+      },
+      "flag_for_review": {
+        "flag_for_review": 6
+      },
+      "request_documents": {
+        "request_documents": 4
+      }
+    },
+    "amount_within_tolerance": 0.9722222222222222,
+    "amount_mae": 3695.509166666667,
+    "amount_within_5pct": 0.9722222222222222,
+    "deductions_match": 0.9444444444444444,
+    "rule_match": 0.9333333333333333,
+    "check_resolved": 0.9333333333333333,
+    "citation_correctness": 1.0,
+    "citation_judged_share": 0.0,
+    "citation_n": 15,
+    "unclear_rate": 0.03296703296703297,
+    "risk_precision": 0.8571428571428571,
+    "risk_recall": 1.0,
+    "risk_f1": 0.923076923076923,
+    "missing_docs_accuracy": 1.0,
+    "missing_docs_exact": 1.0,
+    "adversarial_pass_rate": 1.0,
+    "adversarial_n": 5,
+    "runs": 40,
+    "error_rate": 0.0,
+    "recursion_hits": 0,
+    "latency_p50_s": 24.223781472499468,
+    "latency_p95_s": 34.5845617173978,
+    "node_latency_p50_s": {
+      "coverage": 8.221623205497963,
+      "decision": 1.5976171884994983,
+      "intake": 12.498155645500447,
+      "risk": 1.7031755030002387
+    },
+    "node_latency_p95_s": {
+      "coverage": 11.722970914250254,
+      "decision": 2.141663011497803,
+      "intake": 24.13457168624971,
+      "risk": 2.1826335452515195
+    },
+    "llm_calls_per_claim": 6.975,
+    "tool_calls_per_claim": 11.1,
+    "tokens_per_claim": 15376.125,
+    "cost_per_claim_usd": 0.00327868875,
+    "fallback_rate": 0.0
+  },
+  "wording": {
+    "claims": 7,
+    "decision_accuracy": 0.8571428571428571,
+    "decision_accuracy_by_scenario": {
+      "partial": {
+        "n": 4,
+        "accuracy": 1.0
+      },
+      "rejected": {
+        "n": 2,
+        "accuracy": 0.5
+      },
+      "risk": {
+        "n": 1,
+        "accuracy": 1.0
+      }
+    },
+    "confusion": {
+      "partial_approve": {
+        "partial_approve": 4
+      },
+      "reject": {
+        "flag_for_review": 1,
+        "reject": 1
+      },
+      "flag_for_review": {
+        "flag_for_review": 1
+      }
+    },
+    "amount_within_tolerance": 0.8571428571428571,
+    "amount_mae": 19005.444285714282,
+    "amount_within_5pct": 0.8571428571428571,
+    "deductions_match": 0.8571428571428571,
+    "rule_match": 0.8333333333333334,
+    "check_resolved": 0.8333333333333334,
+    "citation_correctness": 1.0,
+    "citation_judged_share": 0.0,
+    "citation_n": 6,
+    "unclear_rate": 0.043478260869565216,
+    "risk_precision": 1.0,
+    "risk_recall": 1.0,
+    "risk_f1": 1.0,
+    "missing_docs_accuracy": 1.0,
+    "missing_docs_exact": 1.0,
+    "adversarial_pass_rate": 1.0,
+    "adversarial_n": 5,
+    "runs": 7,
+    "error_rate": 0.0,
+    "recursion_hits": 0,
+    "latency_p50_s": 25.199078907000512,
+    "latency_p95_s": 36.86618506809936,
+    "node_latency_p50_s": {
+      "coverage": 10.142872784999781,
+      "decision": 1.9743355739992694,
+      "intake": 9.507064705998346,
+      "risk": 1.776074436998897
+    },
+    "node_latency_p95_s": {
+      "coverage": 12.137059663299077,
+      "decision": 2.180299121997814,
+      "intake": 22.97573546919957,
+      "risk": 2.0279283666983248
+    },
+    "llm_calls_per_claim": 7.285714285714286,
+    "tool_calls_per_claim": 12.285714285714286,
+    "tokens_per_claim": 20750.571428571428,
+    "cost_per_claim_usd": 0.004081242857142856,
+    "fallback_rate": 0.0
+  }
+}

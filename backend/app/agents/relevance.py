@@ -50,7 +50,17 @@ def relevant_checks(rules: PolicyRules, facts: ClaimFacts | None) -> list[Releva
             )
         )
     tag = facts.exclusion_tag
-    if facts.is_maternity or (tag and tag in rules.exclusions):
+    if facts.is_maternity and rules.maternity.covered:
+        # covered maternity is not an exclusion question: only its waiting period can block it
+        months = rules.maternity.waiting_months
+        checks.append(
+            RelevantCheck(
+                "specific_disease_waiting",
+                f"maternity is covered after a waiting period of {months} months",
+                "maternity waiting period",
+            )
+        )
+    elif facts.is_maternity or (tag and tag in rules.exclusions):
         topic = "maternity" if facts.is_maternity else _words(tag or "")
         checks.append(
             RelevantCheck(
@@ -92,6 +102,80 @@ AMOUNT_CHECKS: dict[str, str] = {
     "icu_limit": "icu_limit",
     "sub_limit": "sub_limits.",
 }
+
+
+_DAYS_PER = {
+    "day": 1.0, "days": 1.0, "month": 30.4375, "months": 30.4375, "year": 365.25, "years": 365.25,
+}  # fmt: skip
+
+
+def _waiting_rule(name: str, rules: PolicyRules, facts: ClaimFacts) -> tuple[float, float] | None:
+    """(required days, elapsed days) for a waiting check, from the rules and dates. None = not
+    decidable here (accident exemption, missing dates, no rule)."""
+    start, admitted = facts.policy_start_date, facts.admission_date
+    if start is None or admitted is None:
+        return None
+    elapsed = float((admitted - start).days)
+    if name == "initial_waiting":
+        return None if facts.is_accident else (float(rules.initial_waiting_days), elapsed)
+    if name == "pre_existing":
+        return float(rules.pre_existing_waiting_months) * _DAYS_PER["months"], elapsed
+    if name == "specific_disease_waiting":
+        if facts.is_maternity and rules.maternity.covered:
+            months: float | None = float(rules.maternity.waiting_months)
+        else:
+            key = facts.specific_wait_key or ""
+            waits = rules.specific_disease_waiting
+            months = float(waits[key]) if key in waits else None
+        return None if months is None else (months * _DAYS_PER["months"], elapsed)
+    return None
+
+
+def reconcile_waiting_checks(
+    checks: list[CoverageCheck],
+    stated: dict[str, tuple[float | None, str | None]],
+    rules: PolicyRules,
+    facts: ClaimFacts | None,
+) -> list[CoverageCheck]:
+    """Waiting checks: the model reads the period from the clause (`wording_value` + unit), the code
+    compares it with the elapsed time. A period that differs from the policy rules, or none stated,
+    is `unclear` (a reviewer decides); otherwise pass / fail follow the dates, not the model."""
+    if facts is None:
+        return checks
+    fixed: list[CoverageCheck] = []
+    for check in checks:
+        decided = _waiting_rule(check.check, rules, facts)
+        if decided is None or check.result == "unclear":
+            fixed.append(check)
+            continue
+        required_days, elapsed_days = decided
+        value, unit = stated.get(check.check, (None, None))
+        factor = _DAYS_PER.get((unit or "").strip().lower())
+        if value is None or factor is None:
+            note, result = (
+                "The clause's waiting period was not stated, so this is unclear.",
+                "unclear",
+            )
+        else:
+            wording_days = value * factor
+            if abs(wording_days - required_days) > max(3.0, required_days * 0.03):
+                note = (
+                    f"The wording states {value:g} {unit} but the policy rules use "
+                    f"{required_days / factor:.0f} {unit}: needs review."
+                )
+                result = "unclear"
+            else:
+                result = "pass" if elapsed_days >= required_days else "fail"
+                note = ""
+        if result != check.result:
+            suffix = note or (
+                f"Elapsed time compared in code: {elapsed_days:.0f} days vs {required_days:.0f}."
+            )
+            check = check.model_copy(
+                update={"result": result, "explanation": f"{check.explanation} [{suffix}]"}
+            )
+        fixed.append(check)
+    return fixed
 
 
 def reconcile_amount_checks(

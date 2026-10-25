@@ -83,6 +83,9 @@ class ClaimFacts(BaseModel):
     # billed amount per rule category: room_rent, icu, professional_fees, ot_charges, other...
     charges: dict[str, Decimal] = Field(default_factory=dict)
     room_tax: Decimal = Decimal(0)  # tax billed on the room; follows the room-rent deduction
+    duplicate_amount: Decimal = Decimal(
+        0
+    )  # repeated identical bill lines; already out of `charges`
     claimed_amount: Decimal | None = None  # defaults to charges + room_tax
 
     @property
@@ -183,6 +186,15 @@ def check_eligibility(rules: PolicyRules, facts: ClaimFacts) -> list[Blocker]:
 def compute_payout(rules: PolicyRules, facts: ClaimFacts) -> PayoutResult:
     claimed = facts.total_billed
     deductions: list[Deduction] = []
+
+    if facts.duplicate_amount > 0:
+        deductions.append(
+            Deduction(
+                rule="duplicate_line_items",
+                description="Duplicated bill line items removed from the payable amount",
+                amount=money(facts.duplicate_amount),
+            )
+        )
 
     room_limit = rules.room_rent_limit.per_day(facts.sum_insured)
     if room_limit is not None and facts.room_rate_per_day > room_limit:

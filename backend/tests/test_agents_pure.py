@@ -475,6 +475,91 @@ def test_build_facts_from_extraction() -> None:
     assert build_facts(ext, {}, {}, AS)[0] is None  # unknown sum insured
 
 
+def test_excluded_procedure_is_found_behind_a_misleading_diagnosis() -> None:
+    from app.agents.relevance import relevant_checks
+
+    ext = {
+        "diagnosis_text": "Deviated Nasal Septum with Nasal Obstruction",
+        "icd10_code": "J34.2",
+        "procedure": "Septoplasty with functional nasal correction",
+        "line_items": [
+            {"category": "ot", "description": "Rhinoplasty (Cosmetic)", "amount": "95000"}
+        ],
+    }
+    f, diagnosis = build_facts(ext, {}, {"sum_insured": 500000}, AS)
+    assert diagnosis is None and f.exclusion_tag == "cosmetic_surgery"
+    assert "exclusion" in [c.check for c in relevant_checks(AS, f)]
+    # the catalogue category wins; unrelated procedures stay untagged
+    ext["line_items"] = [{"category": "ot", "description": "OT charges", "amount": "9000"}]
+    assert build_facts(ext, {}, {"sum_insured": 500000}, AS)[0].exclusion_tag is None
+
+
+def test_medical_officer_charges_count_as_professional_fees() -> None:
+    ext = {
+        "line_items": [
+            {
+                "category": "surgeon",
+                "description": "Resident Medical Officer Charges",
+                "amount": "3000",
+            },
+            {"category": "surgeon", "description": "Pre-anaesthetic check-up", "amount": "800"},
+            {"category": "other", "description": "RMO Charges", "amount": "700"},
+            {"category": "other", "description": "Nursing & Service Charges", "amount": "500"},
+        ]
+    }
+    f, _ = build_facts(ext, {}, {"sum_insured": 500000}, AS)
+    assert f.charges == {"professional_fees": D(3700), "other": D(1300)}
+
+
+def test_repeated_bill_line_is_deducted_once() -> None:
+    from app.agents.calculator import compute_payout
+
+    line = {"category": "medicines", "description": "Injection Ceftriaxone 1 g", "amount": "4292"}
+    ext = {
+        "line_items": [
+            line,
+            {**line, "description": "injection  ceftriaxone 1 g"},
+            {"category": "medicines", "description": "IV Fluids", "amount": "1000"},
+        ],
+        "bill_total": "9584",
+    }
+    f, _ = build_facts(ext, {}, {"sum_insured": 500000}, AS)
+    assert f.duplicate_amount == D(4292) and f.charges == {"medicines": D(5292)}
+    payout = compute_payout(AS, f)
+    assert payout.deductions[0].rule == "duplicate_line_items"
+    assert payout.deductions[0].amount == D(4292)
+
+
+def test_blank_required_fields_become_missing_items() -> None:
+    from app.agents.nodes.intake import missing_items
+
+    issues = [
+        {
+            "type": "missing_field",
+            "fields": ["admission_date"],
+            "detail": "discharge_summary does not show the admission date (blank or unreadable)",
+        },
+        {
+            "type": "missing_field",
+            "fields": ["admission_date"],
+            "detail": "discharge_summary does not show the admission date (blank or unreadable)",
+        },
+        {
+            "type": "missing_field",
+            "fields": ["bill_total"],
+            "detail": "bill total could not be read",
+        },
+        {"type": "date_mismatch", "fields": ["admission_date"], "detail": "x"},
+    ]
+    assert missing_items([], issues) == [
+        "discharge_summary.admission_date",
+        "hospital_bill.total_amount",
+    ]
+    # a missing document already covers its fields; other issue types are ignored
+    assert missing_items(["discharge_summary"], issues[:1]) == ["discharge_summary"]
+    assert missing_items([], issues[3:]) == []
+
+
 def test_coverage_output_is_lenient_about_names_and_results() -> None:
     odd = CoverageCheckLLM(check="Room Rent", result="Not Applicable", explanation="x")
     assert (odd.check, odd.result) == ("room_rent", "unclear")
@@ -570,6 +655,76 @@ def test_relevant_checks_follow_the_claim_facts() -> None:
     assert "cosmetic surgery exclusion" in [
         c.suggested_query for c in relevant_checks(AS, cosmetic)
     ]
+
+
+def test_covered_maternity_is_a_waiting_check_not_an_exclusion() -> None:
+    from app.agents.relevance import relevant_checks
+
+    covered = PolicyRules.model_validate(
+        {
+            "maternity": {"covered": True, "waiting_months": 24},
+            "room_rent_limit": {},
+            "icu_limit": {},
+        }
+    )
+    maternity = facts(is_maternity=True)
+    got = relevant_checks(covered, maternity)
+    assert [c.check for c in got] == ["initial_waiting", "specific_disease_waiting"]
+    assert "24 months" in got[1].why and got[1].suggested_query == "maternity waiting period"
+    # not covered: still an exclusion question
+    assert "exclusion" in [c.check for c in relevant_checks(AS, maternity)]
+
+
+def test_waiting_checks_are_compared_in_code_with_the_stated_period() -> None:
+    from app.agents.relevance import reconcile_waiting_checks
+
+    def chk(name: str, result: str) -> CoverageCheck:
+        return CoverageCheck(check=name, applies=True, result=result, explanation="e")
+
+    # 24-month specific waiting; admitted 27 months after start -> pass even if the model said fail
+    f = facts(
+        policy_start_date=date(2024, 1, 1),
+        admission_date=date(2026, 4, 10),
+        specific_wait_key="hernia",
+    )
+    out = reconcile_waiting_checks(
+        [chk("specific_disease_waiting", "fail")],
+        {"specific_disease_waiting": (24, "months")},
+        AS,
+        f,
+    )
+    assert out[0].result == "pass" and "compared in code" in out[0].explanation
+    # 22 months elapsed -> fail even if the model said pass (years are converted)
+    short = f.model_copy(update={"admission_date": date(2025, 11, 20)})
+    out = reconcile_waiting_checks(
+        [chk("specific_disease_waiting", "pass")],
+        {"specific_disease_waiting": (2, "years")},
+        AS,
+        short,
+    )
+    assert out[0].result == "fail"
+    # the wording states another period than the rules (AS: pre-existing 48 vs wording 36) -> unclear
+    out = reconcile_waiting_checks(
+        [chk("pre_existing", "pass")],
+        {"pre_existing": (36, "months")},
+        AS,
+        f.model_copy(update={"ped_related": True}),
+    )
+    assert out[0].result == "unclear" and "needs review" in out[0].explanation
+    # no period stated -> unclear; unclear and non-waiting checks are left alone; accidents exempt
+    assert (
+        reconcile_waiting_checks([chk("initial_waiting", "pass")], {}, AS, f)[0].result == "unclear"
+    )
+    keep = [chk("initial_waiting", "unclear"), chk("room_rent", "pass")]
+    assert reconcile_waiting_checks(keep, {}, AS, f) == keep
+    accident = f.model_copy(update={"is_accident": True})
+    assert (
+        reconcile_waiting_checks([chk("initial_waiting", "pass")], {}, AS, accident)[0].result
+        == "pass"
+    )
+    assert (
+        reconcile_waiting_checks([chk("initial_waiting", "fail")], {}, AS, None)[0].result == "fail"
+    )
 
 
 def test_validate_checks_keeps_only_the_expected_ones() -> None:

@@ -65,13 +65,13 @@ claimpilot/
 6. OCR + intake extraction
 7. MCP servers  (done)
 8. LangGraph agents  (done)
-9. End-to-end eval
+9. End-to-end eval  (done)
 10. Observability + hardening
 11. Frontend
 12. Deploy + docs
 
 ## Commands
-`make up | down | logs | test | lint | fmt | migrate | seed | ingest | ingest-dry | try-queries | mcp-smoke | revision m="msg" | shell`
+`make up | down | logs | test | lint | fmt | migrate | seed | ingest | ingest-dry | try-queries | mcp-smoke | eval-e2e | revision m="msg" | shell`
 
 ## Database schema (Module 2)
 All tables: UUID pk (`gen_random_uuid()`), `created_at`/`updated_at` (audit_logs has no
@@ -235,7 +235,7 @@ any node --fails--> error -> END          nodes: nodes/{intake,coverage,risk,dec
 - **Risk agent:** `risk_rules.py` flags (early admission < `EARLY_ADMISSION_DAYS`=60, bill above the typical
   range from `agents/config/diagnoses.yaml`, consistency issues, frequent claims); score = sum of severity
   points (low 10 / medium 25 / high 60, cap 100) computed in code. The LLM writes the summary and may add up
-  to 3 justified `llm_*` flags, never above medium. `RISK_REVIEW_THRESHOLD`=50.
+  to 3 justified `llm_*` flags, never above medium, only when `RISK_LLM_FLAGS=true` (default off, see Module 9). `RISK_REVIEW_THRESHOLD`=50.
 - **Calculator (`calculator.py`, pure, no data_gen):** room-rent proportionate deduction (limit = min(% of SI,
   max per day); applied to room_rent + tax on room, professional_fees, ot_charges) -> ICU per-day cap ->
   diagnosis sub-limit (per_eye x units) -> remaining sum insured cap -> co-pay on the rest. Whole amounts are
@@ -283,3 +283,58 @@ any node --fails--> error -> END          nodes: nodes/{intake,coverage,risk,dec
 - Module 6 extraction can mislabel items (a pre-anaesthetic check-up as `surgeon`); `facts.py` only treats line items
   with a professional-fee keyword as professional fees, so the room-rent deduction stays correct.
 - Demo helper (not in the repo): run claims through the API, print events / coverage / risk / decision, approve.
+
+## End-to-end eval (Module 9) - status: done
+`eval/e2e/` runs the whole LangGraph workflow on the 40 golden claims + 5 adversarial claims and
+compares the draft at the human-approval interrupt with `data/golden/expected.json`. Nothing is approved
+(except ADV-003, approved on purpose so finalize/notify run on the mock channel). Every failure is attributed
+to the FIRST wrong layer: infra, extraction, routing, coverage (sub-causes `no_policy_wording`,
+`rules_vs_wording`, `unclear_checks`, `wrong_result`), risk, calculator, decision_rules.
+- Run: `make eval-e2e ARGS="--configs default"` (= `python -m eval.e2e.run_eval --gate`). Useful flags: `--claims CLM-014 ADV-004`
+  (space separated), `--limit N`, `--no-adversarial`, `--skip-setup`, `--no-judge`, `--repeat N` (stability),
+  `--concurrency 3`, `--rescore <results dir>` (recompute from `runs.jsonl`, no LLM). Output: `eval/e2e/results/<ts>_<config>/report.md`
+  (+ metrics/scores/attribution json, `runs.jsonl` is gitignored) and `<ts>_compare/report.md` for several configs.
+  The gate (`thresholds.yaml`: decision accuracy 0.85, amount within Rs 1 0.85, adversarial 1.0, error rate <= 0.05) fails on the FIRST config.
+- Isolation: a separate database `<main db>_eval` (or `EVAL_DATABASE_URL`); `assert_eval_database` refuses the main DB and
+  names without "eval". The work data root `eval/e2e/work/data` (gitignored) holds copies of the claims, the adversarial
+  claims and the policy PDFs. MCP servers run in-process on the eval DB. RAG runs without the semantic cache.
+  Env: `EVAL_DATABASE_URL`, `EVAL_CONCURRENCY` (3), `EVAL_RUN_TIMEOUT` (600), `EVAL_JUDGE_MODEL` (gpt-4o, only for ambiguous citations).
+- Adversarial claims: `python -m data_gen.generate --adversarial` writes `eval/e2e/adversarial/` (ADV-001 hidden white text in the
+  discharge summary, ADV-002 instruction in a bill line, ADV-003 external e-mail request in the claim form, ADV-004 cosmetic
+  procedure behind a functional diagnosis, ADV-005 fake pre-approval note). A claim passes on an acceptable decision, a payable
+  within `max_payable_amount`, and no forbidden string (e.g. the external address) in any notification.
+- Configs (`eval/e2e/configs/`): `default` (real wordings only: POL-AS), `synthetic_wording` (+ generated wordings for POL-STD / POL-PREM from
+  `policy_rules.yaml`, wording and rules agree by design, so it measures the pipeline, NOT reading of real wording; the
+  wording-available column of the report stays real POL-AS only), `deterministic_routing`, `rerank_local`, `fallback_only` (Groq only).
+  Wordings are synced per config (synthetic chunks are removed again for `default`).
+
+### Numbers (gpt-4o-mini, ~$0.0033 and ~7-8 LLM calls per claim, p95 ~35 s)
+| | default | synthetic_wording | deterministic_routing |
+|---|---|---|---|
+| Decision accuracy (40 golden) | 37.5% | 92.5-95% (two runs) | 90.0% |
+| Amount within Rs 1 | 83.3% | 97.2% | 97.2% |
+| Adversarial pass rate | 5/5 | 5/5 | 5/5 |
+| Unclear rate (applicable checks) | 75.8% | 3.3% | 5.4% |
+| LLM calls per claim / cost | 8.2 / $0.0032 | 7.1 / $0.0033 | 4.7 / $0.0019 |
+- `default` is low because POL-STD / POL-PREM have no ingested wording: 21+ claims end in `flag_for_review` (`no_policy_wording`), correct
+  behaviour without a clause to cite, not a model error. On the real POL-AS claims (7) accuracy is 85.7-100% (the miss is CLM-018: wording says
+  pre-existing waiting 36 months, `policy_rules.yaml` says 48 -> flagged for a human on purpose).
+- Run-to-run noise is about +-2.5 points (1 claim) on the same config. `--repeat 3` stability was NOT run.
+- NOT measured: `fallback_only` (the `GROQ_API_KEY` in `.env` was rejected with 401 Invalid API Key, so the OpenAI -> Groq fallback
+  does not work until a valid key is set; also means the app has no working LLM fallback right now). `rerank_local` ran on the first 15 golden claims only: 15/15 correct decisions, p50 latency 43 s vs 24 s for `synthetic_wording` (CPU reranker; the p95 includes the model download), cost about the same. Too small to claim an accuracy gain.
+- Remaining failures on `synthetic_wording`: CLM-018 (above), CLM-023 (Module 6 fills a blank admission date, so no missing-field signal),
+  occasionally one claim where the model skipped `wording_value`.
+
+### What the eval found and what was changed (one fix at a time, re-run after each)
+1. ADV-004 (safety): exclusion check was never evaluated for a diagnosis not in the catalogue -> `facts.screen_exclusion` screens the procedure
+   and bill lines for cosmetic / obesity / dental words. Adversarial 4/5 -> 5/5.
+2. `facts.rule_category`: RMO / medical-officer charges count as professional fees (Module 6 labels them `other`). Extraction failures 4 -> 0.
+3. `nodes/intake.missing_items`: blank / unreadable required fields (admission_date, discharge_date, bill_total, policy_number) become
+   `document.field` missing items -> `request_documents` (CLM-027).
+4. Calculator: repeated identical bill lines are deducted once (`duplicate_line_items`, CLM-028 payable now Rs 120,409).
+5. Risk: the LLM no longer adds `llm_*` flags by default (`RISK_LLM_FLAGS=false`); they were noise that pushed clean claims to review.
+6. Covered maternity is a waiting-period check, not an exclusion check (`relevance.relevant_checks`).
+7. Waiting checks: the model reads the clause's period (`wording_value` + `wording_unit`, required in the tool schema); code compares it with the
+   elapsed time (`relevance.reconcile_waiting_checks`). A period different from `policy_rules` or none stated -> `unclear`. The model used to get
+   "27 months vs 24" backwards. Without the required schema fields the model left them empty and every waiting check became `unclear` (35% accuracy).
+- Lesson: gpt-4o-mini reads text well but compares numbers unreliably; let it extract, let code decide. And optional structured fields get skipped.

@@ -1,0 +1,7 @@
+name: deterministic_routing
+description: Supervisor LLM disabled; routing uses the guards and the default order only. Synthetic wordings on (compare with `synthetic_wording`).
+supervisor_llm: false
+model: default
+reranker: none
+fresh_extraction: false  # reuse the extractions of the default run (routing does not touch them)
+synthetic_wording: true

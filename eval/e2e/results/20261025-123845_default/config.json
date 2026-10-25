@@ -1,0 +1,9 @@
+{
+  "name": "default",
+  "description": "Current settings (supervisor LLM on, OpenAI primary with Groq fallback, no reranker).",
+  "supervisor_llm": true,
+  "model": "default",
+  "reranker": "none",
+  "fresh_extraction": true,
+  "synthetic_wording": false
+}

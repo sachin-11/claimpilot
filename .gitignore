@@ -16,3 +16,6 @@ eval/rag/results/*/raw/
 # uploaded claim documents (Module 6)
 storage/
 eval/intake/results/*/per_claim.jsonl
+# Module 9: the eval database's data root (copied claims) and the big raw run dumps
+eval/e2e/work/
+eval/e2e/results/*/runs.jsonl

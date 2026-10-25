@@ -1,0 +1,9 @@
+{
+  "name": "synthetic_wording",
+  "description": "Default settings, plus generated wordings for POL-STD and POL-PREM (built from policy_rules.yaml, so wording and rules agree by design). Measures the pipeline when every policy has a wording; the citation numbers on those two policies are NOT evidence of reading real wording.",
+  "supervisor_llm": true,
+  "model": "default",
+  "reranker": "none",
+  "fresh_extraction": true,
+  "synthetic_wording": true
+}

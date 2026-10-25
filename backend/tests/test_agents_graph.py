@@ -193,6 +193,8 @@ async def test_waiting_period_claim_is_rejected_when_rules_and_wording_agree(
                 result="fail",
                 explanation="Within the 30-day initial waiting period.",
                 chunk_ids=[cid],
+                wording_value=30,
+                wording_unit="days",
             )
         ]
     )
@@ -244,7 +246,8 @@ async def test_the_model_can_cite_clauses_by_short_ref(session: AsyncSession) ->
 
 
 async def test_risk_flag_forces_review(session: AsyncSession) -> None:
-    ext = {**ROOM_RENT_EXTRACTION, "admission_date": "2024-01-20"}  # 19 days after policy start
+    # 45 days after policy start: past the 30-day waiting period, inside the early-admission window
+    ext = {**ROOM_RENT_EXTRACTION, "admission_date": "2024-02-15"}
     world = await make_agent_world(session, extraction=ext)
     llm = standard_llm(
         str(world.chunk.id),

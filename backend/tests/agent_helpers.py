@@ -224,6 +224,7 @@ def passing_coverage(
             CoverageCheckLLM(
                 check="initial_waiting", applies=True, result="pass",
                 explanation="Admitted long after the 30-day initial period.", chunk_ids=cited,
+                wording_value=30, wording_unit="days",
             ),
             CoverageCheckLLM(
                 check="room_rent", applies=True, result="partial",

@@ -82,7 +82,9 @@ def make_risk_node(deps: AgentDeps):  # type: ignore[no-untyped-def]
                 HumanMessage(content=json.dumps(facts, default=str, indent=1)),
             ],
         )
-        all_flags = merge_extra_flags(flags, output.extra_flags)
+        all_flags = (
+            merge_extra_flags(flags, output.extra_flags) if deps.settings.risk_llm_flags else flags
+        )
         assessment = RiskAssessment(
             flags=all_flags, score=risk_score(all_flags), summary=redact(output.summary)[:800]
         )

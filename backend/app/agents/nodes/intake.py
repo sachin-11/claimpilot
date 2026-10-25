@@ -13,6 +13,44 @@ from app.agents.tools import ToolFailure, toolbox_for
 STARTABLE = {"submitted", "processing", "documents_requested"}
 
 
+# Module 6 reports a blank / unreadable field as a `missing_field` issue, not as a missing document.
+# The decision needs these fields, so the claim goes back to the customer.
+# field -> (document, name)
+REQUIRED_FIELDS = {
+    "admission_date": ("discharge_summary", "admission_date"),
+    "discharge_date": ("discharge_summary", "discharge_date"),
+    "bill_total": ("hospital_bill", "total_amount"),
+    "policy_number": ("claim_form", "policy_number"),
+}
+
+
+def missing_items(missing_documents: list[str], issues: list[dict[str, Any]]) -> list[str]:
+    """Missing documents plus required fields that are blank or unreadable (`document.field`)."""
+    items = list(missing_documents)
+    for issue in issues:
+        if issue.get("type") != "missing_field":
+            continue
+        for name in issue.get("fields") or []:
+            required = REQUIRED_FIELDS.get(name)
+            if required is None:
+                continue
+            document, field_name = required
+            detail = str(issue.get("detail") or "")
+            document = next(
+                (
+                    d
+                    for d in ("discharge_summary", "hospital_bill", "claim_form")
+                    if detail.startswith(d)
+                ),
+                document,
+            )
+            label = f"{document}.{field_name}"
+            # a whole missing document already covers its fields
+            if label not in items and document not in items:
+                items.append(label)
+    return items
+
+
 def make_intake_node(deps: AgentDeps):  # type: ignore[no-untyped-def]
     async def intake(state: ClaimState) -> dict[str, Any]:
         tools = await toolbox_for(deps.tools, "intake")
@@ -63,7 +101,10 @@ def make_intake_node(deps: AgentDeps):  # type: ignore[no-untyped-def]
                 **extraction["extracted"],
                 "confidence": extraction.get("confidence"),
             },
-            "missing_documents": extraction.get("missing_documents") or [],
+            "missing_documents": missing_items(
+                extraction.get("missing_documents") or [],
+                extraction.get("consistency_issues") or [],
+            ),
             "consistency_issues": extraction.get("consistency_issues") or [],
             "policy_code": claim.get("policy_code"),
             "customer_history": history,

@@ -17,6 +17,9 @@ class AgentSettings(BaseSettings):
     risk_max_tool_calls: int = 4
     # Risk score (0-100) at or above which the decision becomes flag_for_review.
     risk_review_threshold: int = 50
+    # The risk LLM may add `llm_*` flags (medium, up to 3). Off: the e2e eval showed they were noise
+    # that could push clean claims over the review threshold; the LLM then only writes the summary.
+    risk_llm_flags: bool = False
     # Admission this many days after the policy start is flagged.
     early_admission_days: int = 60
     # More than this many OTHER claims on the policy within the window is "frequent".

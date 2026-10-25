@@ -45,6 +45,12 @@ def main(
     scan_count: Annotated[int, typer.Option(help="Claims that also get *_scanned.png copies")] = 10,
     policy_rules: Annotated[Path | None, typer.Option(help="Override policy_rules.yaml")] = None,
     typical_costs: Annotated[Path | None, typer.Option(help="Override typical_costs.yaml")] = None,
+    adversarial: Annotated[
+        bool, typer.Option("--adversarial", help="Only generate the 5 adversarial eval claims")
+    ] = False,
+    adversarial_out: Annotated[
+        Path, typer.Option(help="Output root for --adversarial (claims/ + expected.json)")
+    ] = Path("eval/e2e/adversarial"),
 ) -> None:
     logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s")
     logging.getLogger("httpx").setLevel(logging.WARNING)
@@ -52,6 +58,13 @@ def main(
     model = os.getenv("GEN_MODEL", DEFAULT_MODEL)
     use_llm = not no_llm and bool(os.getenv("OPENAI_API_KEY"))
     logger.info("Narratives: %s", f"OpenAI {model} (cached)" if use_llm else "templates")
+
+    if adversarial:  # separate output: the regular claims and golden data are not touched
+        from data_gen.adversarial import generate as generate_adversarial
+
+        records = generate_adversarial(adversarial_out, seed)
+        logger.info("Wrote %d adversarial claims to %s", len(records), adversarial_out.resolve())
+        return
 
     rules = load_policy_rules(policy_rules)
     costs = load_typical_costs(typical_costs)

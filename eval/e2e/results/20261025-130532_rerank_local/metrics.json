@@ -1,0 +1,138 @@
+{
+  "all": {
+    "claims": 15,
+    "decision_accuracy": 1.0,
+    "decision_accuracy_by_scenario": {
+      "covered": {
+        "n": 6,
+        "accuracy": 1.0
+      },
+      "incomplete": {
+        "n": 1,
+        "accuracy": 1.0
+      },
+      "partial": {
+        "n": 2,
+        "accuracy": 1.0
+      },
+      "rejected": {
+        "n": 4,
+        "accuracy": 1.0
+      },
+      "risk": {
+        "n": 2,
+        "accuracy": 1.0
+      }
+    },
+    "confusion": {
+      "approve": {
+        "approve": 6
+      },
+      "partial_approve": {
+        "partial_approve": 2
+      },
+      "reject": {
+        "reject": 4
+      },
+      "flag_for_review": {
+        "flag_for_review": 2
+      },
+      "request_documents": {
+        "request_documents": 1
+      }
+    },
+    "amount_within_tolerance": 1.0,
+    "amount_mae": 0.06714285714302345,
+    "amount_within_5pct": 1.0,
+    "deductions_match": 1.0,
+    "rule_match": 1.0,
+    "check_resolved": 1.0,
+    "citation_correctness": 1.0,
+    "citation_judged_share": 0.0,
+    "citation_n": 6,
+    "unclear_rate": 0.0,
+    "risk_precision": 0.6666666666666666,
+    "risk_recall": 1.0,
+    "risk_f1": 0.8,
+    "missing_docs_accuracy": 1.0,
+    "missing_docs_exact": 1.0,
+    "adversarial_pass_rate": null,
+    "adversarial_n": 0,
+    "runs": 15,
+    "error_rate": 0.0,
+    "recursion_hits": 0,
+    "latency_p50_s": 42.93477443200027,
+    "latency_p95_s": 399.4375370073991,
+    "node_latency_p50_s": {
+      "coverage": 22.30436367799848,
+      "decision": 1.7669895939980051,
+      "intake": 13.22756746700179,
+      "risk": 1.7536309525021352
+    },
+    "node_latency_p95_s": {
+      "coverage": 384.22263764900146,
+      "decision": 2.6045759136999536,
+      "intake": 25.606551023599962,
+      "risk": 1.9337983781004366
+    },
+    "llm_calls_per_claim": 7.133333333333334,
+    "tool_calls_per_claim": 11.333333333333334,
+    "tokens_per_claim": 15413.666666666666,
+    "cost_per_claim_usd": 0.0032980899999999996,
+    "fallback_rate": 0.0
+  },
+  "wording": {
+    "claims": 1,
+    "decision_accuracy": 1.0,
+    "decision_accuracy_by_scenario": {
+      "partial": {
+        "n": 1,
+        "accuracy": 1.0
+      }
+    },
+    "confusion": {
+      "partial_approve": {
+        "partial_approve": 1
+      }
+    },
+    "amount_within_tolerance": 1.0,
+    "amount_mae": 0.8600000000005821,
+    "amount_within_5pct": 1.0,
+    "deductions_match": 1.0,
+    "rule_match": 1.0,
+    "check_resolved": 1.0,
+    "citation_correctness": 1.0,
+    "citation_judged_share": 0.0,
+    "citation_n": 1,
+    "unclear_rate": 0.0,
+    "risk_precision": null,
+    "risk_recall": null,
+    "risk_f1": null,
+    "missing_docs_accuracy": 1.0,
+    "missing_docs_exact": 1.0,
+    "adversarial_pass_rate": null,
+    "adversarial_n": 0,
+    "runs": 1,
+    "error_rate": 0.0,
+    "recursion_hits": 0,
+    "latency_p50_s": 69.10852328399778,
+    "latency_p95_s": 69.10852328399778,
+    "node_latency_p50_s": {
+      "coverage": 48.41009853899959,
+      "decision": 1.6773803389987734,
+      "intake": 17.903219766998518,
+      "risk": 1.744072543002403
+    },
+    "node_latency_p95_s": {
+      "coverage": 48.41009853899959,
+      "decision": 1.6773803389987734,
+      "intake": 17.903219766998518,
+      "risk": 1.744072543002403
+    },
+    "llm_calls_per_claim": 8.0,
+    "tool_calls_per_claim": 12.0,
+    "tokens_per_claim": 22829.0,
+    "cost_per_claim_usd": 0.0047005499999999995,
+    "fallback_rate": 0.0
+  }
+}

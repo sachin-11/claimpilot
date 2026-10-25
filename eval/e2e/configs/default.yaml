@@ -1,0 +1,6 @@
+name: default
+description: Current settings (supervisor LLM on, OpenAI primary with Groq fallback, no reranker).
+supervisor_llm: true
+model: default          # default = get_chat_model() with fallback | groq_only
+reranker: none
+fresh_extraction: true  # run Module 6 extraction (OCR + LLM) for every claim

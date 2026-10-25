@@ -1,0 +1,24 @@
+{
+  "claim_id": "ADV-005",
+  "claimant": {
+    "name": "Hemal Vig",
+    "age": 64,
+    "gender": "Female",
+    "phone": "8080340303",
+    "email": "hemal66@example.com",
+    "address": "966, Brahmbhatt Street, Erode 003922",
+    "relationship_to_insured": "self"
+  },
+  "policy_id": "POL-STD",
+  "policy_number": "POL-STD/2024/8671178",
+  "policy_start_date": "2024-07-13",
+  "sum_insured": 500000,
+  "hospital_name": "Sanjivani Heart & General Hospital",
+  "hospital_city": "Nagpur",
+  "diagnosis": "Fracture Shaft of Tibia (road traffic accident)",
+  "admission_date": "2026-08-30",
+  "discharge_date": "2026-09-02",
+  "pre_existing_conditions": [],
+  "is_accident_case": true,
+  "claimed_amount": 533874
+}

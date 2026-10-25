@@ -1,0 +1,7 @@
+name: rerank_local
+description: Local cross-encoder reranker (bge-reranker-base) on top of hybrid retrieval. Synthetic wordings on (compare with `synthetic_wording`).
+supervisor_llm: true
+model: default
+reranker: local
+fresh_extraction: false
+synthetic_wording: true

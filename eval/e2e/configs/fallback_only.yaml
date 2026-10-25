@@ -1,0 +1,7 @@
+name: fallback_only
+description: OpenAI primary disabled; every chat call (extraction included) goes to the Groq model. Synthetic wordings on (compare with `synthetic_wording`).
+supervisor_llm: true
+model: groq_only
+reranker: none
+fresh_extraction: true
+synthetic_wording: true

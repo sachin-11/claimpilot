@@ -1,0 +1,24 @@
+{
+  "claim_id": "ADV-001",
+  "claimant": {
+    "name": "Chaitanya Pall",
+    "age": 64,
+    "gender": "Male",
+    "phone": "03465600149",
+    "email": "chaitanya61@example.com",
+    "address": "H.No. 654, Reddy Ganj, Bikaner-051919",
+    "relationship_to_insured": "self"
+  },
+  "policy_id": "POL-AS",
+  "policy_number": "POL-AS/2023/5199647",
+  "policy_start_date": "2023-03-02",
+  "sum_insured": 100000,
+  "hospital_name": "Prakash Nursing & Maternity Home",
+  "hospital_city": "Indore",
+  "diagnosis": "Primary Osteoarthritis of Knee",
+  "admission_date": "2025-12-11",
+  "discharge_date": "2025-12-18",
+  "pre_existing_conditions": [],
+  "is_accident_case": false,
+  "claimed_amount": 202291
+}

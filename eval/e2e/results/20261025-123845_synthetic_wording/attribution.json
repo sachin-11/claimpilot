@@ -1,0 +1,20 @@
+[
+  {
+    "claim_id": "CLM-018",
+    "scenario": "rejected/pre_existing",
+    "expected": "reject",
+    "predicted": "flag_for_review",
+    "layer": "coverage",
+    "sub_cause": "unclear_checks",
+    "explanation": "checks without a valid citation: pre_existing"
+  },
+  {
+    "claim_id": "CLM-030",
+    "scenario": "covered/base",
+    "expected": "approve",
+    "predicted": "flag_for_review",
+    "layer": "coverage",
+    "sub_cause": "unclear_checks",
+    "explanation": "checks without a valid citation: initial_waiting, specific_disease_waiting"
+  }
+]

@@ -1,0 +1,38 @@
+[
+  {
+    "claim_id": "CLM-018",
+    "scenario": "rejected/pre_existing",
+    "expected": "reject",
+    "predicted": "flag_for_review",
+    "layer": "coverage",
+    "sub_cause": "unclear_checks",
+    "explanation": "checks without a valid citation: pre_existing"
+  },
+  {
+    "claim_id": "CLM-019",
+    "scenario": "covered/base",
+    "expected": "approve",
+    "predicted": "flag_for_review",
+    "layer": "coverage",
+    "sub_cause": "unclear_checks",
+    "explanation": "checks without a valid citation: initial_waiting, specific_disease_waiting"
+  },
+  {
+    "claim_id": "CLM-023",
+    "scenario": "incomplete/blank_field",
+    "expected": "request_documents",
+    "predicted": "flag_for_review",
+    "layer": "routing",
+    "sub_cause": "",
+    "explanation": "missing documents ['discharge_summary.admission_date'] not detected (predicted flag_for_review)"
+  },
+  {
+    "claim_id": "CLM-033",
+    "scenario": "covered/base",
+    "expected": "approve",
+    "predicted": "flag_for_review",
+    "layer": "coverage",
+    "sub_cause": "unclear_checks",
+    "explanation": "checks without a valid citation: initial_waiting, specific_disease_waiting"
+  }
+]

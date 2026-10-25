@@ -1,0 +1,39 @@
+# Maps the golden `expected_policy_rule` to the CoverageCheck that must drive the decision and to
+# the sections of the Arogya Sanjeevani wording (POL-AS) a correct citation lies in.
+# `sections` are case-insensitive substrings of the cited section_path. When none matches but a
+# clause IS cited, an LLM judge (EVAL_JUDGE_MODEL, temperature 0) decides, and the result is marked
+# "judged". Rules without a check (approve / risk / documents) are not scored for rule match.
+wording_policies: [POL-AS]   # policies whose wording is ingested: only these can be scored for citations
+synthetic_policies: [POL-STD, POL-PREM]   # wordings generated from policy_rules.yaml (config synthetic_wording)
+rules:
+  room_rent_limit:
+    check: room_rent
+    sections: ["COVERAGE", "Room Rent"]
+    describes: the proportionate deduction when the room rent is above the policy's daily limit
+  co_pay_percent:
+    check: co_pay
+    sections: ["COVERAGE", "Co-pay", "Copay", "DEFINITIONS"]
+    describes: the co-payment the insured bears on every admissible claim
+  sub_limits:
+    check: sub_limit
+    sections: ["COVERAGE", "Cataract", "Sub-limit", "Sub limit"]
+    describes: a per-procedure sub-limit
+  initial_waiting_days:
+    check: initial_waiting
+    sections: ["6.2", "First Thirty Days", "Waiting Period"]
+    describes: the initial (first 30 days) waiting period
+  specific_disease_waiting:
+    check: specific_disease_waiting
+    sections: ["6.3", "Specific Waiting", "Waiting Period"]
+    describes: the waiting period for named diseases and surgeries
+  pre_existing_waiting_months:
+    check: pre_existing
+    sections: ["6.1", "Pre-Existing", "Pre Existing", "Waiting Period"]
+    describes: the waiting period for pre-existing diseases
+  exclusions:
+    check: exclusion
+    sections: ["EXCLUSIONS", "Excl"]
+    describes: an excluded treatment category
+  base_coverage: {}
+  document_completeness: {}
+  risk: {}

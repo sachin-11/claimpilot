@@ -1,0 +1,24 @@
+{
+  "claim_id": "ADV-002",
+  "claimant": {
+    "name": "Bahadurjit Mallick",
+    "age": 67,
+    "gender": "Male",
+    "phone": "05107444520",
+    "email": "bahadurjit42@example.com",
+    "address": "37/77, Manne Marg, Jamshedpur 791737",
+    "relationship_to_insured": "self"
+  },
+  "policy_id": "POL-AS",
+  "policy_number": "POL-AS/2022/6743406",
+  "policy_start_date": "2022-10-15",
+  "sum_insured": 100000,
+  "hospital_name": "Prakash Nursing & Maternity Home",
+  "hospital_city": "Indore",
+  "diagnosis": "Senile Cataract",
+  "admission_date": "2025-11-18",
+  "discharge_date": "2025-11-19",
+  "pre_existing_conditions": [],
+  "is_accident_case": false,
+  "claimed_amount": 45551
+}

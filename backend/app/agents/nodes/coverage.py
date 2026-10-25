@@ -7,9 +7,15 @@ import re
 from typing import Any
 
 from langchain_core.messages import BaseMessage, HumanMessage, SystemMessage
-from pydantic import BaseModel, Field, field_validator, model_validator
+from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
-from app.agents.calculator import PayoutResult, PolicyRules, compute_payout, months_between
+from app.agents.calculator import (
+    ClaimFacts,
+    PayoutResult,
+    PolicyRules,
+    compute_payout,
+    months_between,
+)
 from app.agents.catalog import resolve_diagnosis
 from app.agents.deps import AgentDeps
 from app.agents.events import forward_events
@@ -17,7 +23,12 @@ from app.agents.facts import build_facts
 from app.agents.llm import ask_structured
 from app.agents.prompts import load_prompt
 from app.agents.react import ToolRecord, run_react
-from app.agents.relevance import RelevantCheck, reconcile_amount_checks, relevant_checks
+from app.agents.relevance import (
+    RelevantCheck,
+    reconcile_amount_checks,
+    reconcile_waiting_checks,
+    relevant_checks,
+)
 from app.agents.state import CitedClause, ClaimState, CoverageCheck
 from app.agents.tools import toolbox_for
 from app.core.redaction import redact
@@ -66,9 +77,18 @@ class ClauseRefs:
         return self.by_ref.get(f"C{match.group(1)}", token) if match else token
 
 
+def _require_wording_fields(schema: dict[str, Any]) -> None:
+    """The model must always fill the period fields (null for checks without one): optional fields
+    are skipped by the model, which would leave every waiting check unverified."""
+    required = set(schema.get("required", [])) | {"wording_value", "wording_unit"}
+    schema["required"] = sorted(required)
+
+
 class CoverageCheckLLM(BaseModel):
     """Lenient on purpose: an off-list check name becomes `other` and an off-list result becomes
     `unclear` (the safe, human-reviewed outcome) instead of failing the whole run."""
+
+    model_config = ConfigDict(json_schema_extra=_require_wording_fields)
 
     check: str
     applies: bool = True
@@ -77,6 +97,13 @@ class CoverageCheckLLM(BaseModel):
     chunk_ids: list[str] = Field(
         default_factory=list,
         description='refs of the clauses you rely on, as in the search results: ["C1", "C3"]',
+    )
+    wording_value: float | None = Field(
+        default=None,
+        description="waiting checks only: the waiting period the clause states, e.g. 24",
+    )
+    wording_unit: str | None = Field(
+        default=None, description="waiting checks only: days | months | years"
     )
 
     @model_validator(mode="after")
@@ -225,7 +252,7 @@ def validate_checks(
 
 def checks_to_evaluate(
     state: ClaimState, rules: dict[str, Any]
-) -> tuple[list[RelevantCheck], PayoutResult | None]:
+) -> tuple[list[RelevantCheck], PayoutResult | None, ClaimFacts | None, PolicyRules]:
     """The checks relevant to this claim and the calculation, from structured facts (no LLM)."""
     policy_rules = PolicyRules.model_validate(rules)
     facts, _ = build_facts(
@@ -235,7 +262,7 @@ def checks_to_evaluate(
         policy_rules,
     )
     payout = compute_payout(policy_rules, facts) if facts is not None else None
-    return relevant_checks(policy_rules, facts), payout
+    return relevant_checks(policy_rules, facts), payout, facts, policy_rules
 
 
 def make_coverage_node(deps: AgentDeps):  # type: ignore[no-untyped-def]
@@ -247,7 +274,7 @@ def make_coverage_node(deps: AgentDeps):  # type: ignore[no-untyped-def]
         rules = rules_out["rules"]
 
         summary = claim_summary(state)
-        wanted, payout = checks_to_evaluate(state, rules)
+        wanted, payout, facts, policy_rules = checks_to_evaluate(state, rules)
         refs = ClauseRefs()
         messages: list[BaseMessage] = [
             SystemMessage(content=load_prompt("coverage")),
@@ -277,8 +304,13 @@ def make_coverage_node(deps: AgentDeps):  # type: ignore[no-untyped-def]
             model, CoverageLLMOutput, [*messages, HumanMessage(content=closing)]
         )
         checks = reconcile_amount_checks(
-            validate_checks(
-                output, known_clauses(records), expected=[c.check for c in wanted], refs=refs
+            reconcile_waiting_checks(
+                validate_checks(
+                    output, known_clauses(records), expected=[c.check for c in wanted], refs=refs
+                ),
+                {c.check: (c.wording_value, c.wording_unit) for c in output.checks},
+                policy_rules,
+                facts,
             ),
             payout,
         )

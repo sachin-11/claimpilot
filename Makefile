@@ -1,4 +1,4 @@
-.PHONY: mcp-smoke up down logs test lint fmt migrate seed ingest ingest-dry try-queries eval-candidates eval-review eval-rag eval-run revision shell
+.PHONY: mcp-smoke up down logs test lint fmt migrate seed ingest ingest-dry try-queries eval-candidates eval-review eval-rag eval-run eval-e2e revision shell
 
 up:
 	docker compose up -d --build
@@ -59,3 +59,8 @@ revision:
 
 shell:
 	docker compose exec backend bash
+
+# End-to-end agent evaluation (Module 9): default config vs eval/e2e/thresholds.yaml (exit 1 if below).
+# Uses the separate eval database; usage: make eval-e2e ARGS="--configs default deterministic_routing"
+eval-e2e:
+	docker compose exec -T backend python -m eval.e2e.run_eval --gate $(ARGS)
