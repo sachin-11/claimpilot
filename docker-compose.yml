@@ -90,9 +90,15 @@ services:
     # whatever is still running is re-queued and continues from its checkpoint.
     stop_grace_period: 150s
     healthcheck:
-      test: ["CMD", "arq", "--check", "app.worker.settings.WorkerSettings"]
+      # a light check (no heavy imports): the worker refreshes this key every 5 seconds
+      test:
+        - CMD
+        - python
+        - -c
+        - "import os,sys,redis; sys.exit(0 if redis.Redis.from_url(os.environ['REDIS_URL']).exists('claimpilot:worker:health') else 1)"
       interval: 15s
       timeout: 10s
+      start_period: 30s
       retries: 3
     volumes:
       - ./backend:/app

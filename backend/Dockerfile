@@ -11,7 +11,8 @@ WORKDIR /app
 RUN apt-get update     && apt-get install -y --no-install-recommends         tesseract-ocr tesseract-ocr-eng tesseract-ocr-hin libglib2.0-0 libgl1     && rm -rf /var/lib/apt/lists/*
 
 COPY . .
-RUN pip install -e ".[dev]"
+# pip itself has advisories in the base image version: upgrade it before installing anything
+RUN pip install --upgrade pip && pip install -e ".[dev]"
 
 # spaCy model used by Presidio for person-name detection (PII masking before LLM calls).
 RUN python -m spacy download en_core_web_sm

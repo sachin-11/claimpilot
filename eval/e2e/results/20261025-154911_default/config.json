@@ -1,0 +1,9 @@
+{
+  "name": "default",
+  "description": "Current settings (supervisor LLM on, Claude Haiku 5.5 via ANTHROPIC_API_KEY, no reranker). Numbers before 2026-10-25 were gpt-4o-mini.",
+  "supervisor_llm": true,
+  "model": "anthropic",
+  "reranker": "none",
+  "fresh_extraction": true,
+  "synthetic_wording": false
+}

@@ -57,9 +57,20 @@ class QueuedAgentRuntime(AgentRuntime):
                 "interrupt": None,
                 "state": {},
             }
-        if busy:
+        if busy and not self._phase_finished(meta, snapshot):
             snapshot["status"] = "running" if meta["state"] == "running" else "queued"
         return snapshot
+
+    @staticmethod
+    def _phase_finished(meta: dict[str, str], snapshot: dict[str, Any]) -> bool:
+        """The checkpoint already shows the end of the current phase although the worker has not yet
+        marked the job idle (the terminal event is published a moment before): the run is paused
+        at the approval (phase 0) or done (phase 1). Without this a client that reacts to the
+        `awaiting_approval` event would still read "running"."""
+        epoch = int(meta.get("epoch") or 0)
+        if epoch == START_EPOCH:
+            return snapshot["interrupt"] is not None or snapshot["status"] == "failed"
+        return snapshot["status"] in {"completed", "failed"}
 
     async def stream_run(self, run_id: str) -> AsyncIterator[dict[str, Any]]:
         """Events of the current phase from the Redis stream, until it pauses or ends. A run that is

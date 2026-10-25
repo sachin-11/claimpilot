@@ -41,7 +41,7 @@ from eval.e2e.common import (
 )
 from eval.e2e.harness import EvalEnv, judge_supported
 from eval.e2e.report import render_compare, write_report
-from eval.e2e.setup_db import reset_state, setup, sync_wordings
+from eval.e2e.setup_db import migrate, reset_state, setup, sync_wordings
 
 logger = logging.getLogger("eval.e2e")
 
@@ -118,6 +118,8 @@ def push_to_langfuse(
     by_claim = {s["claim_id"]: s for s in scores}
     adv = {a["claim_id"]: a for a in adversarial}
     for run in runs:
+        if not run.get("run_id"):  # a run that crashed before it started has no trace
+            continue
         trace_id = trace_id_for(run["run_id"])
         lf.link_run(run_name, run["claim_id"], trace_id, {"config": config})
         s, a = by_claim.get(run["claim_id"]), adv.get(run["claim_id"])
@@ -352,6 +354,8 @@ async def amain(args: argparse.Namespace) -> int:
     if not args.skip_setup:
         logger.info("setting up the eval database %s", eval_url.rsplit("/", 1)[-1])
         data_root = await setup(eval_url, main_url)
+    else:  # an existing eval database must still match the current schema
+        await asyncio.to_thread(migrate, eval_url)
 
     rule_map = load_yaml(RULE_MAP_PATH)
     cases = select_cases(load_cases(include_adversarial=not args.no_adversarial), args)

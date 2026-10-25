@@ -1,0 +1,263 @@
+[
+  {
+    "claim_id": "CLM-001",
+    "scenario": "covered/base",
+    "expected": "approve",
+    "predicted": "flag_for_review",
+    "layer": "coverage",
+    "sub_cause": "no_policy_wording",
+    "explanation": "no policy wording ingested for POL-PREM: initial_waiting, specific_disease_waiting, sub_limit unclear"
+  },
+  {
+    "claim_id": "CLM-002",
+    "scenario": "covered/base",
+    "expected": "approve",
+    "predicted": "flag_for_review",
+    "layer": "coverage",
+    "sub_cause": "no_policy_wording",
+    "explanation": "no policy wording ingested for POL-PREM: initial_waiting, specific_disease_waiting unclear"
+  },
+  {
+    "claim_id": "CLM-003",
+    "scenario": "covered/base",
+    "expected": "approve",
+    "predicted": "flag_for_review",
+    "layer": "coverage",
+    "sub_cause": "no_policy_wording",
+    "explanation": "no policy wording ingested for POL-STD: initial_waiting, specific_disease_waiting, room_rent unclear"
+  },
+  {
+    "claim_id": "CLM-005",
+    "scenario": "rejected/specific_waiting:hernia",
+    "expected": "reject",
+    "predicted": "flag_for_review",
+    "layer": "coverage",
+    "sub_cause": "no_policy_wording",
+    "explanation": "no policy wording ingested for POL-STD: initial_waiting, specific_disease_waiting, room_rent unclear"
+  },
+  {
+    "claim_id": "CLM-006",
+    "scenario": "rejected/specific_waiting:cataract",
+    "expected": "reject",
+    "predicted": "flag_for_review",
+    "layer": "coverage",
+    "sub_cause": "no_policy_wording",
+    "explanation": "no policy wording ingested for POL-PREM: initial_waiting, specific_disease_waiting, sub_limit unclear"
+  },
+  {
+    "claim_id": "CLM-008",
+    "scenario": "covered/base",
+    "expected": "approve",
+    "predicted": "flag_for_review",
+    "layer": "coverage",
+    "sub_cause": "no_policy_wording",
+    "explanation": "no policy wording ingested for POL-STD: initial_waiting, room_rent unclear"
+  },
+  {
+    "claim_id": "CLM-009",
+    "scenario": "covered/base",
+    "expected": "approve",
+    "predicted": "flag_for_review",
+    "layer": "coverage",
+    "sub_cause": "no_policy_wording",
+    "explanation": "no policy wording ingested for POL-STD: initial_waiting, specific_disease_waiting, room_rent unclear"
+  },
+  {
+    "claim_id": "CLM-011",
+    "scenario": "partial/room_rent",
+    "expected": "partial_approve",
+    "predicted": "flag_for_review",
+    "layer": "coverage",
+    "sub_cause": "no_policy_wording",
+    "explanation": "no policy wording ingested for POL-STD: initial_waiting, specific_disease_waiting, room_rent unclear"
+  },
+  {
+    "claim_id": "CLM-012",
+    "scenario": "rejected/exclusion:obesity_treatment",
+    "expected": "reject",
+    "predicted": "flag_for_review",
+    "layer": "coverage",
+    "sub_cause": "no_policy_wording",
+    "explanation": "no policy wording ingested for POL-PREM: initial_waiting, exclusion unclear"
+  },
+  {
+    "claim_id": "CLM-013",
+    "scenario": "rejected/initial_waiting",
+    "expected": "reject",
+    "predicted": "flag_for_review",
+    "layer": "coverage",
+    "sub_cause": "no_policy_wording",
+    "explanation": "no policy wording ingested for POL-PREM: initial_waiting, specific_disease_waiting, sub_limit unclear"
+  },
+  {
+    "claim_id": "CLM-014",
+    "scenario": "partial/room_rent",
+    "expected": "partial_approve",
+    "predicted": "flag_for_review",
+    "layer": "coverage",
+    "sub_cause": "unclear_checks",
+    "explanation": "checks without a valid citation: co_pay"
+  },
+  {
+    "claim_id": "CLM-015",
+    "scenario": "covered/base",
+    "expected": "approve",
+    "predicted": "flag_for_review",
+    "layer": "coverage",
+    "sub_cause": "no_policy_wording",
+    "explanation": "no policy wording ingested for POL-PREM: initial_waiting, specific_disease_waiting unclear"
+  },
+  {
+    "claim_id": "CLM-018",
+    "scenario": "rejected/pre_existing",
+    "expected": "reject",
+    "predicted": "flag_for_review",
+    "layer": "coverage",
+    "sub_cause": "rules_vs_wording",
+    "explanation": "policy rules and wording disagree on a blocking rule"
+  },
+  {
+    "claim_id": "CLM-019",
+    "scenario": "covered/base",
+    "expected": "approve",
+    "predicted": "flag_for_review",
+    "layer": "coverage",
+    "sub_cause": "no_policy_wording",
+    "explanation": "no policy wording ingested for POL-PREM: initial_waiting, specific_disease_waiting unclear"
+  },
+  {
+    "claim_id": "CLM-020",
+    "scenario": "partial/copay",
+    "expected": "partial_approve",
+    "predicted": "flag_for_review",
+    "layer": "coverage",
+    "sub_cause": "unclear_checks",
+    "explanation": "checks without a valid citation: co_pay"
+  },
+  {
+    "claim_id": "CLM-021",
+    "scenario": "partial/sub_limit",
+    "expected": "partial_approve",
+    "predicted": "flag_for_review",
+    "layer": "coverage",
+    "sub_cause": "no_policy_wording",
+    "explanation": "no policy wording ingested for POL-PREM: initial_waiting, specific_disease_waiting, sub_limit unclear"
+  },
+  {
+    "claim_id": "CLM-024",
+    "scenario": "rejected/exclusion:dental_unless_accident",
+    "expected": "reject",
+    "predicted": "flag_for_review",
+    "layer": "coverage",
+    "sub_cause": "no_policy_wording",
+    "explanation": "no policy wording ingested for POL-PREM: initial_waiting, exclusion unclear"
+  },
+  {
+    "claim_id": "CLM-025",
+    "scenario": "partial/copay",
+    "expected": "partial_approve",
+    "predicted": "flag_for_review",
+    "layer": "coverage",
+    "sub_cause": "unclear_checks",
+    "explanation": "checks without a valid citation: co_pay"
+  },
+  {
+    "claim_id": "CLM-026",
+    "scenario": "partial/copay",
+    "expected": "partial_approve",
+    "predicted": "flag_for_review",
+    "layer": "coverage",
+    "sub_cause": "unclear_checks",
+    "explanation": "checks without a valid citation: co_pay"
+  },
+  {
+    "claim_id": "CLM-029",
+    "scenario": "covered/base",
+    "expected": "approve",
+    "predicted": "flag_for_review",
+    "layer": "coverage",
+    "sub_cause": "no_policy_wording",
+    "explanation": "no policy wording ingested for POL-PREM: initial_waiting, specific_disease_waiting, sub_limit unclear"
+  },
+  {
+    "claim_id": "CLM-030",
+    "scenario": "covered/base",
+    "expected": "approve",
+    "predicted": "flag_for_review",
+    "layer": "coverage",
+    "sub_cause": "no_policy_wording",
+    "explanation": "no policy wording ingested for POL-PREM: initial_waiting, specific_disease_waiting unclear"
+  },
+  {
+    "claim_id": "CLM-033",
+    "scenario": "covered/base",
+    "expected": "approve",
+    "predicted": "flag_for_review",
+    "layer": "coverage",
+    "sub_cause": "no_policy_wording",
+    "explanation": "no policy wording ingested for POL-PREM: initial_waiting, specific_disease_waiting unclear"
+  },
+  {
+    "claim_id": "CLM-034",
+    "scenario": "covered/base",
+    "expected": "approve",
+    "predicted": "flag_for_review",
+    "layer": "coverage",
+    "sub_cause": "no_policy_wording",
+    "explanation": "no policy wording ingested for POL-PREM: initial_waiting unclear"
+  },
+  {
+    "claim_id": "CLM-035",
+    "scenario": "covered/base",
+    "expected": "approve",
+    "predicted": "flag_for_review",
+    "layer": "coverage",
+    "sub_cause": "no_policy_wording",
+    "explanation": "no policy wording ingested for POL-STD: initial_waiting, room_rent unclear"
+  },
+  {
+    "claim_id": "CLM-036",
+    "scenario": "covered/base",
+    "expected": "approve",
+    "predicted": "flag_for_review",
+    "layer": "coverage",
+    "sub_cause": "no_policy_wording",
+    "explanation": "no policy wording ingested for POL-STD: initial_waiting, specific_disease_waiting, room_rent unclear"
+  },
+  {
+    "claim_id": "CLM-037",
+    "scenario": "partial/room_rent",
+    "expected": "partial_approve",
+    "predicted": "flag_for_review",
+    "layer": "coverage",
+    "sub_cause": "no_policy_wording",
+    "explanation": "no policy wording ingested for POL-STD: initial_waiting, room_rent unclear"
+  },
+  {
+    "claim_id": "CLM-038",
+    "scenario": "partial/sub_limit",
+    "expected": "partial_approve",
+    "predicted": "flag_for_review",
+    "layer": "coverage",
+    "sub_cause": "no_policy_wording",
+    "explanation": "no policy wording ingested for POL-STD: initial_waiting, specific_disease_waiting, room_rent, sub_limit unclear"
+  },
+  {
+    "claim_id": "CLM-039",
+    "scenario": "covered/base",
+    "expected": "approve",
+    "predicted": "flag_for_review",
+    "layer": "coverage",
+    "sub_cause": "no_policy_wording",
+    "explanation": "no policy wording ingested for POL-PREM: initial_waiting unclear"
+  },
+  {
+    "claim_id": "CLM-040",
+    "scenario": "covered/base",
+    "expected": "approve",
+    "predicted": "flag_for_review",
+    "layer": "coverage",
+    "sub_cause": "no_policy_wording",
+    "explanation": "no policy wording ingested for POL-PREM: initial_waiting, specific_disease_waiting unclear"
+  }
+]

@@ -66,7 +66,7 @@ claimpilot/
 7. MCP servers  (done)
 8. LangGraph agents  (done)
 9. End-to-end eval  (done)
-10. Observability + hardening  (in progress: parts A-D coded and unit tested; step 4, the e2e regression run, and a real-stack check of the worker are still open)
+10. Observability + hardening  (done)
 11. Frontend
 12. Deploy + docs
 
@@ -348,11 +348,9 @@ to the FIRST wrong layer: infra, extraction, routing, coverage (sub-causes `no_p
    "27 months vs 24" backwards. Without the required schema fields the model left them empty and every waiting check became `unclear` (35% accuracy).
 - Lesson: gpt-4o-mini reads text well but compares numbers unreliably; let it extract, let code decide. And optional structured fields get skipped.
 
-## Observability + hardening (Module 10) - status: in progress
-Parts A (tracing, metrics), B (auth, limits), C (arq worker, health) and D (CI) are written and covered by
-tests (410 pass, ruff clean). NOT done yet: the step-4 regression run (`make eval-e2e` against the Claude
-baseline below), a check of the worker on the real compose stack (pause / resume, SIGTERM mid-run), the
-final `pip-audit` run, and the Langfuse score check for `eval-rag`.
+## Observability + hardening (Module 10) - status: done (see 'Verification' at the end of this section)
+Parts A (tracing, metrics), B (auth, limits, hardening), C (arq worker, health) and D (CI) are in; the
+suite has 411 tests (no LLM calls), ruff is clean and pip-audit reports no known vulnerabilities.
 
 ### Tracing and metrics (`app/observability/`)
 - Langfuse is optional: with both `LANGFUSE_PUBLIC_KEY` / `LANGFUSE_SECRET_KEY` unset nothing is imported or sent.
@@ -430,3 +428,23 @@ final `pip-audit` run, and the Langfuse score check for `eval-rag`.
 | Adversarial | 5/5 | 5/5 |
 | Cost per claim | $0.0061 | $0.0049 |
 Folder: `eval/e2e/results/20261025-135528_*`.
+
+### Verification (2026-10-25)
+- **Regression** (`eval/e2e/results/20261025-154911_*`, same Claude Haiku 5.5, tracing on, `--langfuse`): every metric equals the baseline above
+  (default 27.5%, synthetic_wording 87.5%, amount 83.3% / 97.2%, adversarial 5/5, error 0%); one decision differs (ADV-002 partial_approve ->
+  flag_for_review, both acceptable, LLM noise). Latency p95 41.1 -> 38.7 s (default), 30.3 -> 34.6 s (synthetic), cost $0.0061 -> $0.0060 / $0.0049 -> $0.0051.
+- **`make eval-e2e`** now runs `--configs synthetic_wording default`: the gate (`thresholds.yaml`) is checked on the FIRST config and `default` cannot
+  reach it by design (only POL-AS has a wording). `--skip-setup` now migrates the eval database too (a first run failed because it was behind).
+- **Real compose stack** (backend + worker + 3 MCP + Redis + Postgres): login, 401 without a token, enqueue -> `queued` -> 30 SSE events ->
+  `awaiting_approval`, a second client replays the same events; a worker restart while paused, then approve (reviewer = the token's user, a fake
+  `reviewer_id` in the body ignored) -> resume -> `completed` + `sent_mock`; SIGTERM mid-run: the worker waited ~29 s and finished the job;
+  SIGKILL mid-run: the job stayed locked in arq (job_timeout + 10 s), so `worker/recovery.py` was added and the run was taken again in ~40 s.
+  Also fixed there: the `awaiting_approval` event arrived before the worker marked the job idle, so a client reading the status at once saw
+  `running` (status is now derived from the checkpoint per phase); the compose healthcheck used `arq --check` (heavy imports, > 10 s) and is now a Redis key check.
+- **Langfuse** (Cloud): a worker-run claim is one trace across both phases (session = claim number, user, 9 generations with cost per node, 34 MCP
+  spans), raw phone / e-mail / Aadhaar / PAN: 0 hits; a policy_query with a phone and e-mail in the question shows `[phone]` / `[email]`.
+- **pip-audit**: `cryptography` 48.0.1 (6 advisories) -> `>=50` (Presidio pins `<49` but its masking and its AES encrypt / decrypt operators work with 50;
+  tests pass) and `pip` upgraded in the Dockerfile. Rebuild the image to bake both in (`docker compose build backend`); the running containers were upgraded in place.
+- Known limits: an orphaned `extract_claim` / `ingest_policies` job is not re-queued after a hard kill (only agent runs are, ~1 min); with
+  RAG stages running in the MCP server process they do not appear inside a claim trace; the Langfuse scores API used for reading back is v3
+  (`/api/public/v3/scores`) because the old one is gone for new organisations; the GitHub workflows need a token with the `workflow` scope to be pushed.

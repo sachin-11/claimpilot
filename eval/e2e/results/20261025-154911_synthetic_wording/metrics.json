@@ -1,0 +1,155 @@
+{
+  "all": {
+    "claims": 40,
+    "decision_accuracy": 0.875,
+    "decision_accuracy_by_scenario": {
+      "covered": {
+        "n": 15,
+        "accuracy": 1.0
+      },
+      "incomplete": {
+        "n": 4,
+        "accuracy": 1.0
+      },
+      "partial": {
+        "n": 8,
+        "accuracy": 0.5
+      },
+      "rejected": {
+        "n": 7,
+        "accuracy": 0.8571428571428571
+      },
+      "risk": {
+        "n": 6,
+        "accuracy": 1.0
+      }
+    },
+    "confusion": {
+      "approve": {
+        "approve": 15
+      },
+      "partial_approve": {
+        "partial_approve": 4,
+        "flag_for_review": 4
+      },
+      "reject": {
+        "reject": 6,
+        "flag_for_review": 1
+      },
+      "flag_for_review": {
+        "flag_for_review": 6
+      },
+      "request_documents": {
+        "request_documents": 4
+      }
+    },
+    "amount_within_tolerance": 0.9722222222222222,
+    "amount_mae": 3695.509166666667,
+    "amount_within_5pct": 0.9722222222222222,
+    "deductions_match": 0.9444444444444444,
+    "rule_match": 0.9333333333333333,
+    "check_resolved": 0.7333333333333333,
+    "citation_correctness": 1.0,
+    "citation_judged_share": 0.0,
+    "citation_n": 15,
+    "unclear_rate": 0.08791208791208792,
+    "risk_precision": 0.8571428571428571,
+    "risk_recall": 1.0,
+    "risk_f1": 0.923076923076923,
+    "missing_docs_accuracy": 1.0,
+    "missing_docs_exact": 1.0,
+    "adversarial_pass_rate": 1.0,
+    "adversarial_n": 5,
+    "runs": 40,
+    "error_rate": 0.0,
+    "recursion_hits": 0,
+    "latency_p50_s": 23.03506239499984,
+    "latency_p95_s": 34.6424137702972,
+    "node_latency_p50_s": {
+      "coverage": 11.417673588995967,
+      "decision": 2.1382211734999146,
+      "intake": 7.3671253905013145,
+      "risk": 1.9229862585016235
+    },
+    "node_latency_p95_s": {
+      "coverage": 15.962862378000864,
+      "decision": 3.2271531483987923,
+      "intake": 11.957776811250005,
+      "risk": 2.8729490704990894
+    },
+    "llm_calls_per_claim": 7.475,
+    "tool_calls_per_claim": 12.075,
+    "tokens_per_claim": 35922.9,
+    "cost_per_claim_usd": 0.00514135,
+    "fallback_rate": 0.0
+  },
+  "wording": {
+    "claims": 7,
+    "decision_accuracy": 0.2857142857142857,
+    "decision_accuracy_by_scenario": {
+      "partial": {
+        "n": 4,
+        "accuracy": 0.0
+      },
+      "rejected": {
+        "n": 2,
+        "accuracy": 0.5
+      },
+      "risk": {
+        "n": 1,
+        "accuracy": 1.0
+      }
+    },
+    "confusion": {
+      "partial_approve": {
+        "flag_for_review": 4
+      },
+      "reject": {
+        "flag_for_review": 1,
+        "reject": 1
+      },
+      "flag_for_review": {
+        "flag_for_review": 1
+      }
+    },
+    "amount_within_tolerance": 0.8571428571428571,
+    "amount_mae": 19005.444285714282,
+    "amount_within_5pct": 0.8571428571428571,
+    "deductions_match": 0.8571428571428571,
+    "rule_match": 0.8333333333333334,
+    "check_resolved": 0.3333333333333333,
+    "citation_correctness": 1.0,
+    "citation_judged_share": 0.0,
+    "citation_n": 6,
+    "unclear_rate": 0.34782608695652173,
+    "risk_precision": 1.0,
+    "risk_recall": 1.0,
+    "risk_f1": 1.0,
+    "missing_docs_accuracy": 1.0,
+    "missing_docs_exact": 1.0,
+    "adversarial_pass_rate": 1.0,
+    "adversarial_n": 5,
+    "runs": 7,
+    "error_rate": 0.0,
+    "recursion_hits": 0,
+    "latency_p50_s": 27.73276868800167,
+    "latency_p95_s": 37.22480633499945,
+    "node_latency_p50_s": {
+      "coverage": 14.468599820000236,
+      "decision": 2.826667132001603,
+      "intake": 6.762259644994629,
+      "risk": 1.8510898559979978
+    },
+    "node_latency_p95_s": {
+      "coverage": 23.497689520696433,
+      "decision": 11.49944184529958,
+      "intake": 7.820846914601134,
+      "risk": 2.6320612851974143
+    },
+    "llm_calls_per_claim": 8.428571428571429,
+    "tool_calls_per_claim": 14.0,
+    "tokens_per_claim": 61651.42857142857,
+    "cost_per_claim_usd": 0.00805662857142857,
+    "fallback_rate": 0.0
+  }
+}

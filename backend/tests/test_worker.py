@@ -128,6 +128,11 @@ async def test_a_run_goes_through_the_queue_pauses_and_resumes(
         state = await api.get_run_state(run_id)  # read from the checkpoint by the API
         assert state["status"] == "awaiting_approval"
         assert (await bus.get_meta(run_id))["state"] == "idle"
+        # the terminal event is published a moment before the worker marks the job idle: a client
+        # that reacts to it must already see "awaiting_approval", not "running"
+        await bus.set_meta(run_id, state="running")
+        assert (await api.get_run_state(run_id))["status"] == "awaiting_approval"
+        await bus.set_meta(run_id, state="idle")
         streamed = [item async for item in api.stream_run(run_id)]
         events = [item["event"] for item in streamed]
         assert events[0] == "node_started" and events[-1] == "awaiting_approval"
@@ -146,6 +151,8 @@ async def test_a_run_goes_through_the_queue_pauses_and_resumes(
 
         done = await api.get_run_state(run_id)
         assert done["status"] == "completed"
+        await bus.set_meta(run_id, state="running")  # same race at the end of the second phase
+        assert (await api.get_run_state(run_id))["status"] == "completed"
         resumed = [item["event"] async for item in api.stream_run(run_id)]
         assert resumed[-1] == "completed" and "awaiting_approval" not in resumed  # its own phase
 
@@ -395,3 +402,39 @@ def test_readiness_reports_everything_but_only_requires_the_dependencies(
 def test_retry_is_arq_retry() -> None:
     assert issubclass(Retry, Exception)  # the exception the jobs raise to be tried again
     assert QUEUE_NAME == "claimpilot:jobs"
+
+
+# ------------------------------------------------------------------ a worker that died
+
+
+async def test_a_dead_workers_run_is_taken_again(pool: ArqRedis, bus: RunBus) -> None:
+    from arq.constants import in_progress_key_prefix
+
+    from app.worker.recovery import ALIVE_PREFIX, beat, recover_orphans, retire
+
+    runtime = FlakyRuntime([])
+    ctx: dict[str, Any] = {
+        "runtime": runtime, "bus": bus, "max_tries": 3, "worker_id": "w-live", "redis": pool,
+        "queue_name": TEST_QUEUE,
+    }  # fmt: skip
+    # a job a worker took and then died with: queued, locked "in progress", meta says running
+    await pool.enqueue_job(
+        JOB_RUN, "start", "r-dead", {}, {}, _job_id="r-dead:0", _queue_name=TEST_QUEUE
+    )
+    await pool.set(in_progress_key_prefix + "r-dead:0", b"1", px=1_200_000)
+    await bus.set_meta("r-dead", state="running", epoch=0, worker="w-dead")
+
+    await beat(ctx)
+    assert await recover_orphans(ctx) == 1  # w-dead has no heartbeat
+    assert await pool.exists(in_progress_key_prefix + "r-dead:0") == 0
+    assert (await bus.get_meta("r-dead"))["state"] == "queued"
+    await burst(pool, [tasks.run_agent], ctx)
+    assert runtime.calls == 1 and (await bus.get_meta("r-dead"))["state"] == "idle"
+
+    # a run whose worker is alive is left alone, and a clean shutdown frees its jobs at once
+    await bus.set_meta("r-busy", state="running", epoch=0, worker="w-live")
+    assert await recover_orphans(ctx) == 0
+    await retire(ctx)
+    assert await pool.exists(ALIVE_PREFIX + "w-live") == 0
+    assert await recover_orphans(ctx) == 0  # r-busy's job is not queued: marked stalled, not re-run
+    assert (await bus.get_meta("r-busy"))["status"] == "stalled"

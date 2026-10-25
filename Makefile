@@ -64,9 +64,11 @@ shell:
 	docker compose exec backend bash
 
 # End-to-end agent evaluation (Module 9): default config vs eval/e2e/thresholds.yaml (exit 1 if below).
-# Uses the separate eval database; usage: make eval-e2e ARGS="--configs default deterministic_routing"
+# Uses the separate eval database. The gate is checked on the FIRST config: synthetic_wording (every
+# policy has a wording), because `default` only has the real POL-AS wording and cannot reach the
+# thresholds by design. Usage: make eval-e2e ARGS="--configs synthetic_wording deterministic_routing --langfuse"
 eval-e2e:
-	docker compose exec -T backend python -m eval.e2e.run_eval --gate $(ARGS)
+	docker compose exec -T backend python -m eval.e2e.run_eval --gate --configs synthetic_wording default $(ARGS)
 
 # Self-hosted Langfuse (opt-in, ~4 GB RAM): UI http://localhost:3000. Put LANGFUSE_PUBLIC_KEY,
 # LANGFUSE_SECRET_KEY and LANGFUSE_BASE_URL=http://langfuse-web:3000 in .env (see .env.example).

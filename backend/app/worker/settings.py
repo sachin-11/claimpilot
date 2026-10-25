@@ -8,8 +8,10 @@ re-queued, and it continues from its last checkpoint when a worker picks it up a
 import logging
 import os
 import socket
+import uuid
 from typing import Any
 
+from arq import cron
 from prometheus_client import start_http_server
 from sqlalchemy.ext.asyncio import async_sessionmaker
 
@@ -28,6 +30,7 @@ from app.rag.cache import SemanticCache
 from app.rag.config import get_rag_settings
 from app.worker.bus import RunBus
 from app.worker.queue import HEALTH_KEY, QUEUE_NAME, redis_settings
+from app.worker.recovery import beat, recover_orphans, retire
 from app.worker.tasks import extract_claim, ingest_policies, run_agent
 
 logger = logging.getLogger(__name__)
@@ -69,14 +72,17 @@ async def on_startup(ctx: dict[str, Any]) -> None:
         ingestion_settings=get_ingestion_settings(),
         on_policy_changed=rag_cache.invalidate_policy,
         max_tries=settings.worker_max_tries,
-        worker_id=f"{socket.gethostname()}:{os.getpid()}",
+        # a fresh suffix per start: a restarted container must not look like the worker it replaced
+        worker_id=f"{socket.gethostname()}:{os.getpid()}:{uuid.uuid4().hex[:8]}",
     )
+    await beat(ctx)  # alive before the first job can start
     start_http_server(settings.worker_metrics_port)  # this process' own /metrics
     logger.info("worker_started", extra={"worker": ctx["worker_id"], "queue": QUEUE_NAME})
 
 
 async def on_shutdown(ctx: dict[str, Any]) -> None:
     logger.info("worker_stopping")
+    await retire(ctx)
     await ctx["runtime"].close()
     await ctx["engine"].dispose()
     flush_tracing()
@@ -85,6 +91,10 @@ async def on_shutdown(ctx: dict[str, Any]) -> None:
 
 class WorkerSettings:
     functions = [run_agent, extract_claim, ingest_policies]
+    cron_jobs = [
+        cron(beat, second=set(range(0, 60, 5)), run_at_startup=False),
+        cron(recover_orphans, second={10, 40}, run_at_startup=False),
+    ]
     queue_name = QUEUE_NAME
     redis_settings = redis_settings(settings)
     on_startup = on_startup
