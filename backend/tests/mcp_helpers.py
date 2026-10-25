@@ -1,6 +1,7 @@
 """Helpers for the MCP server tests: rows in the rolled-back test DB, an in-memory MCP client, and a
 fake RetrievalService (no LLM / embedding / network)."""
 
+import asyncio
 import contextlib
 import json
 import uuid
@@ -26,15 +27,26 @@ def mcp_settings(**overrides: Any) -> McpSettings:
     return McpSettings(_env_file=None, **overrides)
 
 
-def deps_for(session: AsyncSession, rag: Any = None, **settings: Any) -> ServerDeps:
-    """Deps whose DB session is the shared, rolled-back test session (never closed here)."""
+def shared_session_factory(session: AsyncSession):  # type: ignore[no-untyped-def]
+    """A session factory handing out the ONE rolled-back test session (never closed here).
+
+    Parallel graph nodes would otherwise use a single asyncpg connection concurrently, which the
+    driver forbids; in production every tool call opens its own session. The lock makes the
+    shared session behave like a queue of short sessions."""
+    lock = session.info.setdefault("test_lock", asyncio.Lock())
 
     @contextlib.asynccontextmanager
     async def shared() -> AsyncIterator[AsyncSession]:
-        yield session
+        async with lock:
+            yield session
 
+    return shared
+
+
+def deps_for(session: AsyncSession, rag: Any = None, **settings: Any) -> ServerDeps:
+    """Deps whose DB session is the shared, rolled-back test session."""
     return ServerDeps(
-        session_factory=shared,
+        session_factory=shared_session_factory(session),
         settings=mcp_settings(**settings),
         rag_factory=(lambda: rag) if rag is not None else None,
     )

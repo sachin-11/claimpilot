@@ -8,7 +8,7 @@ from fastapi import FastAPI, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.ext.asyncio import async_sessionmaker
 
-from app.api import claims, health, policies, rag
+from app.api import agent_runs, claims, health, policies, rag
 from app.core.config import Settings, get_settings
 from app.core.db import create_engine
 from app.core.errors import register_exception_handlers
@@ -19,6 +19,15 @@ from app.core.redis import create_redis
 logger = logging.getLogger(__name__)
 
 
+async def warm_up_agents(app: FastAPI) -> None:
+    """Create the checkpointer tables (setup()) at startup. Best effort: if the database is not
+    reachable yet, the first agent request builds the runtime instead."""
+    try:
+        app.state.agent_runtime = await agent_runs.build_runtime(app)
+    except Exception:  # noqa: BLE001
+        logger.warning("agent_runtime_warmup_failed", exc_info=True)
+
+
 @asynccontextmanager
 async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     settings: Settings = app.state.settings
@@ -27,10 +36,15 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     app.state.session_factory = async_sessionmaker(app.state.engine, expire_on_commit=False)
     app.state.redis = create_redis(settings.redis_url)
     app.state.embedder_factory = get_embeddings  # tests swap in a fake
+    app.state.agent_runtime = None  # built on first use (see api/agent_runs.py)
+    if settings.app_env != "test":
+        await warm_up_agents(app)
     logger.info("app_started", extra={"env": settings.app_env})
     try:
         yield
     finally:
+        if app.state.agent_runtime is not None:
+            await app.state.agent_runtime.close()
         await app.state.redis.aclose()
         await app.state.engine.dispose()
         logger.info("app_stopped")
@@ -82,6 +96,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     app.include_router(policies.router)
     app.include_router(rag.router)
     app.include_router(claims.router)
+    app.include_router(agent_runs.router)
     return app
 
 

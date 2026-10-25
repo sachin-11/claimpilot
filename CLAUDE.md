@@ -36,6 +36,7 @@ claimpilot/
       ingestion/         # PDF -> chunks -> embeddings (Module 3)
       rag/               # hybrid retrieval + grounded answers (Module 4)
       mcp_client/        # tokens.py, client.py (MultiServerMCPClient), smoke.py (Module 7)
+      agents/            # LangGraph claim workflow (Module 8); docs/agent_graph.md is the diagram
     alembic/             # async migrations; 0001 pgvector, 0002 core schema, 0004 notifications + tool_idempotency
     tests/
   mcp_servers/           # common/, policy_docs/, claims_db/, notify/ (Module 7), README.md
@@ -63,7 +64,7 @@ claimpilot/
 5. RAG eval
 6. OCR + intake extraction
 7. MCP servers  (done)
-8. LangGraph agents
+8. LangGraph agents  (done)
 9. End-to-end eval
 10. Observability + hardening
 11. Frontend
@@ -190,5 +191,95 @@ Details, tool lists, Claude Desktop demo: `mcp_servers/README.md`.
 | Notify | notify: send_status_update, only after human approval |
 
 ### Known issues
-- 25 intake/PII tests fail (`tests/test_intake_*`): `spacy.load("en_core_web_sm")` raises OverflowError in the
-  current image (also in a pristine container). Not related to Module 7; 193 other tests pass.
+- (fixed in Module 8) spaCy `OverflowError` on model load: `preshed==3.0.10` is pinned in pyproject.
+
+## Agents (Module 8) - status: done (301 tests pass; 8 claims run end to end on real MCP + LLM)
+`backend/app/agents/`. One run = one LangGraph thread (`thread_id = run_id`), checkpointed in Postgres
+(`AsyncPostgresSaver` on a psycopg pool, `setup()` at startup; `agent_runtime` lives in `app.state`).
+Pins: `langgraph==1.2.17`, `langgraph-checkpoint-postgres==3.2.0`, `psycopg[binary,pool]`.
+```
+intake -> supervisor -+-> coverage -+-> supervisor -> decision -> approval (interrupt) -> finalize -> END
+                      +-> risk -----+                  (missing docs / no policy: supervisor -> decision directly)
+any node --fails--> error -> END          nodes: nodes/{intake,coverage,risk,decision,approval,finalize,error}.py
+```
+- **Routing (supervisor.py), why hybrid:** `allowed_steps(state)` (hard guards) decides what may run; the
+  LLM (`SupervisorChoice`) only picks among those, skipped when just one step is allowed. Invalid or failed
+  LLM output -> deterministic order. Both are logged (`supervisor_route`). So: LLM flexibility, hard
+  guarantees on order (intake first, coverage/risk only with complete documents, decision after the join).
+  Coverage and risk run in the same super-step, so the next supervisor visit is the join.
+- **State:** `state.py`. Sub-models are Pydantic; the graph state stores plain JSON dicts (portable
+  checkpoints). `completed_steps` / `errors` append, `models_used` merges. No names or contact details in state.
+- **Permissions (tools.py `AGENT_TOOLS`, each agent has its own MCP identity `<agent>-agent`):**
+  intake: claims_db get_claim, get_claim_extraction, get_customer_history, update_claim_status |
+  coverage: policy_docs search_policy, get_policy_rules | risk: claims_db read tools only |
+  decision: claims_db save_decision_draft, update_claim_status | finalize: notify send_status_update |
+  supervisor (error path only): update_claim_status. New token identity `supervisor-agent` (.env).
+- **Intake node:** uses the latest extraction, or runs `IntakeService.process` (Module 6) if none; moves
+  the claim to `processing`; reads pre-existing conditions and `is_accident` from the JSON claim form
+  (`claim_form.py`, not part of the Module 6 extraction).
+- **Coverage agent:** `relevance.py` decides deterministically WHICH checks matter for the claim (initial
+  waiting always; specific waiting / pre-existing / exclusion / room rent / ICU / sub-limit / co-pay only when
+  the facts and rules make them relevant) with a suggested search query each; the model evaluates exactly those
+  (extra checks dropped, skipped ones become `unclear`). `react.py` subgraph (model <-> own tool node) with a tool-call budget
+  (`COVERAGE_MAX_TOOL_CALLS=8`, recursion_limit = 2 steps per call; running out is not an error). Citations
+  are validated against clauses `search_policy` returned in this run; section/pages come from our records;
+  any applicable check without a valid citation becomes `unclear`. The model cites clauses by SHORT REFS
+  (`C1`, `C2`, shown in the tool results; `ClauseRefs` maps them back to chunk ids) because it copies UUIDs
+  unreliably; UUIDs written into the explanation are still picked up. Output parsing is lenient (off-list
+  check name -> `other`, off-list result -> `unclear`) and one invalid answer is retried with the error shown.
+  Room-rent / ICU / sub-limit results are reconciled with the calculator (`reconcile_amount_checks`): the
+  model supplies wording and citation, the numbers decide pass vs partial.
+- **Rules vs wording:** policies.rules numbers drive the calculator; the wording is what is cited. If the
+  wording states a different number the check is `unclear` (-> flag_for_review). Decision rejects only when
+  the rules (`check_eligibility`) AND the cited wording agree on the same blocking kind; otherwise a human decides.
+- **Risk agent:** `risk_rules.py` flags (early admission < `EARLY_ADMISSION_DAYS`=60, bill above the typical
+  range from `agents/config/diagnoses.yaml`, consistency issues, frequent claims); score = sum of severity
+  points (low 10 / medium 25 / high 60, cap 100) computed in code. The LLM writes the summary and may add up
+  to 3 justified `llm_*` flags, never above medium. `RISK_REVIEW_THRESHOLD`=50.
+- **Calculator (`calculator.py`, pure, no data_gen):** room-rent proportionate deduction (limit = min(% of SI,
+  max per day); applied to room_rent + tax on room, professional_fees, ot_charges) -> ICU per-day cap ->
+  diagnosis sub-limit (per_eye x units) -> remaining sum insured cap -> co-pay on the rest. Whole amounts are
+  Decimal, 2 places. `check_eligibility` lists blocking rules (exclusion, initial / specific / pre-existing waiting).
+- **Decision rules (`decision_rules.py`, in priority order):** missing documents or no policy ->
+  request_documents; blocking rule (rules and wording agree) -> reject, (disagree) -> flag_for_review; risk score
+  >= threshold or an applicable check unclear -> flag_for_review; deductions -> partial_approve; else approve.
+  The LLM only phrases `reasons`; text with a number it was not given is discarded (facts are used instead).
+  Saved with `save_decision_draft` (key `<run_id>-decision`), then status `awaiting_approval` (`<run_id>-awaiting`).
+- **Approval:** the approval node calls `interrupt(review_payload)`. `POST .../approve` (api/agent_runs.py,
+  approvals.py, outcome.py) validates, then writes `claim_approvals`, final status, `approved_amount` and audit
+  rows in ONE transaction, THEN resumes the graph. Mapping (`outcome.final_outcome`): approved = accept the draft
+  (flag_for_review has nothing to accept); edited = reviewer amount (0 < amount <= claimed, needs comment;
+  below claimed -> partially_approved); rejected -> rejected; request_documents + approved -> documents_requested.
+  Retrying the same request after a failed resume does not write a second approval.
+- **Finalize:** only `send_status_update` (template = final status, key `<run_id>-notify`, identity
+  `notify-agent`). A failed notification is recorded in state but never fails a settled claim; the reviewer's
+  comment is an internal note and is never sent to the customer.
+- **Failures:** transient errors (network, provider 5xx / rate limit) use LangGraph `RetryPolicy`
+  (`NODE_RETRY_ATTEMPTS`=3); permanent errors hop to the `error` node. Retries exhausted, `GraphRecursionError`
+  (`AGENT_RECURSION_LIMIT`=40) or a crash end in `runner._fail_run`: error recorded in the checkpoint, claim set
+  to `failed` through MCP, `error` event. (LangGraph's node `error_handler` does not apply to Command-pushed
+  tasks, so it is not used.)
+- **API:** `POST /claims/{id}/process` (202, run_id), `GET /claims/{id}/runs/{run_id}` (snapshot),
+  `GET .../stream` (SSE: node_started, routing, tool_called, node_completed, awaiting_approval, completed, error),
+  `POST .../approve {action, final_amount?, comment?, reviewer_id}`. Runs execute in a background task with a
+  per-run event buffer; after a backend restart the checkpoint is the source of truth (state, interrupt payload
+  and resume still work; the event buffer is gone, the stream replays the current state).
+- **Tests:** `test_agents_pure.py`, `test_agents_graph.py` (real MCP servers in memory + test DB + scripted fake
+  LLM, `tests/agent_helpers.py`), `test_agents_api.py`. Checkpoints in the test DB are committed: use fresh run ids.
+- Not covered: resuming a run killed MID-node (status `stalled`); one active run per claim is not enforced.
+
+### What the end-to-end runs showed (real LLM gpt-4o-mini + real MCP servers + Postgres checkpoints)
+- CLM-014 (POL-AS room rent Rs 8,400/day vs Rs 5,000 limit): `partial_approve`, payable Rs 53,666.86 (golden 53,666),
+  coverage checks cited to `6 Waiting Period`, `4. COVERAGE p.6-7`, `3. DEFINITIONS`; approved -> finalize -> notify.
+- CLM-032 (cosmetic rhinoplasty): `reject`, exclusion cited to `7 EXCLUSIONS p.10`; rules and wording agree.
+- CLM-020 / CLM-018 / CLM-032 (earlier run): when wording and rules disagree (wording says initial-waiting fail,
+  or PED 36 vs 48 months, or exclusion not cited) the decision is `flag_for_review`, never an automatic reject.
+- CLM-022 (admitted 5 days after start): risk score 60 -> `flag_for_review`; CLM-004: missing discharge summary ->
+  `request_documents` with coverage and risk skipped; CLM-001 (POL-PREM, no wording ingested): all checks `unclear`
+  -> `flag_for_review` (the system does not approve without citations).
+- The calculator matches `data/golden/expected.json` for all 9 claims that have an extraction.
+- Restart: a run paused at `awaiting_approval` survived `docker compose restart backend`; GET showed the interrupt
+  payload, the stream replayed it from the checkpoint, approve + resume completed and notified.
+- Module 6 extraction can mislabel items (a pre-anaesthetic check-up as `surgeon`); `facts.py` only treats line items
+  with a professional-fee keyword as professional fees, so the room-rent deduction stays correct.
+- Demo helper (not in the repo): run claims through the API, print events / coverage / risk / decision, approve.

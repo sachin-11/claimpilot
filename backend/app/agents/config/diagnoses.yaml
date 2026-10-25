@@ -1,0 +1,78 @@
+# Diagnosis catalogue for the agents (Module 8): typical bill range per diagnosis and the keys that
+# link a diagnosis to policy rules. Own copy: app code must not import data_gen.
+# cost_range = typical total hospital bill in INR; above the max the risk agent raises a flag.
+diagnoses:
+  - key: dengue
+    name: "Dengue Fever with Thrombocytopenia"
+    icd10: A90
+    cost_range: [35000, 140000]
+  - key: typhoid
+    name: "Enteric Fever (Typhoid)"
+    icd10: A01.0
+    cost_range: [25000, 90000]
+  - key: pneumonia
+    name: "Community Acquired Pneumonia"
+    icd10: J18.9
+    cost_range: [45000, 180000]
+  - key: appendicitis
+    name: "Acute Appendicitis"
+    icd10: K35.80
+    cost_range: [60000, 150000]
+  - key: cataract
+    name: "Senile Cataract"
+    icd10: H25.9
+    cost_range: [25000, 80000]
+    specific_wait_key: cataract
+    sub_limit_key: cataract
+  - key: knee_replacement
+    name: "Primary Osteoarthritis of Knee"
+    icd10: M17.11
+    cost_range: [180000, 450000]
+    specific_wait_key: knee_replacement
+  - key: hernia
+    name: "Inguinal Hernia"
+    icd10: K40.90
+    cost_range: [50000, 120000]
+    specific_wait_key: hernia
+  - key: cholecystectomy
+    name: "Cholelithiasis (Gallstones) with Cholecystitis"
+    icd10: K80.20
+    cost_range: [70000, 160000]
+    specific_wait_key: cholecystectomy
+  - key: fracture
+    name: "Fracture Shaft of Tibia (road traffic accident)"
+    icd10: S82.201A
+    cost_range: [80000, 220000]
+    accident: true
+  - key: maternity_normal
+    name: "Normal Vaginal Delivery"
+    icd10: O80
+    cost_range: [40000, 90000]
+    sub_limit_key: maternity
+    is_maternity: true
+  - key: maternity_cesarean
+    name: "Delivery by Caesarean Section"
+    icd10: O82
+    cost_range: [80000, 170000]
+    sub_limit_key: maternity
+    is_maternity: true
+  - key: cosmetic_rhinoplasty
+    name: "Nasal Deformity (aesthetic correction)"
+    icd10: Z41.1
+    cost_range: [80000, 250000]
+    exclusion_tag: cosmetic_surgery
+  - key: bariatric
+    name: "Morbid Obesity"
+    icd10: E66.01
+    cost_range: [250000, 450000]
+    exclusion_tag: obesity_treatment
+  - key: dental_implant
+    name: "Partial Edentulism (loss of teeth)"
+    icd10: K08.109
+    cost_range: [30000, 120000]
+    exclusion_tag: dental_unless_accident
+  - key: diabetic_ketoacidosis
+    name: "Diabetic Ketoacidosis"
+    icd10: E11.10
+    cost_range: [45000, 150000]
+    ped_condition: "Type 2 Diabetes Mellitus"
