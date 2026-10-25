@@ -287,7 +287,7 @@ def ops_metrics(runs: list[dict[str, Any]]) -> dict[str, Any]:
         c
         for r in runs
         for m, c in (r.get("models") or {}).items()
-        if not m.lower().startswith("gpt")
+        if not m.lower().startswith(("gpt", "claude"))  # the primary providers
     )
     nruns = max(len(runs), 1)
     return {

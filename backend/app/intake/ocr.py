@@ -126,7 +126,11 @@ class TesseractOCR:
     def ocr_image(self, image: np.ndarray) -> OCRResult:
         prepared = preprocess(image, self.settings)
         data = pytesseract.image_to_data(
-            prepared, lang=self.langs, config=TESSERACT_CONFIG, output_type=pytesseract.Output.DICT
+            prepared,
+            lang=self.langs,
+            config=TESSERACT_CONFIG,
+            output_type=pytesseract.Output.DICT,
+            timeout=self.settings.ocr_timeout_seconds,  # raises RuntimeError when exceeded
         )
         lines: dict[tuple[int, int, int], list[str]] = {}
         confidences: list[float] = []

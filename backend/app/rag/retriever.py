@@ -14,6 +14,7 @@ from sqlalchemy.dialects.postgresql import ARRAY
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
 
 from app.models.policy import EMBEDDING_DIM
+from app.observability.tracing import span
 from app.rag.config import RagSettings
 from app.rag.schemas import RetrievedChunk
 
@@ -207,7 +208,10 @@ class Retriever:
         async def timed(name: str, coro):  # type: ignore[no-untyped-def]
             start = time.perf_counter()
             try:
-                return await coro
+                with span(f"rag.{name}", as_type="retriever", input={"query": query}) as s:
+                    hits = await coro
+                    s.update(output={"hits": len(hits)})
+                    return hits
             finally:
                 timings[name] = round((time.perf_counter() - start) * 1000, 1)
 
@@ -234,8 +238,9 @@ class Retriever:
         vector_hits = results.get("vector", [])
 
         start = time.perf_counter()
-        fused = rrf_fuse(
-            vector_hits, keyword_hits, k=self.settings.rrf_k, top_k=self.settings.fused_top_k
-        )
+        with span("rag.fuse"):
+            fused = rrf_fuse(
+                vector_hits, keyword_hits, k=self.settings.rrf_k, top_k=self.settings.fused_top_k
+            )
         timings["fuse"] = round((time.perf_counter() - start) * 1000, 1)
         return HybridResult(chunks=fused, timings_ms=timings, warnings=warnings)

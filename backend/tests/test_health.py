@@ -53,5 +53,5 @@ def test_unknown_route_uses_error_envelope(client: TestClient) -> None:
     resp = client.get("/nope")
     assert resp.status_code == 404
     body = resp.json()["error"]
-    assert body["code"] == "http_error"
+    assert body["code"] == "not_found"
     assert body["request_id"] == resp.headers["X-Request-ID"]

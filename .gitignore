@@ -19,3 +19,31 @@ eval/intake/results/*/per_claim.jsonl
 # Module 9: the eval database's data root (copied claims) and the big raw run dumps
 eval/e2e/work/
 eval/e2e/results/*/runs.jsonl
+
+# partial / debugging eval runs (final results are committed)
+eval/e2e/results/20261025-093915_default/
+eval/e2e/results/20261025-094021_default/
+eval/e2e/results/20261025-112213_default/
+eval/e2e/results/20261025-112534_default/
+eval/e2e/results/20261025-112555_default/
+eval/e2e/results/20261025-112824_default/
+eval/e2e/results/20261025-113226_default/
+eval/e2e/results/20261025-113758_default/
+eval/e2e/results/20261025-113849_default/
+eval/e2e/results/20261025-115018_default/
+eval/e2e/results/20261025-115400_synthetic_wording/
+eval/e2e/results/20261025-120756_synthetic_wording/
+eval/e2e/results/20261025-121405_synthetic_wording/
+eval/e2e/results/20261025-122257_compare/
+eval/e2e/results/20261025-122257_default/
+eval/e2e/results/20261025-122257_synthetic_wording/
+eval/e2e/results/20261025-123706_synthetic_wording/
+eval/e2e/results/20261025-125507_fallback_only/
+eval/e2e/results/20261025-134035_synthetic_wording/
+eval/e2e/results/20261025-134233_synthetic_wording/
+eval/e2e/results/20261025-134440_synthetic_wording/
+eval/e2e/results/20261025-134546_synthetic_wording/
+eval/e2e/results/20261025-134730_synthetic_wording/
+eval/e2e/results/20261025-142205_default/
+eval/e2e/results/20261025-142650_default/
+eval/e2e/results/20261025-142944_default/

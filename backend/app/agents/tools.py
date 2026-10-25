@@ -10,6 +10,8 @@ import httpx
 from langchain_core.tools import BaseTool
 
 from app.agents.events import emit
+from app.observability.metrics import record_mcp_tool_call
+from app.observability.tracing import span
 
 logger = logging.getLogger(__name__)
 
@@ -132,10 +134,22 @@ class ToolBox:
         emit(
             {"type": "tool_called", "agent": self.agent, "tool": name, "args": summarize_args(args)}
         )
-        message = await tool.ainvoke(
-            {"type": "tool_call", "name": name, "args": args, "id": uuid.uuid4().hex}
-        )
-        if getattr(message, "status", None) == "error":
+        server = next((s for s, names in AGENT_TOOLS[self.agent].items() if name in names), "?")
+        with span(
+            f"mcp.{name}",
+            as_type="tool",
+            input=summarize_args(args),
+            metadata={"server": server, "tool": name, "caller": f"{self.agent}-agent"},
+        ) as tool_span:
+            message = await tool.ainvoke(
+                {"type": "tool_call", "name": name, "args": args, "id": uuid.uuid4().hex}
+            )
+            failed = getattr(message, "status", None) == "error"
+            tool_span.update(
+                level="ERROR" if failed else "DEFAULT", metadata={"success": not failed}
+            )
+            record_mcp_tool_call(server, name, ok=not failed)
+        if failed:
             content = message.content
             text = (
                 content

@@ -34,6 +34,7 @@ from app.intake.validation import (
     validate_extraction,
 )
 from app.models.enums import DocType
+from app.observability.tracing import callback_config
 
 logger = logging.getLogger(__name__)
 
@@ -355,7 +356,7 @@ class ClaimExtractor:
         llm = self.chat_model_factory().with_structured_output(  # type: ignore[attr-defined]
             LLMExtraction, include_raw=True, method="function_calling"
         )
-        out = await llm.ainvoke(messages)
+        out = await llm.ainvoke(messages, **callback_config())
         parsed = out.get("parsed") if isinstance(out, dict) else out
         if parsed is None:
             raise ExtractionError(f"unparseable LLM output: {out.get('parsing_error')}")

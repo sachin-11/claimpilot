@@ -1,6 +1,7 @@
 """Importing this package registers every model on Base.metadata (Alembic relies on it)."""
 
 from app.models.audit import AuditLog
+from app.models.auth import RefreshToken
 from app.models.claim import (
     Claim,
     ClaimApproval,
@@ -49,6 +50,7 @@ __all__ = [
     "NotificationStatus",
     "Policy",
     "PolicyChunk",
+    "RefreshToken",
     "ToolIdempotency",
     "User",
     "UserRole",

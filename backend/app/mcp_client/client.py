@@ -9,10 +9,12 @@ Server URLs: MCP_<SERVER>_URL (default: the docker-compose service). Tokens: see
 
 import os
 from collections.abc import Iterable, Mapping
+from datetime import timedelta
 
 from langchain_core.tools import BaseTool
 from langchain_mcp_adapters.client import MultiServerMCPClient
 
+from app.core.config import get_settings
 from app.mcp_client.tokens import token_for
 
 SERVERS: dict[str, str] = {
@@ -29,6 +31,7 @@ def server_url(server: str) -> str:
 def build_client(
     servers: Iterable[str] | None = None, caller: str | None = None
 ) -> MultiServerMCPClient:
+    settings = get_settings()
     names = list(servers) if servers is not None else list(SERVERS)
     unknown = [n for n in names if n not in SERVERS]
     if unknown:
@@ -39,6 +42,9 @@ def build_client(
                 "transport": "streamable_http",
                 "url": server_url(name),
                 "headers": {"Authorization": f"Bearer {token_for(name, caller)}"},
+                # a hung tool call must not hang the agent run
+                "timeout": timedelta(seconds=settings.outbound_timeout_seconds),
+                "sse_read_timeout": timedelta(seconds=settings.outbound_timeout_seconds * 4),
             }
             for name in names
         }

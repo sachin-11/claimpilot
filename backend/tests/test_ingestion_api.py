@@ -2,6 +2,7 @@ import asyncio
 from pathlib import Path
 
 import pytest
+from auth_helpers import bypass_auth
 from fastapi.testclient import TestClient
 from pdf_fixtures import FakeEmbedder, ingestion_settings, make_policy_pdf
 from sqlalchemy import text
@@ -39,6 +40,7 @@ def api(test_database_url: str, tmp_path: Path, monkeypatch: pytest.MonkeyPatch)
         _env_file=None, app_env="test", database_url=test_database_url, openai_api_key="sk-test"
     )
     app = create_app(settings)
+    bypass_auth(app)
     embedder = FakeEmbedder()
     with TestClient(app) as client:
         app.state.embedder_factory = lambda: embedder

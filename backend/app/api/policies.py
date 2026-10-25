@@ -8,6 +8,7 @@ from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Query, R
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
 
+from app.auth.deps import require_admin, require_officer
 from app.core.db import get_session
 from app.core.llm import get_embeddings
 from app.ingestion.config import IngestionSettings, get_ingestion_settings
@@ -25,9 +26,10 @@ from app.schemas.ingestion import (
     PolicySummary,
 )
 from app.schemas.policy import PolicyChunkRead
+from app.worker.queue import enqueue_ingestion
 
 logger = logging.getLogger(__name__)
-router = APIRouter(prefix="/policies", tags=["policies"])
+router = APIRouter(prefix="/policies", tags=["policies"], dependencies=[Depends(require_officer)])
 
 
 async def run_ingestion_task(
@@ -57,7 +59,7 @@ async def run_ingestion_task(
                 await session.rollback()
 
 
-@router.post("/ingest", status_code=202)
+@router.post("/ingest", status_code=202, dependencies=[Depends(require_admin)])
 async def start_ingestion(
     body: IngestRequest,
     request: Request,
@@ -87,6 +89,10 @@ async def start_ingestion(
     if not refs:
         raise HTTPException(404, "no active policies to ingest")
 
+    queue = getattr(request.app.state, "queue", None)
+    if queue is not None:  # the worker runs it (the runs are already created and pollable)
+        await enqueue_ingestion(queue, [(str(r.run_id), r.policy_code) for r in refs], body.force)
+        return IngestStarted(run_id=refs[0].run_id, runs=refs)
     background.add_task(
         run_ingestion_task,
         request.app.state.session_factory,
@@ -99,7 +105,7 @@ async def start_ingestion(
     return IngestStarted(run_id=refs[0].run_id, runs=refs)
 
 
-@router.get("/ingest/{run_id}")
+@router.get("/ingest/{run_id}", dependencies=[Depends(require_admin)])
 async def get_ingestion_run(
     run_id: UUID, session: AsyncSession = Depends(get_session)
 ) -> IngestRunRead:

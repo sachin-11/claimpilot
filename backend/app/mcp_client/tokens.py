@@ -27,6 +27,18 @@ def identities(server: str, env: Mapping[str, str] | None = None) -> dict[str, s
     return result
 
 
+MIN_TOKEN_LENGTH = 16
+
+
+def weak_identities(server: str, env: Mapping[str, str] | None = None) -> list[str]:
+    """Callers whose token is still the `.env.example` placeholder or too short to be a secret."""
+    return [
+        name
+        for name, token in identities(server, env).items()
+        if "replace-me" in token.lower() or len(token) < MIN_TOKEN_LENGTH
+    ]
+
+
 def token_map(server: str, env: Mapping[str, str] | None = None) -> dict[str, str]:
     """token -> caller identity (what a server checks incoming requests against)."""
     return {token: name for name, token in identities(server, env).items()}

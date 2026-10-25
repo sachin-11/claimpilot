@@ -1,0 +1,383 @@
+{
+  "about": "Masked summary of one Langfuse trace (claim_run, CLM-014, eval run). Inputs and outputs are not included here; in Langfuse they are masked by backend/app/observability/mask.py.",
+  "trace_name": "claim_run",
+  "session_id": "CLM-014",
+  "tags": [
+    "scenario:eval",
+    "policy:POL-AS"
+  ],
+  "totals": {
+    "observations": 102,
+    "llm_calls": 8,
+    "cost_usd": 0.006802,
+    "tokens": 49328
+  },
+  "spans": [
+    {
+      "name": "claim_run",
+      "type": "SPAN",
+      "graph_node": "intake",
+      "latency_ms": 24491,
+      "level": "DEFAULT"
+    },
+    {
+      "name": "mcp.get_claim",
+      "type": "TOOL",
+      "graph_node": null,
+      "latency_ms": 17,
+      "level": "DEFAULT",
+      "server": "claims_db",
+      "caller": "intake-agent",
+      "success": true
+    },
+    {
+      "name": "get_claim",
+      "type": "TOOL",
+      "graph_node": "intake",
+      "latency_ms": 16,
+      "level": "DEFAULT"
+    },
+    {
+      "name": "mcp.get_claim_extraction",
+      "type": "TOOL",
+      "graph_node": null,
+      "latency_ms": 14,
+      "level": "ERROR",
+      "server": "claims_db",
+      "caller": "intake-agent",
+      "success": false
+    },
+    {
+      "name": "get_claim_extraction",
+      "type": "TOOL",
+      "graph_node": "intake",
+      "latency_ms": 14,
+      "level": "ERROR"
+    },
+    {
+      "name": "EvalChatAnthropic",
+      "type": "GENERATION",
+      "graph_node": "intake",
+      "latency_ms": 6754,
+      "level": "DEFAULT",
+      "model": "claude-haiku-5-5",
+      "provider": "anthropic",
+      "input_tokens": 3934,
+      "output_tokens": 2172,
+      "cost_usd": 0.001479
+    },
+    {
+      "name": "mcp.get_claim_extraction",
+      "type": "TOOL",
+      "graph_node": null,
+      "latency_ms": 14,
+      "level": "DEFAULT",
+      "server": "claims_db",
+      "caller": "intake-agent",
+      "success": true
+    },
+    {
+      "name": "get_claim_extraction",
+      "type": "TOOL",
+      "graph_node": "intake",
+      "latency_ms": 13,
+      "level": "DEFAULT"
+    },
+    {
+      "name": "mcp.get_claim",
+      "type": "TOOL",
+      "graph_node": null,
+      "latency_ms": 18,
+      "level": "DEFAULT",
+      "server": "claims_db",
+      "caller": "intake-agent",
+      "success": true
+    },
+    {
+      "name": "get_claim",
+      "type": "TOOL",
+      "graph_node": "intake",
+      "latency_ms": 17,
+      "level": "DEFAULT"
+    },
+    {
+      "name": "mcp.get_customer_history",
+      "type": "TOOL",
+      "graph_node": null,
+      "latency_ms": 11,
+      "level": "DEFAULT",
+      "server": "claims_db",
+      "caller": "intake-agent",
+      "success": true
+    },
+    {
+      "name": "get_customer_history",
+      "type": "TOOL",
+      "graph_node": "intake",
+      "latency_ms": 11,
+      "level": "DEFAULT"
+    },
+    {
+      "name": "supervisor",
+      "type": "CHAIN",
+      "graph_node": "supervisor",
+      "latency_ms": 1224,
+      "level": "DEFAULT"
+    },
+    {
+      "name": "EvalChatAnthropic",
+      "type": "GENERATION",
+      "graph_node": "supervisor",
+      "latency_ms": 1193,
+      "level": "DEFAULT",
+      "model": "claude-haiku-5-5",
+      "provider": "anthropic",
+      "input_tokens": 733,
+      "output_tokens": 97,
+      "cost_usd": 0.000122
+    },
+    {
+      "name": "mcp.get_policy_rules",
+      "type": "TOOL",
+      "graph_node": null,
+      "latency_ms": 14,
+      "level": "DEFAULT",
+      "server": "policy_docs",
+      "caller": "coverage-agent",
+      "success": true
+    },
+    {
+      "name": "get_policy_rules",
+      "type": "TOOL",
+      "graph_node": "coverage",
+      "latency_ms": 10,
+      "level": "DEFAULT"
+    },
+    {
+      "name": "mcp.get_customer_history",
+      "type": "TOOL",
+      "graph_node": null,
+      "latency_ms": 50,
+      "level": "DEFAULT",
+      "server": "claims_db",
+      "caller": "risk-agent",
+      "success": true
+    },
+    {
+      "name": "get_customer_history",
+      "type": "TOOL",
+      "graph_node": "risk",
+      "latency_ms": 48,
+      "level": "DEFAULT"
+    },
+    {
+      "name": "agent",
+      "type": "AGENT",
+      "graph_node": "agent",
+      "latency_ms": 1577,
+      "level": "DEFAULT"
+    },
+    {
+      "name": "EvalChatAnthropic",
+      "type": "GENERATION",
+      "graph_node": "agent",
+      "latency_ms": 1570,
+      "level": "DEFAULT",
+      "model": "claude-haiku-5-5",
+      "provider": "anthropic",
+      "input_tokens": 2830,
+      "output_tokens": 249,
+      "cost_usd": 0.000407
+    },
+    {
+      "name": "EvalChatAnthropic",
+      "type": "GENERATION",
+      "graph_node": "risk",
+      "latency_ms": 4648,
+      "level": "DEFAULT",
+      "model": "claude-haiku-5-5",
+      "provider": "anthropic",
+      "input_tokens": 937,
+      "output_tokens": 196,
+      "cost_usd": 0.000192
+    },
+    {
+      "name": "mcp.search_policy",
+      "type": "TOOL",
+      "graph_node": null,
+      "latency_ms": 954,
+      "level": "DEFAULT",
+      "server": "policy_docs",
+      "caller": "coverage-agent",
+      "success": true
+    },
+    {
+      "name": "search_policy",
+      "type": "TOOL",
+      "graph_node": "tools",
+      "latency_ms": 952,
+      "level": "DEFAULT"
+    },
+    {
+      "name": "mcp.search_policy",
+      "type": "TOOL",
+      "graph_node": null,
+      "latency_ms": 428,
+      "level": "DEFAULT",
+      "server": "policy_docs",
+      "caller": "coverage-agent",
+      "success": true
+    },
+    {
+      "name": "search_policy",
+      "type": "TOOL",
+      "graph_node": "tools",
+      "latency_ms": 428,
+      "level": "DEFAULT"
+    },
+    {
+      "name": "mcp.search_policy",
+      "type": "TOOL",
+      "graph_node": null,
+      "latency_ms": 862,
+      "level": "DEFAULT",
+      "server": "policy_docs",
+      "caller": "coverage-agent",
+      "success": true
+    },
+    {
+      "name": "search_policy",
+      "type": "TOOL",
+      "graph_node": "tools",
+      "latency_ms": 861,
+      "level": "DEFAULT"
+    },
+    {
+      "name": "agent",
+      "type": "AGENT",
+      "graph_node": "agent",
+      "latency_ms": 3365,
+      "level": "DEFAULT"
+    },
+    {
+      "name": "EvalChatAnthropic",
+      "type": "GENERATION",
+      "graph_node": "agent",
+      "latency_ms": 3353,
+      "level": "DEFAULT",
+      "model": "claude-haiku-5-5",
+      "provider": "anthropic",
+      "input_tokens": 9649,
+      "output_tokens": 545,
+      "cost_usd": 0.001237
+    },
+    {
+      "name": "mcp.search_policy",
+      "type": "TOOL",
+      "graph_node": null,
+      "latency_ms": 500,
+      "level": "DEFAULT",
+      "server": "policy_docs",
+      "caller": "coverage-agent",
+      "success": true
+    },
+    {
+      "name": "search_policy",
+      "type": "TOOL",
+      "graph_node": "tools",
+      "latency_ms": 498,
+      "level": "DEFAULT"
+    },
+    {
+      "name": "agent",
+      "type": "AGENT",
+      "graph_node": "agent",
+      "latency_ms": 3384,
+      "level": "DEFAULT"
+    },
+    {
+      "name": "EvalChatAnthropic",
+      "type": "GENERATION",
+      "graph_node": "agent",
+      "latency_ms": 3363,
+      "level": "DEFAULT",
+      "model": "claude-haiku-5-5",
+      "provider": "anthropic",
+      "input_tokens": 12381,
+      "output_tokens": 628,
+      "cost_usd": 0.001552
+    },
+    {
+      "name": "EvalChatAnthropic",
+      "type": "GENERATION",
+      "graph_node": "coverage",
+      "latency_ms": 2087,
+      "level": "DEFAULT",
+      "model": "claude-haiku-5-5",
+      "provider": "anthropic",
+      "input_tokens": 12618,
+      "output_tokens": 429,
+      "cost_usd": 0.001476
+    },
+    {
+      "name": "supervisor",
+      "type": "CHAIN",
+      "graph_node": "supervisor",
+      "latency_ms": 2,
+      "level": "DEFAULT"
+    },
+    {
+      "name": "EvalChatAnthropic",
+      "type": "GENERATION",
+      "graph_node": "decision",
+      "latency_ms": 2194,
+      "level": "DEFAULT",
+      "model": "claude-haiku-5-5",
+      "provider": "anthropic",
+      "input_tokens": 1571,
+      "output_tokens": 359,
+      "cost_usd": 0.000337
+    },
+    {
+      "name": "mcp.save_decision_draft",
+      "type": "TOOL",
+      "graph_node": null,
+      "latency_ms": 52,
+      "level": "DEFAULT",
+      "server": "claims_db",
+      "caller": "decision-agent",
+      "success": true
+    },
+    {
+      "name": "save_decision_draft",
+      "type": "TOOL",
+      "graph_node": "decision",
+      "latency_ms": 48,
+      "level": "DEFAULT"
+    },
+    {
+      "name": "mcp.update_claim_status",
+      "type": "TOOL",
+      "graph_node": null,
+      "latency_ms": 19,
+      "level": "DEFAULT",
+      "server": "claims_db",
+      "caller": "decision-agent",
+      "success": true
+    },
+    {
+      "name": "update_claim_status",
+      "type": "TOOL",
+      "graph_node": "decision",
+      "latency_ms": 18,
+      "level": "DEFAULT"
+    },
+    {
+      "name": "approval",
+      "type": "CHAIN",
+      "graph_node": "approval",
+      "latency_ms": 3,
+      "level": "DEFAULT"
+    }
+  ]
+}

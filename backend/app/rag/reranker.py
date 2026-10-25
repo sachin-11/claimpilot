@@ -6,7 +6,7 @@ from typing import Protocol
 
 import httpx
 
-from app.core.config import has_real_key
+from app.core.config import get_settings, has_real_key
 from app.rag.config import RagSettings
 from app.rag.schemas import RetrievedChunk
 
@@ -72,7 +72,7 @@ class CohereReranker:
             "top_n": min(top_n, len(chunks)),
         }
         headers = {"Authorization": f"Bearer {self.api_key}"}
-        client = self._client or httpx.AsyncClient(timeout=15.0)
+        client = self._client or httpx.AsyncClient(timeout=get_settings().reranker_timeout_seconds)
         try:
             response = await client.post(COHERE_RERANK_URL, json=payload, headers=headers)
             response.raise_for_status()

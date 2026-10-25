@@ -1,7 +1,6 @@
 """Module 9 evaluation code: metrics, attribution, DB safety and the report (no LLM, no database)."""
 
 import json
-from pathlib import Path
 
 import pytest
 
@@ -565,9 +564,10 @@ def test_findings_rank_layers_and_compare_table(tmp_path) -> None:
 
 
 def _policy(code: str) -> dict:
+    from app.core.config import get_settings
     from eval.e2e.common import load_yaml
 
-    rules = load_yaml(Path("/data_gen/policy_rules.yaml"))
+    rules = load_yaml(get_settings().policy_rules_path)
     return next(p for p in rules["policies"] if p["policy_id"] == code)
 
 
@@ -608,3 +608,37 @@ def test_effective_rule_map_adds_synthetic_policies_only_when_configured() -> No
     synth = effective_rule_map(rule_map, EvalConfig(name="s", synthetic_wording=True))
     assert synth["wording_policies"] == ["POL-AS", "POL-STD", "POL-PREM"]
     assert synth["real_wording_policies"] == ["POL-AS"]
+
+
+def test_claude_thinking_blocks_are_removed_before_a_structured_call() -> None:
+    from langchain_core.messages import AIMessage, HumanMessage
+
+    from app.core.llm import _without_thinking
+
+    ai = AIMessage(
+        content=[
+            {"type": "thinking", "thinking": "", "signature": "sig"},
+            {"type": "text", "text": "searching"},
+        ]
+    )
+    only_thinking = AIMessage(content=[{"type": "thinking", "thinking": "", "signature": "s"}])
+    human = HumanMessage(content="hi")
+    out = _without_thinking([human, ai, only_thinking])
+    assert out[0] is human
+    assert out[1].content == [{"type": "text", "text": "searching"}]
+    assert out[2].content == ""
+    assert _without_thinking("not a list") == "not a list"
+
+
+def test_anthropic_model_needs_a_key_and_sends_no_temperature() -> None:
+    from pydantic import SecretStr
+
+    from app.core.config import Settings
+    from app.core.llm import build_anthropic_chat_model
+
+    with pytest.raises(RuntimeError, match="ANTHROPIC_API_KEY"):
+        build_anthropic_chat_model(Settings(anthropic_api_key=None))
+    model = build_anthropic_chat_model(
+        Settings(anthropic_api_key=SecretStr("sk-ant-test")), temperature=0
+    )
+    assert model.model == "claude-haiku-5-5" and model.temperature is None

@@ -20,13 +20,19 @@ from app.agents.runner import AgentRuntime, RunNotFoundError, RunStateError
 from app.agents.state import HumanApproval
 from app.agents.tools import McpToolProvider
 from app.api.claims import get_intake_service
+from app.auth.deps import CurrentUser, llm_guard, require_officer
 from app.core.config import get_settings
 from app.core.db import get_session
 from app.core.llm import get_chat_model
+from app.models import ActorType, Claim
+from app.observability.tracing import trace_id_for
+from app.repositories.audit import AuditLogRepository
+from app.worker.bus import RunBus
+from app.worker.runtime import QueuedAgentRuntime
 
 logger = logging.getLogger(__name__)
 
-router = APIRouter(prefix="/claims", tags=["agents"])
+router = APIRouter(prefix="/claims", tags=["agents"], dependencies=[Depends(require_officer)])
 
 _build_lock = asyncio.Lock()
 
@@ -66,6 +72,11 @@ async def build_runtime(app) -> AgentRuntime:  # type: ignore[no-untyped-def]
         data_dir=get_settings().data_dir,
         intake=get_intake_service(holder),  # type: ignore[arg-type]
     )
+    queue = getattr(app.state, "queue", None)
+    if queue is not None:  # a worker does the running; this process only reads and enqueues
+        return await QueuedAgentRuntime.create(
+            deps, checkpoint_conninfo(), queue=queue, bus=RunBus(app.state.redis)
+        )
     return await AgentRuntime.create(deps, checkpoint_conninfo())
 
 
@@ -78,7 +89,7 @@ class ApproveRequest(BaseModel):
     action: Literal["approved", "rejected", "edited"]
     final_amount: Annotated[Decimal | None, Field(ge=0, le=Decimal("100000000"))] = None
     comment: Annotated[str | None, Field(max_length=1000)] = None
-    reviewer_id: UUID
+    # no reviewer_id: the reviewer is the authenticated user, never taken from the request
 
 
 class ApproveResponse(BaseModel):
@@ -89,14 +100,47 @@ class ApproveResponse(BaseModel):
     resumed: bool
 
 
+MIN_OVERRIDE_COMMENT = 10
+
+
+async def check_separation_of_duties(
+    session: AsyncSession, claim_id: UUID, user: CurrentUser, comment: str | None
+) -> bool:
+    """An officer may not approve a claim they uploaded; an admin may, with a comment that
+    explains why. Returns True when an admin override is being used (it is audited)."""
+    claim = await session.get(Claim, claim_id)
+    if claim is None or claim.created_by != user.id:
+        return False
+    if not user.is_admin:
+        raise HTTPException(
+            403, "separation of duties: you uploaded this claim, another officer must decide it"
+        )
+    if len((comment or "").strip()) < MIN_OVERRIDE_COMMENT:
+        raise HTTPException(
+            422,
+            f"you uploaded this claim: an admin override needs a comment of at least "
+            f"{MIN_OVERRIDE_COMMENT} characters",
+        )
+    return True
+
+
+def bind_run_trace(request: Request, run_id: str) -> None:
+    """X-Trace-ID of the run's trace on the response (the id is derived from the run id)."""
+    request.state.trace_id = trace_id_for(run_id)
+
+
 @router.post("/{claim_id}/process", status_code=202)
 async def process_claim(
-    claim_id: UUID, runtime: AgentRuntime = Depends(get_runtime)
+    request: Request,
+    claim_id: UUID,
+    runtime: AgentRuntime = Depends(get_runtime),
+    user: CurrentUser = Depends(llm_guard),
 ) -> ProcessResponse:
     try:
-        run_id = await runtime.start_run(claim_id)
+        run_id = await runtime.start_run(claim_id, user_id=str(user.id))
     except RunNotFoundError as exc:
         raise HTTPException(404, str(exc)) from exc
+    bind_run_trace(request, run_id)
     return ProcessResponse(claim_id=claim_id, run_id=run_id)
 
 
@@ -114,7 +158,7 @@ def _sse(event: str, data: object) -> str:
     return f"event: {event}\ndata: {json.dumps(data, default=str)}\n\n"
 
 
-@router.get("/{claim_id}/runs/{run_id}/stream")
+@router.get("/{claim_id}/runs/{run_id}/stream", dependencies=[Depends(bind_run_trace)])
 async def stream_run(
     claim_id: UUID, run_id: str, runtime: AgentRuntime = Depends(get_runtime)
 ) -> StreamingResponse:
@@ -133,7 +177,7 @@ async def stream_run(
     )
 
 
-@router.get("/{claim_id}/runs/{run_id}")
+@router.get("/{claim_id}/runs/{run_id}", dependencies=[Depends(bind_run_trace)])
 async def get_run(
     claim_id: UUID, run_id: str, runtime: AgentRuntime = Depends(get_runtime)
 ) -> dict:
@@ -156,13 +200,17 @@ async def get_run(
     }
 
 
-@router.post("/{claim_id}/runs/{run_id}/approve", status_code=202)
+@router.post(
+    "/{claim_id}/runs/{run_id}/approve", status_code=202, dependencies=[Depends(bind_run_trace)]
+)
 async def approve_run(
     claim_id: UUID,
     run_id: str,
     body: ApproveRequest,
+    request: Request,
     runtime: AgentRuntime = Depends(get_runtime),
     session: AsyncSession = Depends(get_session),
+    user: CurrentUser = Depends(require_officer),
 ) -> ApproveResponse:
     """The human decision. Writes claim_approvals, the final claim status and the audit log in one
     transaction, THEN resumes the paused graph (finalize + notify). If the resume fails, calling
@@ -171,12 +219,13 @@ async def approve_run(
     decision = snapshot["state"].get("decision")
     if snapshot["status"] != "awaiting_approval" or decision is None:
         raise HTTPException(409, f"run is '{snapshot['status']}', not awaiting approval")
+    override = await check_separation_of_duties(session, claim_id, user, body.comment)
     try:
         approval = HumanApproval(
             action=body.action,
             final_amount=body.final_amount,
             comment=body.comment,
-            reviewer=str(body.reviewer_id),
+            reviewer=str(user.id),  # from the token, never from the request body
         )
     except ValidationError as exc:
         raise HTTPException(422, "; ".join(e["msg"] for e in exc.errors())) from exc
@@ -190,6 +239,17 @@ async def approve_run(
     except ApprovalConflictError as exc:
         raise HTTPException(409, str(exc)) from exc
 
+    if override:
+        await AuditLogRepository(session).log(
+            actor_type=ActorType.USER,
+            actor_id=str(user.id),
+            action="separation_of_duties_override",
+            entity_type="claim",
+            entity_id=claim_id,
+            details={"run_id": run_id, "comment": (body.comment or "")[:500]},
+            request_id=getattr(request.state, "request_id", None),
+        )
+        await session.commit()
     resumed = False
     try:
         await runtime.resume_run(run_id, approval)

@@ -24,6 +24,7 @@ class IntakeSettings(BaseSettings):
     storage_dir: Path = Field(default_factory=_default_storage_dir)
     max_upload_mb: int = 10
     max_files_per_claim: int = 10
+    ocr_timeout_seconds: int = 60  # per page: a stuck Tesseract must not hold the request
     max_pdf_pages: int = 30  # more pages than this are refused (OCR cost / DoS guard)
     max_image_pixels: int = 40_000_000  # decompression-bomb guard for PNG/JPG
 

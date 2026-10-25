@@ -11,6 +11,8 @@ from redis.asyncio import Redis
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
 
 from app.core.llm import get_chat_model, get_embeddings
+from app.observability.metrics import record_cache
+from app.observability.tracing import span
 from app.rag.answerer import Answerer, AnswerGenerationError
 from app.rag.cache import SemanticCache
 from app.rag.config import RagSettings, get_rag_settings
@@ -107,7 +109,8 @@ class RetrievalService:
             return result
 
         generate_start = time.perf_counter()
-        outcome = await self.answerer.answer(prepared.standalone, prepared.chunks)
+        with span("rag.generate", metadata={"clauses": len(prepared.chunks)}):
+            outcome = await self.answerer.answer(prepared.standalone, prepared.chunks)
         prepared.timings["generate"] = _ms(generate_start)
 
         result = self._result(prepared, outcome.answer, outcome.model_used)
@@ -203,14 +206,16 @@ class RetrievalService:
         warnings: list[str] = []
 
         start = time.perf_counter()
-        standalone = await self.rewriter.rewrite(query, history)  # no history: no LLM call
-        variants = [standalone]
-        if self.settings.multi_query:
-            variants += await self.rewriter.alternatives(standalone)
+        with span("rag.rewrite", input={"query": query, "history_turns": len(history or [])}):
+            standalone = await self.rewriter.rewrite(query, history)  # no history: no LLM call
+            variants = [standalone]
+            if self.settings.multi_query:
+                variants += await self.rewriter.alternatives(standalone)
         timings["rewrite"] = _ms(start)
 
         start = time.perf_counter()
-        embeddings = await asyncio.gather(*(self._embed(v, warnings) for v in variants))
+        with span("rag.embed", as_type="embedding", metadata={"variants": len(variants)}):
+            embeddings = await asyncio.gather(*(self._embed(v, warnings) for v in variants))
         timings["embed"] = _ms(start)
         embedding = embeddings[0]
 
@@ -225,7 +230,10 @@ class RetrievalService:
 
         if use_cache and self.cache is not None and embedding is not None:
             start = time.perf_counter()
-            prepared.cached = await self._cache_lookup(policy_codes, embedding)
+            with span("rag.cache") as cache_span:
+                prepared.cached = await self._cache_lookup(policy_codes, embedding)
+                cache_span.update(output={"hit": prepared.cached is not None})
+                record_cache(prepared.cached is not None)
             timings["cache"] = _ms(start)
             if prepared.cached is not None:
                 return prepared
@@ -250,7 +258,8 @@ class RetrievalService:
         )
 
         start = time.perf_counter()
-        prepared.chunks = await self._rerank(standalone, fused, top_n, warnings)
+        with span("rag.rerank", metadata={"candidates": len(fused), "top_n": top_n}):
+            prepared.chunks = await self._rerank(standalone, fused, top_n, warnings)
         timings["rerank"] = _ms(start)
         return prepared
 

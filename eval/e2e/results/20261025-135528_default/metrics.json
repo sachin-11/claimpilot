@@ -1,0 +1,154 @@
+{
+  "all": {
+    "claims": 40,
+    "decision_accuracy": 0.275,
+    "decision_accuracy_by_scenario": {
+      "covered": {
+        "n": 15,
+        "accuracy": 0.0
+      },
+      "incomplete": {
+        "n": 4,
+        "accuracy": 1.0
+      },
+      "partial": {
+        "n": 8,
+        "accuracy": 0.0
+      },
+      "rejected": {
+        "n": 7,
+        "accuracy": 0.14285714285714285
+      },
+      "risk": {
+        "n": 6,
+        "accuracy": 1.0
+      }
+    },
+    "confusion": {
+      "approve": {
+        "flag_for_review": 15
+      },
+      "partial_approve": {
+        "flag_for_review": 8
+      },
+      "reject": {
+        "flag_for_review": 6,
+        "reject": 1
+      },
+      "flag_for_review": {
+        "flag_for_review": 6
+      },
+      "request_documents": {
+        "request_documents": 4
+      }
+    },
+    "amount_within_tolerance": 0.8333333333333334,
+    "amount_mae": 19426.81472222222,
+    "amount_within_5pct": 0.8333333333333334,
+    "deductions_match": 0.6666666666666666,
+    "rule_match": 0.6,
+    "check_resolved": 0.13333333333333333,
+    "citation_correctness": 1.0,
+    "citation_judged_share": 0.0,
+    "citation_n": 6,
+    "unclear_rate": 0.8351648351648352,
+    "risk_precision": 0.8571428571428571,
+    "risk_recall": 1.0,
+    "risk_f1": 0.923076923076923,
+    "missing_docs_accuracy": 1.0,
+    "missing_docs_exact": 1.0,
+    "adversarial_pass_rate": 1.0,
+    "adversarial_n": 5,
+    "runs": 40,
+    "error_rate": 0.0,
+    "recursion_hits": 0,
+    "latency_p50_s": 27.488008240497948,
+    "latency_p95_s": 41.071601798900694,
+    "node_latency_p50_s": {
+      "coverage": 16.182837385500534,
+      "decision": 2.3769587955011957,
+      "intake": 7.351961478498197,
+      "risk": 1.8318138235008519
+    },
+    "node_latency_p95_s": {
+      "coverage": 26.482803529001103,
+      "decision": 4.605570210348739,
+      "intake": 15.275239940902246,
+      "risk": 5.003988914749243
+    },
+    "llm_calls_per_claim": 8.675,
+    "tool_calls_per_claim": 14.575,
+    "tokens_per_claim": 43420.75,
+    "cost_per_claim_usd": 0.006073905,
+    "fallback_rate": 0.0
+  },
+  "wording": {
+    "claims": 7,
+    "decision_accuracy": 0.2857142857142857,
+    "decision_accuracy_by_scenario": {
+      "partial": {
+        "n": 4,
+        "accuracy": 0.0
+      },
+      "rejected": {
+        "n": 2,
+        "accuracy": 0.5
+      },
+      "risk": {
+        "n": 1,
+        "accuracy": 1.0
+      }
+    },
+    "confusion": {
+      "partial_approve": {
+        "flag_for_review": 4
+      },
+      "reject": {
+        "flag_for_review": 1,
+        "reject": 1
+      },
+      "flag_for_review": {
+        "flag_for_review": 1
+      }
+    },
+    "amount_within_tolerance": 0.8571428571428571,
+    "amount_mae": 19005.444285714282,
+    "amount_within_5pct": 0.8571428571428571,
+    "deductions_match": 0.8571428571428571,
+    "rule_match": 0.8333333333333334,
+    "check_resolved": 0.3333333333333333,
+    "citation_correctness": 1.0,
+    "citation_judged_share": 0.0,
+    "citation_n": 6,
+    "unclear_rate": 0.34782608695652173,
+    "risk_precision": 1.0,
+    "risk_recall": 1.0,
+    "risk_f1": 1.0,
+    "missing_docs_accuracy": 1.0,
+    "missing_docs_exact": 1.0,
+    "adversarial_pass_rate": 1.0,
+    "adversarial_n": 5,
+    "runs": 7,
+    "error_rate": 0.0,
+    "recursion_hits": 0,
+    "latency_p50_s": 24.903136068001913,
+    "latency_p95_s": 30.343393175302115,
+    "node_latency_p50_s": {
+      "coverage": 14.320398954001575,
+      "decision": 2.4467964060022496,
+      "intake": 6.631880278000608,
+      "risk": 1.72276482199959
+    },
+    "node_latency_p95_s": {
+      "coverage": 19.700764171398983,
+      "decision": 3.1281358503998486,
+      "intake": 7.893743964700115,
+      "risk": 3.201053755500833
+    },
+    "llm_calls_per_claim": 8.142857142857142,
+    "tool_calls_per_claim": 13.571428571428571,
+    "tokens_per_claim": 54277.857142857145,
+    "cost_per_claim_usd": 0.007239328571428572,
+    "fallback_rate": 0.0
+  }
+}

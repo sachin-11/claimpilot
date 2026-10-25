@@ -3,6 +3,7 @@ from collections.abc import AsyncIterator
 from uuid import UUID
 
 import pytest
+from auth_helpers import bypass_auth
 from fastapi.testclient import TestClient
 from rag_fakes import make_chunk
 
@@ -57,6 +58,7 @@ class StubService:
 @pytest.fixture
 def api() -> tuple[TestClient, StubService]:
     app = create_app(Settings(_env_file=None, app_env="test"))
+    bypass_auth(app)
     stub = StubService()
     with TestClient(app) as client:
         app.state.rag_service = stub
@@ -151,6 +153,7 @@ def test_service_is_reported_unavailable_when_it_cannot_be_built(monkeypatch) ->
 
     monkeypatch.setattr("app.api.rag.build_rag_service", broken)
     app = create_app(Settings(_env_file=None, app_env="test"))
+    bypass_auth(app)
     with TestClient(app) as client:
         response = client.post("/policies/search", json={"query": "cataract"})
     assert response.status_code == 503

@@ -13,6 +13,7 @@ from uuid import UUID
 
 import groq
 import openai
+from langchain_anthropic import ChatAnthropic
 from langchain_core.callbacks import (
     AsyncCallbackManagerForLLMRun,
     BaseCallbackHandler,
@@ -21,12 +22,13 @@ from langchain_core.callbacks import (
 from langchain_core.language_models import LanguageModelInput
 from langchain_core.messages import BaseMessage
 from langchain_core.outputs import ChatGenerationChunk, ChatResult, LLMResult
-from langchain_core.runnables import Runnable
+from langchain_core.runnables import Runnable, RunnableLambda
 from langchain_groq import ChatGroq
 from langchain_openai import ChatOpenAI, OpenAIEmbeddings
 from pydantic import Field
 
 from app.core.config import Settings, get_settings, has_real_key
+from app.observability.metrics import record_llm_call
 
 logger = logging.getLogger(__name__)
 
@@ -91,6 +93,13 @@ class CircuitBreaker:
                 logger.info("llm_circuit_half_open")
                 return False
             return True
+
+    def state_code(self) -> int:
+        """0 closed, 1 half-open, 2 open (for the metrics gauge; does not change the state)."""
+        with self._lock:
+            if self._opened_at is None:
+                return 1 if self._half_open else 0
+            return 1 if self._clock() - self._opened_at >= self._cooldown else 2
 
     def record_failure(self) -> None:
         with self._lock:
@@ -212,6 +221,7 @@ class ProviderLoggingHandler(BaseCallbackHandler):
 
     def __init__(self) -> None:
         self._started: dict[UUID, tuple[float, str, str]] = {}
+        self._nodes: dict[UUID, str] = {}
 
     def on_chat_model_start(
         self,
@@ -230,12 +240,16 @@ class ProviderLoggingHandler(BaseCallbackHandler):
         provider = provider.removesuffix("-chat")
         model = str(meta.get("ls_model_name") or params.get("model") or "unknown")
         self._started[run_id] = (time.perf_counter(), provider, model)
+        # the LangGraph node ("coverage:<id>|model:<id>" inside a subgraph -> "coverage")
+        namespace = str(meta.get("langgraph_checkpoint_ns") or meta.get("langgraph_node") or "")
+        self._nodes[run_id] = namespace.split("|")[0].split(":")[0] or "none"
 
     def on_llm_end(self, response: LLMResult, *, run_id: UUID, **kwargs: Any) -> None:
         started = self._started.pop(run_id, None)
         if started is None:
             return
         t0, provider, model = started
+        node = self._nodes.pop(run_id, "none")
         usage: dict[str, Any] = {}
         try:
             message = response.generations[0][0].message  # type: ignore[union-attr]
@@ -244,6 +258,11 @@ class ProviderLoggingHandler(BaseCallbackHandler):
             pass
         if not usage:
             usage = dict((response.llm_output or {}).get("token_usage") or {})
+        tokens_in = int(usage.get("input_tokens", usage.get("prompt_tokens")) or 0)
+        tokens_out = int(usage.get("output_tokens", usage.get("completion_tokens")) or 0)
+        record_llm_call(
+            provider=provider, model=model, node=node, tokens_in=tokens_in, tokens_out=tokens_out
+        )
         logger.info(
             "llm_call",
             extra={
@@ -261,6 +280,10 @@ class ProviderLoggingHandler(BaseCallbackHandler):
         if started is None:
             return
         t0, provider, model = started
+        node = self._nodes.pop(run_id, "none")
+        record_llm_call(
+            provider=provider, model=model, node=node, tokens_in=0, tokens_out=0, failed=True
+        )
         logger.warning(
             "llm_call_failed",
             extra={
@@ -316,6 +339,84 @@ def build_chat_model(
     )
 
 
+def _without_thinking(messages: Any) -> Any:
+    """Message list minus the thinking blocks of earlier assistant turns (a thinking-off call has no
+    use for them, and their signatures no longer match once the request differs)."""
+    if not isinstance(messages, list):
+        return messages
+    cleaned: list[Any] = []
+    for message in messages:
+        content = getattr(message, "content", None)
+        if isinstance(content, list) and any(
+            isinstance(b, dict) and b.get("type") in {"thinking", "redacted_thinking"}
+            for b in content
+        ):
+            kept = [
+                b
+                for b in content
+                if not (isinstance(b, dict) and b.get("type") in {"thinking", "redacted_thinking"})
+            ]
+            message = message.model_copy(update={"content": kept or ""})
+        cleaned.append(message)
+    return cleaned
+
+
+class EvalChatAnthropic(ChatAnthropic):
+    """ChatAnthropic whose structured output is a reliable forced tool call.
+
+    With thinking on the tool call can't be forced, so a reply without it fails to parse. The
+    structured-output calls (extraction, final answers) need no reasoning, so they run with thinking
+    off; the tool loops keep adaptive thinking. (Claude's native JSON-schema mode was tried first
+    and rejects the extraction schema: too many union-typed fields.)
+    """
+
+    def with_structured_output(  # type: ignore[override]
+        self,
+        schema: Any,
+        *,
+        include_raw: bool = False,
+        method: str = "function_calling",
+        **kwargs: Any,
+    ) -> Any:
+        plain = self.model_copy(update={"thinking": {"type": "disabled"}, "betas": None})
+        structured = super(EvalChatAnthropic, plain).with_structured_output(
+            schema, include_raw=include_raw, method="function_calling", **kwargs
+        )
+        return RunnableLambda(_without_thinking) | structured
+
+
+def build_anthropic_chat_model(
+    settings: Settings, **kwargs: Any
+) -> Runnable[LanguageModelInput, BaseMessage]:
+    """Claude for the evaluation runs (no breaker, no fallback: an eval must fail loudly).
+
+    No `temperature` on purpose: Claude 5.x models return a 400 for any non-default value, so the
+    model's own default is used. `get_chat_model` stays OpenAI (+ Groq) for the app itself.
+    """
+    if not has_real_key(settings.anthropic_api_key):
+        raise RuntimeError("ANTHROPIC_API_KEY is not set (needed for the evaluation runs)")
+    kwargs.pop("temperature", None)
+    callbacks = [ProviderLoggingHandler(), *kwargs.pop("callbacks", [])]
+    return EvalChatAnthropic(
+        model=settings.anthropic_model,
+        api_key=settings.anthropic_api_key,
+        max_retries=settings.llm_max_retries,
+        timeout=settings.llm_timeout_seconds,
+        max_tokens=kwargs.pop("max_tokens", 4096),
+        callbacks=callbacks,
+        # LangChain rebuilds the assistant turns of a tool loop (block order), which breaks the
+        # signature of Claude 5.x thinking blocks ("bound to a different conversation", a 400).
+        # drop_block lets the request through without the mismatched blocks instead of failing.
+        betas=["thinking-binding-controls-2026-08-01"],
+        thinking={"type": "adaptive", "block_binding": {"prefix_mismatch_behavior": "drop_block"}},
+        **kwargs,
+    )
+
+
+def get_anthropic_chat_model(**kwargs: Any) -> Runnable[LanguageModelInput, BaseMessage]:
+    return build_anthropic_chat_model(get_settings(), **kwargs)
+
+
 _breaker: CircuitBreaker | None = None
 
 
@@ -344,4 +445,9 @@ def get_embeddings() -> OpenAIEmbeddings:
     # (and dimension), so vectors from a fallback model can't be compared with the ones already
     # stored in pgvector. Mixing them would silently wreck retrieval. Fail loudly instead.
     settings = get_settings()
-    return OpenAIEmbeddings(model=settings.embedding_model, api_key=settings.openai_api_key)
+    return OpenAIEmbeddings(
+        model=settings.embedding_model,
+        api_key=settings.openai_api_key,
+        timeout=settings.outbound_timeout_seconds,
+        max_retries=settings.llm_max_retries,
+    )

@@ -6,6 +6,7 @@ from decimal import Decimal
 from pathlib import Path
 
 import pytest
+from auth_helpers import FAKE_ADMIN, bypass_auth
 from fastapi.testclient import TestClient
 from intake_fakes import (
     BILL_TEXT,
@@ -332,6 +333,7 @@ async def test_a_bad_file_rejects_the_whole_upload_and_leaves_no_claim(factory, 
 def api(test_database_url: str, tmp_path):
     settings = Settings(_env_file=None, app_env="test", database_url=test_database_url)
     app = create_app(settings)
+    bypass_auth(app)
     chat = ScriptedChat(
         [
             lambda m: good_llm_extraction(
@@ -339,6 +341,21 @@ def api(test_database_url: str, tmp_path):
             )
         ]
     )
+    import asyncio
+
+    async def seed_acting_user() -> None:  # claims.created_by points at a real user
+        engine = create_async_engine(test_database_url, poolclass=NullPool)
+        async with engine.begin() as conn:
+            await conn.execute(
+                text(
+                    "INSERT INTO users (id, email, full_name, role, password_hash) "
+                    "VALUES (:id, :email, 'Test Admin', 'admin', 'x') ON CONFLICT DO NOTHING"
+                ),
+                {"id": str(FAKE_ADMIN.id), "email": FAKE_ADMIN.email},
+            )
+        await engine.dispose()
+
+    asyncio.run(seed_acting_user())
     with TestClient(app) as client:
         app.state.intake_service = IntakeService(
             app.state.session_factory, chat, ocr=FakeOCR(),
@@ -354,7 +371,7 @@ def api(test_database_url: str, tmp_path):
             await conn.execute(
                 text(
                     "TRUNCATE claim_documents, claim_extractions, claims, customer_policies, "
-                    "customers, policies, audit_logs CASCADE"
+                    "customers, policies, audit_logs, users CASCADE"
                 )
             )
         await engine.dispose()

@@ -32,7 +32,13 @@ from app.agents.runner import AgentRuntime
 from app.agents.state import HumanApproval
 from app.agents.tools import AGENT_TOOLS
 from app.core.db import create_engine
-from app.core.llm import build_chat_model, get_breaker, get_chat_model
+from app.core.llm import (
+    build_anthropic_chat_model,
+    build_chat_model,
+    get_anthropic_chat_model,
+    get_breaker,
+    get_chat_model,
+)
 from app.intake.service import IntakeService
 from app.models import Claim, Notification, PolicyChunk, User, UserRole
 from app.rag.config import RagSettings
@@ -91,9 +97,8 @@ class McpProvider:
 class EvalRuntime(AgentRuntime):
     """Same runtime; only the run id carries the 'eval-' tag."""
 
-    async def start_run(self, claim_id: UUID) -> str:
-        async with self.deps.session_factory() as session:
-            claim = (await session.execute(select(Claim).where(Claim.id == claim_id))).scalar_one()
+    async def start_run(self, claim_id: UUID, user_id: str | None = None) -> str:
+        claim, policy_code = await self.claim_and_policy(claim_id)
         run_id = RUN_PREFIX + uuid.uuid4().hex
         self._launch(
             run_id,
@@ -106,6 +111,9 @@ class EvalRuntime(AgentRuntime):
                 "models_used": {},
             },
             claim_id=str(claim.id),
+            claim_number=claim.claim_number,
+            policy_code=policy_code,
+            user_id=user_id,
         )
         return run_id
 
@@ -114,6 +122,8 @@ def chat_factory(cfg: EvalConfig, collector: UsageCollector):  # type: ignore[no
     """get_chat_model() with a usage collector; `groq_only` keeps just the fallback model."""
 
     def make() -> Any:
+        if cfg.model == "anthropic":  # evaluation runs call Claude (ANTHROPIC_API_KEY)
+            return get_anthropic_chat_model(callbacks=[collector])
         model = get_chat_model(temperature=0, callbacks=[collector])
         if cfg.model == "groq_only":
             fallbacks = getattr(model, "fallbacks", None)
@@ -381,16 +391,19 @@ def failed_run(
 
 async def judge_supported(rule_description: str, clause_text: str) -> bool:
     """LLM judge for a citation whose section name matched no keyword: does the clause state the
-    rule? EVAL_JUDGE_MODEL (default gpt-4o), temperature 0."""
+    rule? EVAL_JUDGE_MODEL (default claude-sonnet-5-5; a `gpt-*` name uses OpenAI)."""
     import os
 
     from app.core.config import get_settings
 
     settings = get_settings()
-    model = os.environ.get("EVAL_JUDGE_MODEL", "gpt-4o")
-    llm = build_chat_model(
-        settings.model_copy(update={"primary_model": model}), get_breaker(settings), 0
-    )
+    model = os.environ.get("EVAL_JUDGE_MODEL", "claude-sonnet-5-5")
+    if model.startswith("claude"):
+        llm = build_anthropic_chat_model(settings.model_copy(update={"anthropic_model": model}))
+    else:
+        llm = build_chat_model(
+            settings.model_copy(update={"primary_model": model}), get_breaker(settings), 0
+        )
     reply = await llm.ainvoke(
         [
             HumanMessage(

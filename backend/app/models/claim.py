@@ -44,6 +44,11 @@ class Claim(UUIDPrimaryKeyMixin, TimestampMixin, Base):
     customer_policy_id: Mapped[uuid.UUID | None] = mapped_column(
         UUID(as_uuid=True), ForeignKey("customer_policies.id")
     )
+    # Who uploaded it (separation of duties: an officer does not approve their own upload).
+    # NULL for seeded claims and for claims that predate authentication.
+    created_by: Mapped[uuid.UUID | None] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("users.id", ondelete="SET NULL")
+    )
     hospital_name: Mapped[str | None] = mapped_column(String(255))
     diagnosis_text: Mapped[str | None] = mapped_column(Text)
     icd10_code: Mapped[str | None] = mapped_column(String(16))

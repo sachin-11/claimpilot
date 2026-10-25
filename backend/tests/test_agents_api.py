@@ -6,6 +6,7 @@ from decimal import Decimal
 
 import httpx
 from agent_helpers import agent_deps, make_agent_world, mcp_world, standard_llm
+from auth_helpers import bypass_auth, current_user_for
 from langgraph.checkpoint.memory import InMemorySaver
 from mcp_helpers import FakeRag
 from sqlalchemy import select
@@ -29,7 +30,7 @@ from app.models import (
 
 @contextlib.asynccontextmanager
 async def api_client(
-    session: AsyncSession, runtime_holder: dict
+    session: AsyncSession, runtime_holder: dict, user=None
 ) -> AsyncIterator[httpx.AsyncClient]:
     from app.core.config import Settings
 
@@ -41,6 +42,7 @@ async def api_client(
     async def runtime() -> AgentRuntime:
         return runtime_holder["runtime"]
 
+    bypass_auth(app, user)
     app.dependency_overrides[get_session] = shared_session
     app.dependency_overrides[get_runtime] = runtime
     async with httpx.AsyncClient(
@@ -58,7 +60,7 @@ async def start(http: httpx.AsyncClient, runtime: AgentRuntime, claim_id) -> str
 
 
 def body(world, **kw) -> dict:
-    return {"action": "approved", "reviewer_id": str(world.reviewer.id), **kw}
+    return {"action": "approved", **kw}
 
 
 async def test_process_stream_inspect_and_approve(session: AsyncSession) -> None:
@@ -66,7 +68,9 @@ async def test_process_stream_inspect_and_approve(session: AsyncSession) -> None
     llm = standard_llm(str(world.chunk.id))
     async with mcp_world(session, FakeRag(world.chunk)) as provider:
         runtime = AgentRuntime(agent_deps(session, provider, llm), InMemorySaver())
-        async with api_client(session, {"runtime": runtime}) as http:
+        async with api_client(
+            session, {"runtime": runtime}, current_user_for(world.reviewer)
+        ) as http:
             run_id = await start(http, runtime, world.claim.id)
             base = f"/claims/{world.claim.id}/runs/{run_id}"
 
@@ -94,10 +98,6 @@ async def test_process_stream_inspect_and_approve(session: AsyncSession) -> None
                 ({"action": "edited", "comment": "x"}, 422),  # no amount
                 (
                     {"action": "edited", "final_amount": "99999", "comment": "more than claimed"},
-                    422,
-                ),
-                (
-                    {"action": "approved", "reviewer_id": "00000000-0000-0000-0000-000000000000"},
                     422,
                 ),
             ]
@@ -145,7 +145,9 @@ async def test_rejection_by_the_human(session: AsyncSession) -> None:
         runtime = AgentRuntime(
             agent_deps(session, provider, standard_llm(str(world.chunk.id))), InMemorySaver()
         )
-        async with api_client(session, {"runtime": runtime}) as http:
+        async with api_client(
+            session, {"runtime": runtime}, current_user_for(world.reviewer)
+        ) as http:
             run_id = await start(http, runtime, world.claim.id)
             resp = await http.post(
                 f"/claims/{world.claim.id}/runs/{run_id}/approve",
@@ -164,7 +166,7 @@ async def test_a_paused_run_survives_a_backend_restart(session: AsyncSession) ->
     async with mcp_world(session, FakeRag(world.chunk)) as provider:
         before = AgentRuntime(agent_deps(session, provider, llm), saver)
         holder = {"runtime": before}
-        async with api_client(session, holder) as http:
+        async with api_client(session, holder, current_user_for(world.reviewer)) as http:
             run_id = await start(http, before, world.claim.id)
 
             after = AgentRuntime(agent_deps(session, provider, llm), saver)  # "restarted" process
@@ -189,7 +191,9 @@ async def test_a_failed_resume_can_be_retried_without_a_second_approval(
         runtime = AgentRuntime(
             agent_deps(session, provider, standard_llm(str(world.chunk.id))), InMemorySaver()
         )
-        async with api_client(session, {"runtime": runtime}) as http:
+        async with api_client(
+            session, {"runtime": runtime}, current_user_for(world.reviewer)
+        ) as http:
             run_id = await start(http, runtime, world.claim.id)
             state = (await runtime.get_run_state(run_id))["state"]
             # the API wrote the approval, then died before resuming the graph
@@ -219,7 +223,9 @@ async def test_unknown_claim_and_run(session: AsyncSession) -> None:
         runtime = AgentRuntime(
             agent_deps(session, provider, standard_llm(str(world.chunk.id))), InMemorySaver()
         )
-        async with api_client(session, {"runtime": runtime}) as http:
+        async with api_client(
+            session, {"runtime": runtime}, current_user_for(world.reviewer)
+        ) as http:
             missing = "00000000-0000-0000-0000-000000000001"
             assert (await http.post(f"/claims/{missing}/process")).status_code == 404
             assert (await http.get(f"/claims/{world.claim.id}/runs/nope")).status_code == 404
@@ -232,10 +238,121 @@ async def test_a_client_can_attach_right_after_process(session: AsyncSession) ->
         runtime = AgentRuntime(
             agent_deps(session, provider, standard_llm(str(world.chunk.id))), InMemorySaver()
         )
-        async with api_client(session, {"runtime": runtime}) as http:
+        async with api_client(
+            session, {"runtime": runtime}, current_user_for(world.reviewer)
+        ) as http:
             resp = await http.post(f"/claims/{world.claim.id}/process")
             run_id = resp.json()["run_id"]
             base = f"/claims/{world.claim.id}/runs/{run_id}"
             assert (await http.get(base)).status_code == 200  # no checkpoint written yet
             stream = await http.get(f"{base}/stream")
             assert stream.status_code == 200 and "event: awaiting_approval" in stream.text
+
+
+# ------------------------------------------------------------------ separation of duties
+
+
+async def _run_as(session, world, who, comment=None, action="approved"):
+    """Start a run (as a neutral admin) and try to approve it as `who`."""
+    async with mcp_world(session, FakeRag(world.chunk)) as provider:
+        runtime = AgentRuntime(
+            agent_deps(session, provider, standard_llm(str(world.chunk.id))), InMemorySaver()
+        )
+        async with api_client(session, {"runtime": runtime}) as starter:
+            run_id = await start(starter, runtime, world.claim.id)
+        async with api_client(session, {"runtime": runtime}, who) as http:
+            payload = {"action": action, **({"comment": comment} if comment else {})}
+            resp = await http.post(f"/claims/{world.claim.id}/runs/{run_id}/approve", json=payload)
+        if resp.status_code == 202:
+            await runtime.channels[run_id].task
+    return resp
+
+
+async def _second_user(session, role):
+    import uuid
+
+    from app.models import User
+
+    user = User(
+        email=f"u-{uuid.uuid4().hex[:6]}@example.com",
+        full_name="Other",
+        role=role,
+        password_hash="x",
+    )
+    session.add(user)
+    await session.flush()
+    return user
+
+
+async def test_an_officer_cannot_approve_the_claim_they_uploaded(session: AsyncSession) -> None:
+    world = await make_agent_world(session)
+    world.claim.created_by = world.reviewer.id  # the reviewer uploaded it
+    await session.flush()
+    resp = await _run_as(session, world, current_user_for(world.reviewer))
+    assert resp.status_code == 403 and "separation of duties" in resp.json()["error"]["message"]
+    assert (await session.execute(select(ClaimApproval))).first() is None  # nothing was written
+    assert (
+        await session.execute(select(Claim.status))
+    ).scalar_one() == ClaimStatus.AWAITING_APPROVAL
+
+
+async def test_another_officer_can_approve_it(session: AsyncSession) -> None:
+    from app.models import UserRole
+
+    world = await make_agent_world(session)
+    world.claim.created_by = world.reviewer.id
+    other = await _second_user(session, UserRole.OFFICER)
+    resp = await _run_as(session, world, current_user_for(other))
+    assert resp.status_code == 202, resp.text
+    approval = (await session.execute(select(ClaimApproval))).scalar_one()
+    assert approval.reviewer_id == other.id  # the reviewer is the authenticated user
+
+
+async def test_an_admin_override_needs_a_comment_and_is_audited(session: AsyncSession) -> None:
+    from app.models import UserRole
+
+    world = await make_agent_world(session)
+    admin = await _second_user(session, UserRole.ADMIN)
+    world.claim.created_by = admin.id  # the admin uploaded it
+    await session.flush()
+    async with mcp_world(session, FakeRag(world.chunk)) as provider:
+        runtime = AgentRuntime(
+            agent_deps(session, provider, standard_llm(str(world.chunk.id))), InMemorySaver()
+        )
+        async with api_client(session, {"runtime": runtime}) as starter:
+            run_id = await start(starter, runtime, world.claim.id)
+        url = f"/claims/{world.claim.id}/runs/{run_id}/approve"
+        async with api_client(session, {"runtime": runtime}, current_user_for(admin)) as http:
+            no_comment = await http.post(url, json={"action": "approved"})
+            assert no_comment.status_code == 422
+            assert "override" in no_comment.json()["error"]["message"]
+            assert (
+                await http.post(url, json={"action": "approved", "comment": "ok"})
+            ).status_code == 422
+            assert (await session.execute(select(ClaimApproval))).first() is None
+            done = await http.post(
+                url,
+                json={"action": "approved", "comment": "reviewer on leave, urgent hospital case"},
+            )
+            assert done.status_code == 202, done.text
+        await runtime.channels[run_id].task
+    override = (
+        await session.execute(
+            select(AuditLog).where(AuditLog.action == "separation_of_duties_override")
+        )
+    ).scalar_one()
+    assert override.actor_id == str(admin.id) and "on leave" in override.details["comment"]
+
+
+async def test_an_admin_who_did_not_upload_needs_no_override(session: AsyncSession) -> None:
+    from app.models import UserRole
+
+    world = await make_agent_world(session)
+    admin = await _second_user(session, UserRole.ADMIN)
+    resp = await _run_as(session, world, current_user_for(admin))
+    assert resp.status_code == 202
+    assert (
+        await session.execute(
+            select(AuditLog).where(AuditLog.action == "separation_of_duties_override")
+        )
+    ).first() is None

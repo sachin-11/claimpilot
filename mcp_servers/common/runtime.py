@@ -2,6 +2,7 @@
 
 import argparse
 import logging
+import os
 import sys
 from collections.abc import Callable, Sequence
 
@@ -9,7 +10,7 @@ from mcp.server.fastmcp import FastMCP
 
 from app.core.config import get_settings
 from app.core.logging import setup_logging
-from app.mcp_client.tokens import token_map
+from app.mcp_client.tokens import token_map, weak_identities
 from mcp_servers.common.auth import BearerAuthMiddleware
 
 logger = logging.getLogger("mcp.runtime")
@@ -37,6 +38,12 @@ def run_cli(name: str, factory: Callable[..., FastMCP], argv: Sequence[str] | No
             f"refusing to start: set MCP_{name.upper()}_TOKEN (or MCP_{name.upper()}_TOKENS) "
             "for http mode"
         )
+    weak = weak_identities(name)
+    if weak:
+        message = f"MCP {name}: placeholder or short tokens for {sorted(weak)}"
+        if os.environ.get("APP_ENV", "").lower() == "production":
+            sys.exit(f"refusing to start: {message}")
+        logger.warning("mcp_weak_tokens", extra={"server": name, "callers": sorted(weak)})
     import uvicorn
 
     app = factory(host=args.host).streamable_http_app()

@@ -5,6 +5,7 @@ from collections.abc import Callable
 
 from langchain_core.messages import HumanMessage, SystemMessage
 
+from app.observability.tracing import callback_config
 from app.rag.config import RagSettings
 from app.rag.schemas import ChatTurn
 
@@ -50,7 +51,9 @@ class QueryRewriter:
             HumanMessage(f"Conversation:\n{transcript}\n\nLatest question: {query}"),
         ]
         try:
-            reply = await self.chat_model_factory().ainvoke(messages)  # type: ignore[attr-defined]
+            reply = await self.chat_model_factory().ainvoke(  # type: ignore[attr-defined]
+                messages, **callback_config()
+            )
             rewritten = _text(reply).strip('"').strip()
         except Exception:  # noqa: BLE001 - a failed rewrite must not fail the request
             logger.warning("rewrite_failed", exc_info=True)

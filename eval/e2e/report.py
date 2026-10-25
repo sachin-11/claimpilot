@@ -102,7 +102,7 @@ def headline_rows(metrics: dict[str, Any]) -> list[tuple[str, str]]:
         ),
         ("Tokens per claim", num(metrics.get("tokens_per_claim"), 0)),
         ("Cost per claim (USD, estimate)", num(metrics.get("cost_per_claim_usd"), 4)),
-        ("Fallback (non-OpenAI) share of LLM calls", pct(metrics.get("fallback_rate"))),
+        ("Fallback (Groq / other) share of LLM calls", pct(metrics.get("fallback_rate"))),
         ("Recursion-limit hits", str(metrics.get("recursion_hits", 0))),
     ]
 

@@ -10,6 +10,14 @@ from starlette.exceptions import HTTPException as StarletteHTTPException
 logger = logging.getLogger(__name__)
 
 
+HTTP_ERROR_CODES = {
+    401: "unauthorized",
+    403: "forbidden",
+    404: "not_found",
+    429: "rate_limited",
+}
+
+
 class AppError(Exception):
     """Base for expected, client-visible errors. Subclass and set status_code / code."""
 
@@ -23,7 +31,12 @@ class AppError(Exception):
 
 
 def error_response(
-    request: Request, status_code: int, code: str, message: str, details: Any = None
+    request: Request,
+    status_code: int,
+    code: str,
+    message: str,
+    details: Any = None,
+    headers: dict[str, str] | None = None,
 ) -> JSONResponse:
     body: dict[str, Any] = {
         "error": {
@@ -34,7 +47,7 @@ def error_response(
     }
     if details is not None:
         body["error"]["details"] = details
-    return JSONResponse(status_code=status_code, content=body)
+    return JSONResponse(status_code=status_code, content=body, headers=headers)
 
 
 def register_exception_handlers(app: FastAPI) -> None:
@@ -44,7 +57,13 @@ def register_exception_handlers(app: FastAPI) -> None:
 
     @app.exception_handler(StarletteHTTPException)
     async def handle_http_error(request: Request, exc: StarletteHTTPException) -> JSONResponse:
-        return error_response(request, exc.status_code, "http_error", str(exc.detail))
+        return error_response(
+            request,
+            exc.status_code,
+            HTTP_ERROR_CODES.get(exc.status_code, "http_error"),
+            str(exc.detail),
+            headers=dict(exc.headers) if exc.headers else None,  # Retry-After, WWW-Authenticate
+        )
 
     @app.exception_handler(RequestValidationError)
     async def handle_validation_error(

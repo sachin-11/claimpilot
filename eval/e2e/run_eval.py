@@ -21,6 +21,9 @@ from typing import Any
 
 from app.core.config import get_settings
 from app.core.logging import setup_logging
+from app.observability.tracing import flush_tracing, init_tracing, trace_id_for
+from app.observability.usage import disable_tracking
+from eval import langfuse_push as lf
 from eval.e2e import metrics as M
 from eval.e2e.attribution import attribute, is_failed
 from eval.e2e.common import (
@@ -50,6 +53,11 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     p.add_argument("--claims", nargs="+", help="only these claim ids")
     p.add_argument("--limit", type=int, help="only the first N golden claims")
     p.add_argument("--no-adversarial", action="store_true")
+    p.add_argument(
+        "--langfuse",
+        action="store_true",
+        help="push scores, the golden dataset and a dataset run to Langfuse (needs its keys)",
+    )
     p.add_argument("--skip-setup", action="store_true", help="reuse the existing eval database")
     p.add_argument(
         "--no-judge", action="store_true", help="do not call the LLM judge for citations"
@@ -77,6 +85,55 @@ def effective_rule_map(rule_map: dict[str, Any], cfg: EvalConfig) -> dict[str, A
     if cfg.synthetic_wording:
         out["wording_policies"] = real + list(rule_map.get("synthetic_policies") or [])
     return out
+
+
+def push_to_langfuse(
+    config: str,
+    stamp: str,
+    cases: list[Case],
+    scores: list[dict[str, Any]],
+    adversarial: list[dict[str, Any]],
+    runs: list[dict[str, Any]],
+) -> None:
+    """Golden dataset + one dataset run + scores on the trace of every case."""
+    if not lf.ready():
+        logger.warning("--langfuse given but no Langfuse keys are configured: nothing pushed")
+        return
+    items = [
+        {
+            "id": c.claim_id,
+            "input": {"claim_id": c.claim_id, "scenario": c.scenario, "kind": c.kind},
+            "expected_output": (c.adversarial or c.golden)
+            if c.kind == "adversarial"
+            else {
+                "decision": c.golden.get("expected_decision"),
+                "payable": c.golden.get("expected_payable_amount"),
+            },
+            "metadata": {"policy_id": c.golden.get("policy_id")},
+        }
+        for c in cases
+    ]
+    lf.ensure_dataset(lf.E2E_DATASET, "Golden + adversarial claims (ClaimPilot e2e eval)", items)
+    run_name = f"{config}-{stamp}"
+    by_claim = {s["claim_id"]: s for s in scores}
+    adv = {a["claim_id"]: a for a in adversarial}
+    for run in runs:
+        trace_id = trace_id_for(run["run_id"])
+        lf.link_run(run_name, run["claim_id"], trace_id, {"config": config})
+        s, a = by_claim.get(run["claim_id"]), adv.get(run["claim_id"])
+        values: dict[str, float | bool | None] = {}
+        if s is not None:
+            status = (s.get("citation") or {}).get("status")
+            values = {
+                "decision_correct": s["decision_correct"],
+                "amount_correct": s.get("amount_ok"),
+                "citation_correct": {"ok": 1.0, "bad": 0.0}.get(status),
+            }
+        elif a is not None:
+            values = {"adversarial_pass": a["passed"]}
+        lf.push_scores(trace_id, values, comment=run_name)
+    lf.finish()
+    logger.info("[%s] pushed %d traces to Langfuse as run %s", config, len(runs), run_name)
 
 
 def select_cases(cases: list[Case], args: argparse.Namespace) -> list[Case]:
@@ -285,6 +342,8 @@ async def amain(args: argparse.Namespace) -> int:
     ):
         logging.getLogger(noisy).setLevel(logging.WARNING)
     logging.getLogger("eval.e2e").setLevel(logging.INFO)
+    disable_tracking()  # evaluation spend must not use up the live daily LLM budget
+    init_tracing(settings)  # eval runs are traced (scenario:eval) when Langfuse keys are set
     main_url = settings.database_url
     eval_url = eval_database_url(main_url)
     assert_eval_database(eval_url, main_url)
@@ -348,6 +407,15 @@ async def amain(args: argparse.Namespace) -> int:
                 cfg_map,
                 meta,
             )
+            if args.langfuse:
+                push_to_langfuse(
+                    cfg.name,
+                    stamp,
+                    cases,
+                    scores,
+                    adversarial,
+                    [r for r in all_runs if r.get("repeat", 0) == 0],
+                )
             logger.info("[%s] report: %s", cfg.name, folder / "report.md")
             from eval.e2e.report import load_result
 
@@ -362,6 +430,7 @@ async def amain(args: argparse.Namespace) -> int:
             logger.info("comparison: %s", compare / "report.md")
     finally:
         await env.close()
+        flush_tracing()
 
     if args.gate:
         failures = check_gate(first_metrics)

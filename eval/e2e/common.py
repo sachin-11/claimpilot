@@ -9,6 +9,8 @@ from typing import Any
 import yaml
 from sqlalchemy.engine import make_url
 
+from app.observability.pricing import load_pricing as _load_pricing
+
 EVAL_DIR = Path(__file__).resolve().parent
 REPO_ROOT = EVAL_DIR.parent.parent  # "/" inside the backend container (eval is mounted at /eval)
 DATA_DIR = REPO_ROOT / "data"
@@ -18,7 +20,6 @@ ADVERSARIAL_DIR = EVAL_DIR / "adversarial"
 WORK_DIR = EVAL_DIR / "work"  # gitignored: the data root the eval database is seeded from
 THRESHOLDS_PATH = EVAL_DIR / "thresholds.yaml"
 RULE_MAP_PATH = EVAL_DIR / "rule_map.yaml"
-PRICING_PATH = EVAL_DIR.parent / "rag" / "pricing.yaml"
 
 AMOUNT_TOLERANCE = 1.0  # rupees
 RUN_PREFIX = "eval-"
@@ -58,7 +59,9 @@ class EvalConfig:
     name: str
     description: str = ""
     supervisor_llm: bool = True
-    model: str = "default"  # default | groq_only
+    model: str = (
+        "anthropic"  # anthropic (Claude, ANTHROPIC_API_KEY) | default (OpenAI + Groq) | groq_only
+    )
     reranker: str = "none"
     fresh_extraction: bool = True
     synthetic_wording: bool = False  # ingest generated wordings for the policies without a PDF
@@ -110,7 +113,7 @@ def load_cases(
 
 
 def load_pricing() -> dict[str, dict[str, float]]:
-    return load_yaml(PRICING_PATH).get("models", {})
+    return _load_pricing()
 
 
 def price_usd(

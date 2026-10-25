@@ -1,4 +1,5 @@
 import asyncio
+import os
 from collections.abc import AsyncIterator, Iterator
 from pathlib import Path
 
@@ -11,8 +12,14 @@ from sqlalchemy.engine import make_url
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.pool import NullPool
 
-from app.core.config import Settings
+# Compose sets USE_WORKER=true for the running services; tests run everything in-process.
+os.environ["USE_WORKER"] = "false"
+
+from app.core.config import Settings  # noqa: E402
 from app.main import create_app
+from app.observability.usage import disable_tracking
+
+disable_tracking()  # tests must not write to the real daily-spend counters in Redis
 
 
 @pytest.fixture
@@ -23,6 +30,7 @@ def settings() -> Settings:
         app_env="test",
         openai_api_key="sk-test",
         groq_api_key="gsk-test",
+        readiness_extra_checks=False,  # no MCP servers / worker in unit tests
     )
 
 

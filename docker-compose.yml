@@ -58,6 +58,8 @@ services:
       WATCHFILES_FORCE_POLLING: "true"
       # makes `python -m eval.rag.run_eval` importable (/eval is mounted above)
       PYTHONPATH: /app:/
+      # Agent runs, extraction and ingestion go to the worker (set USE_WORKER=false to run them in-process)
+      USE_WORKER: ${USE_WORKER:-true}
     command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
     ports:
       - "${BACKEND_HOST_PORT:-8000}:8000"
@@ -66,6 +68,36 @@ services:
       - ./data:/data
       - ./data_gen:/data_gen:ro
       - ./eval:/eval
+      - ./mcp_servers:/mcp_servers
+      - ./storage:/storage
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  # --- arq worker (Module 10): runs agent runs, extraction and ingestion off the API process ---
+  worker:
+    image: claimpilot-backend
+    pull_policy: never
+    env_file: .env
+    environment:
+      PYTHONPATH: /app:/
+      USE_WORKER: "true"
+    command: arq app.worker.settings.WorkerSettings
+    restart: unless-stopped
+    # SIGTERM: stop taking jobs, give the running ones WORKER_SHUTDOWN_WAIT_SECONDS (120) to finish;
+    # whatever is still running is re-queued and continues from its checkpoint.
+    stop_grace_period: 150s
+    healthcheck:
+      test: ["CMD", "arq", "--check", "app.worker.settings.WorkerSettings"]
+      interval: 15s
+      timeout: 10s
+      retries: 3
+    volumes:
+      - ./backend:/app
+      - ./data:/data
+      - ./data_gen:/data_gen:ro
       - ./mcp_servers:/mcp_servers
       - ./storage:/storage
     depends_on:

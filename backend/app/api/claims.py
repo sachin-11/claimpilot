@@ -20,6 +20,7 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
+from app.auth.deps import CurrentUser, llm_guard, require_officer
 from app.core.config import get_settings
 from app.core.db import get_session
 from app.core.llm import get_chat_model
@@ -35,9 +36,10 @@ from app.schemas.intake import (
     ExtractStarted,
     UploadedDocument,
 )
+from app.worker.queue import enqueue_extraction
 
 logger = logging.getLogger(__name__)
-router = APIRouter(prefix="/claims", tags=["claims"])
+router = APIRouter(prefix="/claims", tags=["claims"], dependencies=[Depends(require_officer)])
 
 
 def get_intake_service(request: Request) -> IntakeService:
@@ -100,6 +102,7 @@ async def create_claim(
     claimed_amount: Annotated[Decimal, Form(ge=0)] = Decimal(0),
     session: AsyncSession = Depends(get_session),
     service: IntakeService = Depends(get_intake_service),
+    user: CurrentUser = Depends(require_officer),
 ) -> ClaimUploadResponse:
     """Create a claim (source=upload). Every file is validated before anything is stored."""
     uploads = await read_uploads(files)
@@ -110,6 +113,7 @@ async def create_claim(
         claim_number=claim_number,
         claimed_amount=claimed_amount,
     )
+    claim.created_by = user.id  # who uploaded it: that officer cannot approve it
     await session.commit()
     stored = await load_claim(session, claim.id)
     return ClaimUploadResponse(
@@ -145,15 +149,22 @@ async def add_documents(
 @router.post("/{claim_id}/extract", status_code=202)
 async def extract(
     claim_id: UUID,
+    request: Request,
     background: BackgroundTasks,
     prefer: Literal["digital", "scanned"] = "digital",
     session: AsyncSession = Depends(get_session),
     service: IntakeService = Depends(get_intake_service),
+    _user: CurrentUser = Depends(llm_guard),
 ) -> ExtractStarted:
     """Run intake in the background (works for seeded claims too). Poll GET .../extraction."""
     claim = await load_claim(session, claim_id)
     if not claim.documents:
         raise HTTPException(422, "the claim has no documents to extract from")
+    queue = getattr(request.app.state, "queue", None)
+    if queue is not None:  # the worker runs it; the lock keeps it to one at a time
+        if not await enqueue_extraction(queue, str(claim_id), prefer):
+            raise HTTPException(409, "an extraction for this claim is already running")
+        return ExtractStarted(claim_id=claim_id, status="queued", prefer=prefer)
     if claim_id in service._running:
         raise HTTPException(409, "an extraction for this claim is already running")
     background.add_task(service.process, claim_id, prefer=prefer)

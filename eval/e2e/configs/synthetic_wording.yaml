@@ -4,3 +4,4 @@ description: >-
   so wording and rules agree by design). Measures the pipeline when every policy has a wording; the
   citation numbers on those two policies are NOT evidence of reading real wording.
 synthetic_wording: true
+model: anthropic

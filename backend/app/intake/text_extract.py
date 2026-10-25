@@ -10,6 +10,8 @@ import pymupdf
 from app.intake.config import IntakeSettings
 from app.intake.ocr import OCRProvider
 from app.intake.schemas import PageText
+from app.observability.metrics import record_ocr_page
+from app.observability.tracing import span
 
 logger = logging.getLogger(__name__)
 
@@ -50,10 +52,14 @@ def extract_pdf(data: bytes, settings: IntakeSettings, ocr: OCRProvider) -> list
         for number, page in enumerate(doc, start=1):
             text = page_text_layer(page)
             if len(text) >= settings.ocr_min_chars:
+                record_ocr_page("text_layer")
                 pages.append(PageText(page=number, text=text, method="text_layer"))
                 continue
             logger.info("page_routed_to_ocr", extra={"page": number, "chars": len(text)})
-            result = ocr.ocr_image(render_page(page, settings.ocr_render_dpi))
+            with span("ocr.page", metadata={"page": number, "provider": type(ocr).__name__}) as s:
+                result = ocr.ocr_image(render_page(page, settings.ocr_render_dpi))
+                s.update(output={"chars": len(result.text), "confidence": result.confidence})
+            record_ocr_page("ocr")
             pages.append(
                 PageText(
                     page=number, text=result.text, method="ocr", ocr_confidence=result.confidence
@@ -64,7 +70,10 @@ def extract_pdf(data: bytes, settings: IntakeSettings, ocr: OCRProvider) -> list
 
 def extract_image(data: bytes, ocr: OCRProvider) -> list[PageText]:
     """An uploaded image is always OCR'd (page 1)."""
-    result = ocr.ocr_image(decode_image(data))
+    with span("ocr.page", metadata={"page": 1, "provider": type(ocr).__name__}) as s:
+        result = ocr.ocr_image(decode_image(data))
+        s.update(output={"chars": len(result.text), "confidence": result.confidence})
+    record_ocr_page("ocr")
     return [PageText(page=1, text=result.text, method="ocr", ocr_confidence=result.confidence)]
 
 

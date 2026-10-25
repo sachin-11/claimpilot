@@ -8,6 +8,7 @@ from uuid import UUID
 
 from langchain_core.messages import HumanMessage, SystemMessage
 
+from app.observability.tracing import callback_config
 from app.rag.config import RagSettings
 from app.rag.schemas import Citation, LLMPolicyAnswer, PolicyAnswer, RetrievedChunk
 
@@ -186,7 +187,7 @@ class Answerer:
             LLMPolicyAnswer, include_raw=True, method="function_calling"
         )
         try:
-            out = await llm.ainvoke(build_messages(question, chunks))
+            out = await llm.ainvoke(build_messages(question, chunks), **callback_config())
         except Exception as exc:
             raise AnswerGenerationError(f"LLM call failed: {exc}") from exc
         parsed = out.get("parsed") if isinstance(out, dict) else out

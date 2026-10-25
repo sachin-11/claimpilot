@@ -5,8 +5,12 @@ import logging
 import re
 
 # landlines and numbers not starting 6-9 occur in real data too: any standalone 10-digit run
-PHONE_RE = re.compile(r"(?<![\d/.,-])(?:(?:\+?91)[\s-]?)?0?\d{5}[\s-]?\d{5}(?![\d/.,-])")
-AADHAAR_RE = re.compile(r"(?<![\d/.,-])[2-9]\d{3}\s?\d{4}\s?\d{4}(?![\d/.,-])")
+# Not part of a longer number, date or amount ("12/03/2025", "1,23,456.00") but fine before / after
+# ordinary punctuation: "Aadhaar 2345 6789 0123, PAN ..." must still be redacted.
+_NOT_AFTER = r"(?<!\d)(?<!\d[/.,-])"
+_NOT_BEFORE = r"(?!\d)(?![/.,-]\d)"
+PHONE_RE = re.compile(_NOT_AFTER + r"(?:(?:\+?91)[\s-]?)?0?\d{5}[\s-]?\d{5}" + _NOT_BEFORE)
+AADHAAR_RE = re.compile(_NOT_AFTER + r"[2-9]\d{3}\s?\d{4}\s?\d{4}" + _NOT_BEFORE)
 PAN_RE = re.compile(r"\b[A-Z]{5}\d{4}[A-Z]\b")
 EMAIL_RE = re.compile(r"[\w.+-]+@[\w-]+(?:\.[\w-]+)+")
 

@@ -66,12 +66,12 @@ claimpilot/
 7. MCP servers  (done)
 8. LangGraph agents  (done)
 9. End-to-end eval  (done)
-10. Observability + hardening
+10. Observability + hardening  (in progress: parts A-D coded and unit tested; step 4, the e2e regression run, and a real-stack check of the worker are still open)
 11. Frontend
 12. Deploy + docs
 
 ## Commands
-`make up | down | logs | test | lint | fmt | migrate | seed | ingest | ingest-dry | try-queries | mcp-smoke | eval-e2e | revision m="msg" | shell`
+`make up | down | logs | test | lint | fmt | migrate | seed | ingest | ingest-dry | try-queries | mcp-smoke | eval-e2e | audit | langfuse-up | langfuse-down | revision m="msg" | shell`
 
 ## Database schema (Module 2)
 All tables: UUID pk (`gen_random_uuid()`), `created_at`/`updated_at` (audit_logs has no
@@ -308,6 +308,15 @@ to the FIRST wrong layer: infra, extraction, routing, coverage (sub-causes `no_p
   wording-available column of the report stays real POL-AS only), `deterministic_routing`, `rerank_local`, `fallback_only` (Groq only).
   Wordings are synced per config (synthetic chunks are removed again for `default`).
 
+- Provider for evals (since 2026-10-25): `model: anthropic` in the configs = Claude Haiku 5.5 through `ANTHROPIC_API_KEY`
+  (`core/llm.py` `build_anthropic_chat_model`, `ANTHROPIC_MODEL` to change it); the judge defaults to `claude-sonnet-5-5`.
+  OpenAI stays for the app and for embeddings (Anthropic has no embeddings API). The numbers below are gpt-4o-mini
+  (before this switch): re-run `default` + `synthetic_wording` to get Claude baselines before comparing. Claude quirks handled in
+  `EvalChatAnthropic`: no `temperature` (400 on Claude 5.x), thinking blocks rebuilt by LangChain break the preserved-thinking
+  check (`thinking.block_binding.prefix_mismatch_behavior=drop_block` + beta `thinking-binding-controls-2026-08-01`), and
+  structured output runs with thinking off after stripping thinking blocks (forced tool calls need thinking off; native JSON-schema
+  mode rejects the extraction schema). A 4-claim run on Haiku 5.5 cost about $0.006 per claim (~42k tokens, thinking included).
+
 ### Numbers (gpt-4o-mini, ~$0.0033 and ~7-8 LLM calls per claim, p95 ~35 s)
 | | default | synthetic_wording | deterministic_routing |
 |---|---|---|---|
@@ -338,3 +347,86 @@ to the FIRST wrong layer: infra, extraction, routing, coverage (sub-causes `no_p
    elapsed time (`relevance.reconcile_waiting_checks`). A period different from `policy_rules` or none stated -> `unclear`. The model used to get
    "27 months vs 24" backwards. Without the required schema fields the model left them empty and every waiting check became `unclear` (35% accuracy).
 - Lesson: gpt-4o-mini reads text well but compares numbers unreliably; let it extract, let code decide. And optional structured fields get skipped.
+
+## Observability + hardening (Module 10) - status: in progress
+Parts A (tracing, metrics), B (auth, limits), C (arq worker, health) and D (CI) are written and covered by
+tests (410 pass, ruff clean). NOT done yet: the step-4 regression run (`make eval-e2e` against the Claude
+baseline below), a check of the worker on the real compose stack (pause / resume, SIGTERM mid-run), the
+final `pip-audit` run, and the Langfuse score check for `eval-rag`.
+
+### Tracing and metrics (`app/observability/`)
+- Langfuse is optional: with both `LANGFUSE_PUBLIC_KEY` / `LANGFUSE_SECRET_KEY` unset nothing is imported or sent.
+  Cloud (`LANGFUSE_HOST` / `LANGFUSE_BASE_URL`) or the opt-in self-hosted stack `docker-compose.langfuse.yml`
+  (`make langfuse-up`, server pinned 4.70.0; the Python SDK v5 needs server >= 4.59). SDK: `langfuse>=5,<6`.
+- `tracing.run_trace(name, seed=...)`: trace id = sha256(seed)[:32], so `X-Trace-ID` is known before the run starts and
+  a run resumed after the approval joins the SAME trace. `claim_run` (session = claim number, user = starter / reviewer,
+  tags `scenario:live|eval`, `policy:<code>`, metadata run_id / models_used.* / fallback_used) and `policy_query`.
+  Spans: `rag.rewrite|embed|cache|vector|keyword|fuse|rerank|generate`, `ocr.page`, `mcp.<tool>` (server, caller, success).
+  The LangChain `CallbackHandler` is in the graph config; plain LLM calls use `**callback_config()`.
+- RAG stage spans run inside the MCP server process, so in a claim trace only `mcp.search_policy` is visible; the stages show in
+  `policy_query` traces (and in the eval harness, whose MCP servers are in-process).
+- PII: `mask.mask_trace_data` (Module 6 `redact` + sensitive keys such as patient_name) is the Langfuse `mask=`; it fails closed.
+  `should_export_span=is_langfuse_span` drops third-party OTel spans (the Anthropic SDK emits its own, which bypass the mask
+  and double count). Found by the PII scan of a real trace: the Aadhaar regex missed a number followed by a comma (fixed).
+- Langfuse Cloud's legacy trace API is gone for new orgs: read data with `GET /api/public/v2/observations?traceId=...&fromStartTime=...`
+  (ingestion lags by up to a minute). `docs/trace_example_claim_run.json` is a masked summary of one trace.
+- Metrics (`GET /metrics`, admin JWT or `METRICS_TOKEN`): http_requests_total / http_request_duration_seconds by route template,
+  llm_calls_total / llm_call_errors_total / llm_fallback_total / llm_tokens_total / llm_cost_inr_total (provider, model, node),
+  circuit_breaker_state, rag_cache_hits/misses_total, agent_runs_total / agent_run_duration_seconds, ocr_pages_total,
+  mcp_tool_calls_total, worker_jobs_total. The worker exposes its own on `WORKER_METRICS_PORT` (9102).
+  Prices: `app/observability/pricing.yaml` (one table for metrics, the budget and the eval reports); INR via `USD_INR_RATE`.
+- Eval: `--langfuse` on `eval.e2e.run_eval` / `eval.rag.run_eval` (`eval/langfuse_push.py`): datasets `claimpilot-golden-e2e|rag`,
+  one dataset run per evaluation, scores decision_correct / amount_correct / citation_correct / faithfulness / hit_at_3 /
+  adversarial_pass. Evaluation runs switch spend tracking off (`usage.disable_tracking()`).
+- Logs: JSON lines carry `request_id` and, when bound, `trace_id`, `run_id`, `claim_number`; responses carry `X-Request-ID`, `X-Trace-ID`.
+
+### Auth and RBAC (`app/auth/`, `api/auth.py`, `api/admin.py`)
+- `POST /auth/login` (access JWT 15 min, refresh 7 days), `/auth/refresh` (rotates; a refresh token presented twice revokes ALL of the
+  user's tokens), `/auth/logout` (`everywhere`), `GET /auth/me`. Refresh tokens are stored as sha256 (`refresh_tokens`).
+  Lockout: 5 failures per e-mail + IP in 15 min (Redis) -> 429 with Retry-After. Unknown e-mail costs the same bcrypt time.
+- Role and `is_active` are read from the database on every request (a demotion or disabled account applies at once).
+| endpoint | officer | admin |
+|---|---|---|
+| /policies/search, /policies/query(/stream), GET /policies, /policies/{code}/chunks | yes | yes |
+| /claims (upload), /claims/{id}/documents, /extract, /extraction, /process, runs get / stream / approve | yes | yes |
+| /policies/ingest, /policies/ingest/{id}, /admin/audit-logs, /admin/usage, /admin/users | no (403) | yes |
+| /metrics | no | yes (or the METRICS_TOKEN scraper) |
+| /health, /health/ready, /auth/login, /auth/refresh | open | open |
+- Approval: `ApproveRequest` has no `reviewer_id`; the reviewer is the token's user. `claims.created_by` is set on upload; the uploader
+  cannot approve it (403); an admin can with a comment of >= 10 chars (audit action `separation_of_duties_override`).
+- Rate limits (Redis, fixed 1-minute window; fail OPEN if Redis is down, the login lockout does not): per IP middleware, per user in
+  `get_current_user`, stricter pair via `llm_guard` (`/policies/query`, `/claims/{id}/process`, `/extract`). 429 + Retry-After.
+  Daily budget `DAILY_LLM_BUDGET_INR` (Indian calendar day; spend recorded by the LLM callback into `llm_spend:<day>` in Redis; 0 = off):
+  new LLM work is refused with 429 and an `llm_budget_exceeded` log line; `GET /admin/usage` shows today and 7 days.
+  Off when APP_ENV=test unless `RATE_LIMIT_IN_TESTS`.
+- Hardening: security headers (nosniff, DENY, no-referrer, CSP `default-src 'none'` except the docs pages, no-store); `APP_ENV=production`
+  fails at startup on default JWT secret / default DB credentials / localhost CORS / well-known seed passwords / missing OPENAI key
+  (`core.config.production_problems`); MCP servers warn on placeholder or short tokens and refuse them in production; timeouts on
+  embeddings, MCP client, reranker and Tesseract; error envelope keeps `Retry-After` / `WWW-Authenticate`; `make audit` = pip-audit.
+
+### Worker (`app/worker/`, compose service `worker`)
+- arq on Redis (asyncio native like the rest of the stack; Celery is sync-first and heavier, RQ is sync). `USE_WORKER=true` in compose: the API
+  enqueues (`QueuedAgentRuntime`), the worker runs `run_agent` / `extract_claim` / `ingest_policies`; `USE_WORKER=false` keeps everything
+  in-process (tests, the eval harness, single-process dev).
+- Events: Redis Streams `run:<id>:events:<epoch>` (epoch 0 = until the approval, 1 = after the resume) + `run:<id>:meta` hash. A late or
+  reconnecting SSE client replays its phase from the start; the checkpoint in Postgres stays the source of truth.
+- Idempotent: job id `<run_id>:<epoch>` (a second enqueue returns None); `AgentRuntime.execute` looks at the checkpoint, so a re-delivered
+  start of a paused / finished run does nothing and a crashed one continues instead of restarting. Retries: transient errors only
+  (network, DB connection loss, LLM provider errors) with backoff 5 / 10 / 20 s, `WORKER_MAX_TRIES`. A paused run survives a worker restart.
+- Graceful shutdown: `job_completion_wait` = `WORKER_SHUTDOWN_WAIT_SECONDS` (120), compose `stop_grace_period` 150 s; a job still running is
+  re-queued and continues from its last checkpoint.
+- `/health/ready` also pings the MCP servers (`/healthz`) and the worker heartbeat (arq health key); Langfuse is reported, never required.
+
+### CI (`.github/workflows/`)
+- `ci.yml` (push to main, PRs): ruff check + format, pytest with pgvector/pg16 and Redis services (dummy OPENAI key), pip-audit.
+- `eval.yml` (manual): `suite` rag | e2e | both, configs, RAGAS on/off, Langfuse on/off; needs secrets OPENAI_API_KEY, ANTHROPIC_API_KEY,
+  POLICY_PDF_URL (the wording PDF is not in the repo); uploads report.md / metrics.json as an artifact.
+
+### Claude baseline before Module 10 hardening (Haiku 5.5, 2026-10-25; compare the step-4 run with this, not with the gpt-4o-mini numbers)
+| | default | synthetic_wording |
+|---|---|---|
+| Decision accuracy (40 golden) | 27.5% | 87.5% |
+| Amount within Rs 1 | 83.3% | 97.2% |
+| Adversarial | 5/5 | 5/5 |
+| Cost per claim | $0.0061 | $0.0049 |
+Folder: `eval/e2e/results/20261025-135528_*`.

@@ -274,7 +274,7 @@ def write_report(run_dir: Path, summary: dict[str, Any], records: list[dict[str,
         comparison_table(summary),
         "",
         "Cost / question = generator tokens (answer, rewrite, multi-query) + RAGAS judge share, at "
-        "the prices in eval/rag/pricing.yaml (assumptions: edit them). "
+        "the prices in backend/app/observability/pricing.yaml (assumptions: edit them). "
         "ctx recall (sections) = share of reference clauses among the clauses given to the model.",
         "",
         f"## Best config: {best}",
