@@ -1,0 +1,229 @@
+# Production-style stack for ONE server (EC2 demo): see deploy/README.md.
+#
+#   docker compose -f docker-compose.prod.yml build backend frontend
+#   docker compose -f docker-compose.prod.yml up -d
+#
+# Differences from docker-compose.yml (development):
+#   - only Caddy publishes ports (80 / 443); Postgres, Redis, the MCP servers and the backend stay on the
+#     compose network
+#   - the code comes from the image (no ./backend bind mount, no --reload); data, storage and the MCP package
+#     are mounted read-only where they are only read
+#   - every service restarts with the machine (`restart: unless-stopped`)
+#   - nothing falls back to a default secret: missing values in .env stop `docker compose` with a message
+#   - MOCK_LLM is always off (the app refuses it with APP_ENV=production anyway)
+
+x-logging: &logging
+  driver: json-file
+  options:
+    max-size: "10m"
+    max-file: "3"
+
+x-mcp-env: &mcp-env
+  PYTHONPATH: /app:/
+  WRITE_ENABLED: "false"
+  MOCK_LLM: "false"
+
+x-mcp-server: &mcp-server
+  # Same image as the backend (built by the `backend` service below).
+  image: claimpilot-backend
+  pull_policy: never
+  env_file: .env
+  environment: *mcp-env
+  restart: unless-stopped
+  logging: *logging
+  volumes:
+    - ./data:/data:ro
+    - ./data_gen:/data_gen:ro
+    - ./mcp_servers:/mcp_servers:ro
+  depends_on:
+    postgres:
+      condition: service_healthy
+    redis:
+      condition: service_healthy
+
+services:
+  postgres:
+    image: pgvector/pgvector:pg16
+    restart: unless-stopped
+    logging: *logging
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:?set POSTGRES_USER in .env}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}
+      POSTGRES_DB: ${POSTGRES_DB:?set POSTGRES_DB in .env}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    logging: *logging
+    command: redis-server --appendonly yes
+    volumes:
+      - redisdata:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  backend:
+    build:
+      context: ./backend
+      args:
+        # the local reranker is what makes "is treatment abroad covered?" come out right; RAGAS (eval) is not needed
+        INSTALL_LOCAL_RERANKER: "true"
+        INSTALL_EVAL: "false"
+    image: claimpilot-backend
+    env_file: .env
+    restart: unless-stopped
+    logging: *logging
+    environment:
+      PYTHONPATH: /app:/
+      USE_WORKER: "true"
+      MOCK_LLM: "false"
+    # --proxy-headers: the real client address (rate limits, login lockout) comes from Caddy's X-Forwarded-For.
+    # Safe here because the backend has no published port: only containers on this network can reach it.
+    command:
+      - uvicorn
+      - app.main:app
+      - --host
+      - 0.0.0.0
+      - --port
+      - "8000"
+      - --proxy-headers
+      - --forwarded-allow-ips
+      - "*"
+    volumes:
+      - ./data:/data:ro
+      - ./data_gen:/data_gen:ro
+      - ./eval:/eval:ro
+      - ./mcp_servers:/mcp_servers:ro
+      - ./storage:/storage
+      - hf_cache:/root/.cache/huggingface
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request as u; u.urlopen('http://localhost:8000/health')"]
+      interval: 15s
+      timeout: 5s
+      start_period: 30s
+      retries: 5
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  worker:
+    image: claimpilot-backend
+    pull_policy: never
+    env_file: .env
+    restart: unless-stopped
+    logging: *logging
+    environment:
+      PYTHONPATH: /app:/
+      USE_WORKER: "true"
+      MOCK_LLM: "false"
+    command: arq app.worker.settings.WorkerSettings
+    # SIGTERM: stop taking jobs, let the running ones finish (WORKER_SHUTDOWN_WAIT_SECONDS), re-queue the rest
+    stop_grace_period: 150s
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - "import os,sys,redis; sys.exit(0 if redis.Redis.from_url(os.environ['REDIS_URL']).exists('claimpilot:worker:health') else 1)"
+      interval: 15s
+      timeout: 10s
+      start_period: 30s
+      retries: 3
+    volumes:
+      - ./data:/data:ro
+      - ./data_gen:/data_gen:ro
+      - ./mcp_servers:/mcp_servers:ro
+      - ./storage:/storage
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  mcp-policy-docs:
+    <<: *mcp-server
+    command: python -m mcp_servers.policy_docs.server --transport http --host 0.0.0.0 --port 8101
+    volumes:
+      - ./data:/data:ro
+      - ./data_gen:/data_gen:ro
+      - ./mcp_servers:/mcp_servers:ro
+      # search_policy runs the reranker here, so it shares the downloaded model with the backend
+      - hf_cache:/root/.cache/huggingface
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request as u; u.urlopen('http://localhost:8101/healthz')"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  mcp-claims-db:
+    <<: *mcp-server
+    command: python -m mcp_servers.claims_db.server --transport http --host 0.0.0.0 --port 8102
+    environment:
+      <<: *mcp-env
+      WRITE_ENABLED: ${MCP_CLAIMS_DB_WRITE_ENABLED:-true}
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request as u; u.urlopen('http://localhost:8102/healthz')"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  mcp-notify:
+    <<: *mcp-server
+    command: python -m mcp_servers.notify.server --transport http --host 0.0.0.0 --port 8103
+    environment:
+      <<: *mcp-env
+      WRITE_ENABLED: ${MCP_NOTIFY_WRITE_ENABLED:-true}
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request as u; u.urlopen('http://localhost:8103/healthz')"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  # nginx: serves the built web app and proxies /api to the backend (internal only, Caddy is the front door)
+  frontend:
+    build: ./frontend
+    restart: unless-stopped
+    logging: *logging
+    environment:
+      BACKEND_URL: http://backend:8000
+    depends_on:
+      backend:
+        condition: service_healthy
+
+  # Caddy: public HTTPS (certificate from Let's Encrypt for ${DOMAIN}), the only service with published ports
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    logging: *logging
+    environment:
+      DOMAIN: ${DOMAIN:?set DOMAIN in .env (the public host name)}
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    volumes:
+      - ./deploy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - frontend
+
+volumes:
+  pgdata:
+  redisdata:
+  caddy_data:
+  caddy_config:
+  # downloaded reranker model (~1 GB): survives recreating the containers
+  hf_cache:
+    name: claimpilot_hf_cache

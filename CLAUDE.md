@@ -41,6 +41,7 @@ claimpilot/
     tests/
   mcp_servers/           # common/, policy_docs/, claims_db/, notify/ (Module 7), README.md
   frontend/              # React app (Module 11): src/{api,stores,app,components,features,lib}, e2e/, Dockerfile + nginx.conf.template
+  docker-compose.prod.yml + deploy/   # one-server EC2 demo: Caddy HTTPS, bootstrap-env.sh, server-setup.sh, README.md
   docker-compose.e2e.yml # isolated MOCK_LLM stack for the browser tests (project claimpilot-e2e, own DB, port 3300)
   docs/screenshots/      # written by `SHOTS=1 npm run e2e` (README / posts)
   data/{policies,claims,golden}/
@@ -70,7 +71,7 @@ claimpilot/
 9. End-to-end eval  (done)
 10. Observability + hardening  (done)
 11. Frontend  (done)
-12. Deploy + docs
+12. Deploy + docs  (in progress: `deploy/` + `docker-compose.prod.yml` for one EC2 instance written and config-checked, not yet run on a server)
 
 ## Commands
 `make up | down | logs | test | lint | fmt | migrate | seed | ingest | ingest-dry | try-queries | mcp-smoke | eval-e2e | audit | langfuse-up | langfuse-down | demo-data | e2e-up | e2e | e2e-down | revision m="msg" | shell`

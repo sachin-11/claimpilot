@@ -1,0 +1,8 @@
+# Public front door. {$DOMAIN} comes from .env (compose passes it in); Caddy gets and renews the
+# Let's Encrypt certificate by itself, so ports 80 and 443 must be reachable from the internet.
+{$DOMAIN} {
+	reverse_proxy frontend:80 {
+		# server-sent events (the live agent timeline, the policy chat) must not be buffered
+		flush_interval -1
+	}
+}
