@@ -49,9 +49,59 @@ function useDocumentBlob(claimId: string, doc: DocumentOut | undefined) {
   )
   return {
     url,
+    data: query.data,
     loading: query.isLoading,
     error: query.isError ? errorMessage(query.error) : null,
   }
+}
+
+/** The JSON claim form is data, not a picture: show it as labelled fields. */
+function JsonValue({ value }: { value: unknown }) {
+  if (value === null || value === undefined || value === '') return <span className="text-muted">-</span>
+  if (Array.isArray(value)) {
+    if (value.length === 0) return <span className="text-muted">none</span>
+    if (value.every((v) => typeof v !== 'object' || v === null)) return <span>{value.join(', ')}</span>
+    return (
+      <div className="space-y-2">
+        {value.map((v, i) => (
+          <div key={i} className="rounded border border-line bg-surface p-2">
+            <JsonValue value={v} />
+          </div>
+        ))}
+      </div>
+    )
+  }
+  if (typeof value === 'object') {
+    return (
+      <dl className="grid grid-cols-[minmax(7rem,max-content)_1fr] gap-x-4 gap-y-1.5">
+        {Object.entries(value as Record<string, unknown>).map(([k, v]) => (
+          <div key={k} className="contents">
+            <dt className="text-muted">{humanize(k)}</dt>
+            <dd className="min-w-0 break-words">
+              <JsonValue value={v} />
+            </dd>
+          </div>
+        ))}
+      </dl>
+    )
+  }
+  if (typeof value === 'boolean') return <span>{value ? 'Yes' : 'No'}</span>
+  return <span>{String(value)}</span>
+}
+
+function JsonDocument({ blob }: { blob: Blob }) {
+  const query = useQuery({
+    queryKey: ['document-json', blob.size, blob.type],
+    staleTime: Infinity,
+    queryFn: async () => JSON.parse(await blob.text()) as unknown,
+  })
+  if (query.isLoading) return <Skeleton className="h-[20rem] w-full" />
+  if (query.isError) return <ErrorState message="This form could not be read." />
+  return (
+    <div className="rounded bg-surface p-4 shadow" data-testid="json-document">
+      <JsonValue value={query.data} />
+    </div>
+  )
 }
 
 /** Left column of the claim screen: one tab per uploaded document, page navigation, jump targets. */
@@ -95,6 +145,8 @@ export function DocumentViewer({
   }, [container])
 
   const isPdf = doc?.mime_type === 'application/pdf'
+  const isJson = doc?.mime_type === 'application/json' || !!doc?.file_name.toLowerCase().endsWith('.json')
+  const isImage = !!doc?.mime_type?.startsWith('image/')
   const total = pages ?? doc?.page_count ?? 1
   const options = useMemo(() => ({}), [])
 
@@ -155,8 +207,12 @@ export function DocumentViewer({
             </Document>
           </Suspense>
         )}
-        {blob.url && !isPdf && (
+        {blob.data && isJson && <JsonDocument blob={blob.data} />}
+        {blob.url && isImage && (
           <img src={blob.url} alt={doc?.file_name} className="mx-auto max-w-full rounded shadow" />
+        )}
+        {blob.url && !isPdf && !isJson && !isImage && (
+          <EmptyState title="No preview for this file type" hint={doc ? documentLabel(doc) : undefined} />
         )}
       </div>
 
