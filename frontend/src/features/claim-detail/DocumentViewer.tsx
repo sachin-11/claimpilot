@@ -107,7 +107,7 @@ export function DocumentViewer({
   }
 
   return (
-    <Card className="flex min-h-[28rem] flex-col overflow-hidden">
+    <Card className="flex h-full min-h-[28rem] flex-col overflow-hidden">
       <div role="tablist" aria-label="Documents" className="flex gap-1 overflow-x-auto border-b border-line px-2 pt-2">
         {documents.map((d, i) => (
           <button

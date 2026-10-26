@@ -15,6 +15,7 @@ x-mcp-server: &mcp-server
     - ./data:/data
     - ./data_gen:/data_gen:ro
     - ./mcp_servers:/mcp_servers
+    - hf_cache:/root/.cache/huggingface
   depends_on:
     postgres:
       condition: service_healthy
@@ -73,6 +74,7 @@ services:
       - ./eval:/eval
       - ./mcp_servers:/mcp_servers
       - ./storage:/storage
+      - hf_cache:/root/.cache/huggingface
     depends_on:
       postgres:
         condition: service_healthy
@@ -167,4 +169,7 @@ services:
       - backend
 
 volumes:
+  # downloaded reranker model (~1 GB): survives recreating the backend / MCP containers
+  hf_cache:
+    name: claimpilot_hf_cache
   pgdata:

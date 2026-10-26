@@ -48,6 +48,88 @@ export function ConnectionBanner({ connection }: { connection: ConnectionState }
   return null
 }
 
+const TOOL_LABEL: Record<string, string> = {
+  get_claim: 'Read the claim record',
+  get_claim_extraction: 'Read the data extracted from the documents',
+  get_customer_history: "Looked up the customer's earlier claims",
+  list_claims: 'Listed related claims',
+  list_policies: 'Listed the available policies',
+  get_policy_rules: 'Loaded the policy rules',
+  search_policy: 'Searched the policy wording',
+  update_claim_status: 'Updated the claim status',
+  save_decision_draft: 'Saved the draft decision',
+  send_status_update: 'Notified the customer',
+}
+
+const RESULT_TONE: Record<string, 'ok' | 'bad' | 'warn' | 'neutral'> = {
+  pass: 'ok',
+  fail: 'bad',
+  partial: 'warn',
+  unclear: 'neutral',
+}
+
+/** "a=pass, b=fail" -> [["a","pass"],["b","fail"]]; null when the text is not in that shape. */
+function parseResults(summary: string): Array<[string, string]> | null {
+  const parts = summary.split(', ')
+  const pairs = parts.map((p) => p.split('='))
+  if (pairs.length === 0 || pairs.some((p) => p.length !== 2 || !(p[1] ?? '') || !(p[0] ?? ''))) return null
+  return pairs.map(([k, v]) => [k as string, v as string])
+}
+
+interface ToolGroup {
+  tool: string
+  args: string
+  count: number
+}
+
+/** Consecutive identical calls collapse into one row ("x2"). */
+function groupTools(tools: TimelineStep['tools']): ToolGroup[] {
+  const groups: ToolGroup[] = []
+  for (const t of tools) {
+    const last = groups.at(-1)
+    if (last && last.tool === t.tool && last.args === t.args) last.count += 1
+    else groups.push({ tool: t.tool, args: t.args, count: 1 })
+  }
+  return groups
+}
+
+function ToolRow({ group }: { group: ToolGroup }) {
+  const query = /query=([^,]*)/.exec(group.args)?.[1]?.trim()
+  const long = group.args.length > 90
+  return (
+    <li className="flex items-start gap-2 text-[13px] text-muted">
+      <Wrench className="mt-1 size-3 shrink-0" aria-hidden />
+      <div className="min-w-0">
+        <span className="text-fg/80">{TOOL_LABEL[group.tool] ?? humanize(group.tool)}</span>
+        {group.count > 1 && <span className="ml-1 text-xs">×{group.count}</span>}
+        {query && <span className="ml-1.5 italic">“{query}”</span>}
+        {(long || (group.args && !query)) && (
+          <details className="mt-0.5 text-xs">
+            <summary className="cursor-pointer select-none text-muted hover:text-fg">
+              <code className="rounded bg-surface-2 px-1">{group.tool}</code> details
+            </summary>
+            <p className="mt-1 break-words rounded bg-surface-2 p-2 font-mono text-[11.5px] leading-relaxed">{group.args}</p>
+          </details>
+        )}
+      </div>
+    </li>
+  )
+}
+
+function StepSummary({ summary }: { summary: string }) {
+  const results = parseResults(summary)
+  if (!results) return <p className="mt-1 text-fg/80">{summary}</p>
+  return (
+    <div className="mt-1.5 flex flex-wrap gap-1.5">
+      {results.map(([name, value]) => (
+        <Badge key={name} tone={RESULT_TONE[value] ?? 'neutral'}>
+          {humanize(name)}: {humanize(value)}
+        </Badge>
+      ))}
+    </div>
+  )
+}
+
 function Step({ step, last }: { step: TimelineStep; last: boolean }) {
   const duration = durationMs(step)
   return (
@@ -70,26 +152,30 @@ function Step({ step, last }: { step: TimelineStep; last: boolean }) {
             {duration !== null && <span>{formatDuration(duration)}</span>}
           </span>
         </div>
-        {step.summary && <p className="mt-0.5 text-muted">{step.summary}</p>}
+        {step.summary && <StepSummary summary={step.summary} />}
         {step.routing && (
-          <p className="mt-0.5 text-muted">
-            Chose{' '}
-            <strong className="text-fg">
-              {Array.isArray(step.routing.chosen) ? step.routing.chosen.join(' + ') : (step.routing.chosen ?? 'nothing')}
-            </strong>{' '}
-            from {step.routing.allowed.join(', ') || 'no options'} ({step.routing.source === 'llm' ? 'model' : 'rules'})
+          <p className="mt-1 text-fg/80">
+            Next:{' '}
+            <strong>
+              {(Array.isArray(step.routing.chosen) ? step.routing.chosen : [step.routing.chosen ?? 'nothing'])
+                .map(humanize)
+                .join(' + ')}
+            </strong>
+            <span className="text-muted">
+              {' '}
+              ·{' '}
+              {step.routing.allowed.length <= 1
+                ? 'the only step allowed'
+                : step.routing.source === 'llm'
+                  ? 'chosen by the model'
+                  : 'chosen by the rules'}
+            </span>
           </p>
         )}
         {step.tools.length > 0 && (
-          <ul className="mt-1.5 space-y-1">
-            {step.tools.map((tool, i) => (
-              <li key={i} className="flex items-start gap-1.5 text-xs text-muted">
-                <Wrench className="mt-0.5 size-3 shrink-0" aria-hidden />
-                <span className="min-w-0 break-words">
-                  <code className="rounded bg-surface-2 px-1">{tool.tool}</code>
-                  {tool.args && <span className="ml-1.5">{tool.args}</span>}
-                </span>
-              </li>
+          <ul className="mt-2 space-y-1 border-l-2 border-line pl-3">
+            {groupTools(step.tools).map((group, i) => (
+              <ToolRow key={i} group={group} />
             ))}
           </ul>
         )}

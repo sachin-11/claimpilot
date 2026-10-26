@@ -21,8 +21,13 @@ server {
 
     # API: the browser only talks to this origin. The prefix is stripped, and X-Forwarded-Prefix lets the
     # backend scope the refresh cookie to /api/auth.
+    # The upstream sits in a variable and Docker's DNS is used, so nginx looks the backend up again after
+    # its container is recreated (a literal proxy_pass keeps the IP it resolved at start-up -> 502).
     location /api/ {
-        proxy_pass ${BACKEND_URL}/;
+        resolver 127.0.0.11 valid=10s ipv6=off;
+        set $backend_upstream ${BACKEND_URL};
+        rewrite ^/api/(.*)$ /$1 break;
+        proxy_pass $backend_upstream;
         proxy_http_version 1.1;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
