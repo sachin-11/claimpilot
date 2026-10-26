@@ -6,8 +6,8 @@
 # Differences from docker-compose.yml (development):
 #   - only Caddy publishes ports (80 / 443); Postgres, Redis, the MCP servers and the backend stay on the
 #     compose network
-#   - the code comes from the image (no ./backend bind mount, no --reload); data, storage and the MCP package
-#     are mounted read-only where they are only read
+#   - the code comes from the image (no ./backend bind mount, no --reload); data is writable only for the backend and
+#     the worker (ingestion writes data/debug), the MCP package and the MCP servers' data are read-only
 #   - every service restarts with the machine (`restart: unless-stopped`)
 #   - nothing falls back to a default secret: missing values in .env stop `docker compose` with a message
 #   - MOCK_LLM is always off (the app refuses it with APP_ENV=production anyway)
@@ -99,7 +99,7 @@ services:
       - --forwarded-allow-ips
       - "*"
     volumes:
-      - ./data:/data:ro
+      - ./data:/data
       - ./data_gen:/data_gen:ro
       - ./eval:/eval:ro
       - ./mcp_servers:/mcp_servers:ro
@@ -141,7 +141,7 @@ services:
       start_period: 30s
       retries: 3
     volumes:
-      - ./data:/data:ro
+      - ./data:/data
       - ./data_gen:/data_gen:ro
       - ./mcp_servers:/mcp_servers:ro
       - ./storage:/storage
